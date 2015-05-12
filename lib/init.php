@@ -18,9 +18,19 @@ if (!class_exists( 'autoMobileCore' )){
          */
         function loadModels( $dir ,$enc=false ){
             $classes = !$enc ? $this->loadDirectory( $dir ) : $this->loadEncDirectory( $dir );
-            foreach( $classes as $class )
-                $this->objects[] = $class;
+            //foreach( $classes as $class )
+                //$this->objects[] = $class;
         }
+		
+		/**
+         * Load all class from admin directory
+         */
+        function loadAdmins( $dir ,$enc=false ){
+            $classes = $this->loadDirectory( $dir );
+            //foreach( $classes as $class )
+                //$this->objects[] = $class;
+        }
+		
         /**
          * Include all file from directory
          * Create instence of each class and add return all instance as an array
@@ -31,10 +41,10 @@ if (!class_exists( 'autoMobileCore' )){
                 if( preg_match( "/.php$/i" , $item ) ) {
                     require_once( $dir . $item );
                     $className = str_replace( ".php", "", $item );
-                    $classes[] = new $className;
+                    //$classes[] = new $className;
                 }      
             }
-            return $classes;
+            return isset( $classes ) ? $classes : false; //$classes;
         }
         
         function loadEncDirectory( $dir ){
@@ -43,8 +53,8 @@ if (!class_exists( 'autoMobileCore' )){
                 if( preg_match( "/.php$/i" , $item ) ) {
                     eval( base64_decode( file_get_contents( $dir . $item ) ) );
                     $className = str_replace( ".php", "", $item );
-                    if( class_exists( $className ) )
-                        $classes[] = new $className;
+                    if( class_exists( $className ) ){}
+                       // $classes[] = new $className;
                 }      
             }
             return isset( $classes ) ? $classes : false;           

@@ -32,6 +32,7 @@ if (!class_exists( 'AutoMobile' )){
             $this->pluginSlug       = plugin_basename(__FILE__);
             $this->pluginPath       = dirname( __FILE__ );
             $this->modelsPath       = $this->pluginPath . '/lib/models/';
+			$this->adminPath       = $this->pluginPath . '/lib/admin/';
             $this->controllersPath  = $this->pluginPath . '/lib/controllers/';
             $this->viewsPath        = $this->pluginPath . '/lib/views/';
             $this->helperPath        = $this->pluginPath . '/lib/helpers/';
@@ -45,7 +46,8 @@ if (!class_exists( 'AutoMobile' )){
             define('ATM_HELPER_URL', ATM_PLUGIN_URL.'/lib/helpers/');
             
           
-          //$this->loadModels( $this->modelsPath );
+          $this->loadModels( $this->modelsPath );
+		  $this->loadAdmins( $this->adminPath );
           //$this->loadModels( $this->modelsPath.'enc/' , true);
           
           $this->options=array(
