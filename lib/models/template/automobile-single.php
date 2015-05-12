@@ -3,8 +3,8 @@
  */
  $automobile_options = get_option('automobile_options');
 get_header(); ?>
-<div id="primary">
-    <div id="content" role="main">
+<div id="">
+    <div id="" role="main">
     <?php  while ( have_posts() ) : the_post();    
     $pid=$post->ID;   
     $post_image= wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
@@ -25,8 +25,29 @@ get_header(); ?>
 					<div class="product-title"><?php the_title(); ?></div>
 					<!--<div class="product-desc">The Corsair Gaming Series GS600 is the ideal price/performance choice for mid-spec gaming PC</div>-->					
 					<hr>
-					<div class="product-price">$ <?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); ?></div>
-					<div class="product-stock"><?php echo esc_html( get_post_meta( get_the_ID(), 'automobile-product-status', true ) ); ?></div>
+					<p class="price">
+					<?php $txt_automobile_regular_price = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_regular_price', true ) ); 
+					if($txt_automobile_regular_price): ?>
+					<del><span class="amount">$<?php echo $txt_automobile_regular_price; ?>.00</span></del>
+					<?php endif; 
+					$txt_automobile_price = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) );
+					if($txt_automobile_price):
+					?>
+					<ins><span class="amount">$<?php echo $txt_automobile_price; ?>.00</span></ins>
+					<?php endif; ?>
+					</p>
+					
+					<div class="product-stock">
+					<?php
+					$automobile_product_status = esc_html( get_post_meta( get_the_ID(), 'automobile-product-status', true ) );
+					if($automobile_product_status == 'instock' ):
+						echo 'In stock';
+					else :
+						echo 'Out of stock';
+					endif;
+					?>
+					
+					</div>
 					<hr>
                     
                     
@@ -62,26 +83,30 @@ get_header(); ?>
                     <section class="container product-info" >
                     
                     <ul>
-                    <?php 
-                    $main_top=get_post_meta($post->ID, 'txt_automobile_mpn', true);
-                    $array_automobile_mpn=explode('|', $main_top);
-                    $n=count($array_automobile_mpn);
-                    for($i=0; $i<$n; $i++){
-                    ?>
-                    <li><?php echo $array_automobile_mpn[$i]; ?></li>
-                    
-                    <?php } ?>
+						<?php 
+						$get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
+						$get_automobile_mpn_uns = unserialize($get_automobile_mpn);			
+						foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>
+							<li><?php echo $get_automobile_mpn_un; ?></li>
+						<?php endforeach; ?>
                     </ul>
                     </section>
 						
 					</div>
 					<div class="tab-pane fade" id="service-three">  
-                      <section class="container product-info" >                 
-                    <p>make: <?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_make', true ) ); ?></p> 
-                    <p>model:   <?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_model', true ) ); ?> </p> 
-                    <p>year :<?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_year', true ) ); ?></p> 
-                    <p>color:<?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_color', true ) ); ?></p> 
-                    <p>position:<?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_position', true ) ); ?></p> 
+                      <section class="container product-info" >  
+
+					  <?php
+						$get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);
+						$get_advanced_automobile = unserialize($get_advanced_automobile_array); 
+					  ?>
+					  
+                    <p>make: <?php echo $get_advanced_automobile['txt_automobile_make']; ?></p> 
+                    <p>model:<?php echo $get_advanced_automobile['txt_automobile_model']; ?></p> 
+                    <p>year :<?php echo $get_advanced_automobile['txt_automobile_year']; ?></p> 
+                    <p>color:<?php echo $get_advanced_automobile['txt_automobile_color']; ?></p> 
+                    <p>position:<?php echo $get_advanced_automobile['txt_automobile_position']; ?></p> 
+					<p>Weight (oz):<?php echo $get_advanced_automobile['txt_automobile_weight']; ?></p>
 </section>
 					</div>
 				</div>

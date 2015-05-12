@@ -40,7 +40,7 @@ if (!is_admin()){
 }
 if (!function_exists('automobile_js')) {
     function automobile_js() {	
-           wp_enqueue_script( 'automobile_theme_options', plugins_url('js/custom_automobile.js',dirname(__FILE__)) );
+           wp_enqueue_script( 'automobile_theme_options', plugins_url('assets/js/custom_automobile.js',dirname(__FILE__)) );
            
           
     }
@@ -58,11 +58,7 @@ if (!function_exists('automobile_public_css')) {
 add_action( 'wp_enqueue_scripts', 'automobile_public_css' );
   
 
-function automobile_custom_styles(){
-        wp_enqueue_style(
-		'custom-style',
-		plugins_url('/css/public.css', dirname(__FILE__))
-	);
+function automobile_custom_styles(){       
     $options = get_option('automobile_options');   
     $automobile_text_color = $options['automobile_text_color'];
     $automobile_background_color = $options['automobile_background_color'];    

@@ -375,3 +375,15 @@ h2.entry-title a:hover{
 .item-container {
     padding-top: 20px;
 }
+
+del,ins{
+	display:block;
+}
+
+del span.amount, ins span.amount{
+  color: #77a464;
+  font-size: 1.25em;
+}
+del span.amount{
+	color:#333;
+}

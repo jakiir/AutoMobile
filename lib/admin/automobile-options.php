@@ -11,7 +11,7 @@
 
 add_action( 'admin_init', 'automobile_register_admin_scripts' );
 function automobile_register_admin_scripts() {
-	wp_enqueue_style( 'automobile-font-awesome', plugins_url('font-awesome/css/font-awesome.min.css', __FILE__ ) );
+	wp_enqueue_style( 'automobile-font-awesome', plugins_url('css/font-awesome/css/font-awesome.min.css', __FILE__ ) );
     wp_enqueue_style( 'automobile_css', plugins_url( 'css/automobile-options.css', __FILE__ ) );      
 	wp_enqueue_style('thickbox');
 	wp_enqueue_script('jquery-ui-core');
