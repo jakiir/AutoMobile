@@ -1,5 +1,5 @@
 <?php
- /*Template Name: order
+ /*Template Name: Automobile order
  */
  
  $automobile_options = get_option('automobile_options');

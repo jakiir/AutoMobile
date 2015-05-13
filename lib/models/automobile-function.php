@@ -135,18 +135,29 @@ if ( is_single() ) {
 // otherwise serve the file from the plugin
 if ( $theme_file = locate_template( array
 ( 'automobile-single.php' ) ) ) {
-$template_path = $theme_file;
-} else {
-$template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-single.php';
-     }
-  } 
-    elseif ( is_archive() ) {
-                if ( $theme_file = locate_template( array ( 'automobile_archive.php' ) ) ) {
-$template_path = $theme_file;
-}    else { $template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-archive.php';
+	$template_path = $theme_file;
+} 
+	else 
+	{
+		$template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-single.php';
+    }
+  }
 
-           }
-      }
+	
+  
+elseif ( is_archive() ) {
+  if ( $theme_file = locate_template( array ( 'automobile_archive.php' ) ) ) {
+$template_path = $theme_file;
+}
+
+else 
+		{ 
+			$template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-archive.php';
+		}
+	}
+}
+if(is_page( 'shopping-cart' )){
+$template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-shopping-cart.php';
 }
 return $template_path;
 }

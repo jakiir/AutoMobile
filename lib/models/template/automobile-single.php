@@ -1,6 +1,6 @@
 <?php
- /*Template Name: New Template
- */
+ /*Template Name: Automobile single */
+ 
  $automobile_options = get_option('automobile_options');
 get_header(); ?>
 <div id="">

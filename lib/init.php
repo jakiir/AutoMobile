@@ -8,7 +8,9 @@ if (!class_exists( 'autoMobileCore' )){
     class autoMobileCore {
         public $coreVersion = '1.0';
         public $corePrefix  = 'pc_';
+		
         
+		
         function __construct(){                          
             
         }
@@ -30,6 +32,32 @@ if (!class_exists( 'autoMobileCore' )){
             //foreach( $classes as $class )
                 //$this->objects[] = $class;
         }
+		
+		/**
+         * Load all class from admin directory
+         */
+        function loadHelpers( $dir ){
+            $classes = $this->loadClassDirectory( $dir );
+            foreach( $classes as $class )
+                $this->objects[] = $class;
+        }
+		
+		/**
+         * Include all file from directory
+         * Create instence of each class and add return all instance as an array
+         */  
+        function loadClassDirectory( $dir ){
+            if (!file_exists($dir)) return;
+            foreach (scandir($dir) as $item) {
+                if( preg_match( "/.php$/i" , $item ) ) {
+                    require_once( $dir . $item );
+                    $className = str_replace( ".php", "", $item );
+                    $classes[] = new $className;
+                }      
+            }
+            return $classes;
+        }
+		
 		
         /**
          * Include all file from directory

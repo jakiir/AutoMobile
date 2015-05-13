@@ -24,8 +24,7 @@ if (!class_exists( 'AutoMobile' )){
         public $version     = '1.0';
         public $prefix      = 'atm_';  
         public $prefixLong  = 'auto_mobile_';
-        public $website     = 'http://jakirhossain.com';     
-        
+        public $website     = 'http://jakirhossain.com';
         
         function __construct(){ 
             $this->file             = __FILE__;
@@ -48,6 +47,7 @@ if (!class_exists( 'AutoMobile' )){
           
           $this->loadModels( $this->modelsPath );
 		  $this->loadAdmins( $this->adminPath );
+		  $this->loadHelpers( $this->helperPath );
           //$this->loadModels( $this->modelsPath.'enc/' , true);
           
           $this->options=array(
@@ -57,14 +57,23 @@ if (!class_exists( 'AutoMobile' )){
 			'settings'  =>'atm_settings',
 			'cache'     =>'atm_cache'
 			);
-          
+			
 
-        }
+		  register_activation_hook(__FILE__, array($this, 'atm_activate'));
+		  register_deactivation_hook(__FILE__, array($this, 'atm_deactivate'));
+		  register_uninstall_hook(__FILE__, array($this, 'atm_uninstall'));
+
+		  //add_filter('parse_query', array($this, 'atm_query_parser'));
+		  //add_filter('the_posts', array($this, 'atm_page_filter'));
+			
+		  }
         function init(){
             
-            $this->pluginInit();        
+            $this->pluginInit(); 
+			
         }
-        
+		
+	        
         
     }
     global $autoMobile;

@@ -1,8 +1,5 @@
  <?php
-/*
-Template Name: Test
-
-*/
+/* Template Name: Automobile archive */
 ?>
 <?php get_header(); ?>
 
