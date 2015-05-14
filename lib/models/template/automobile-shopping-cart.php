@@ -88,10 +88,11 @@ get_header(); ?>
                         <button type="button" class="btn btn-default">
                             <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
                         </button></td>
-                        <td>
-                        <button type="button" class="btn btn-success">
+                        <td>                        
+						<a class="btn btn-success" href="<?php echo home_url('/automobile-checkout/'); ?>" alt="Checkout" target="_self">
                             Checkout <span class="glyphicon glyphicon-play"></span>
-                        </button></td>
+                        </a>
+						</td>
                     </tr>
                 </tbody>
             </table>

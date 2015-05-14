@@ -114,7 +114,8 @@ if (!function_exists('owl_team_public_css')) {
     function owl_team_public_css() { 	  
     //wp_enqueue_style( 'font-awesome', plugins_url('lib/assets/css/font-awesome/css/font-awesome.min.css', dirname(__FILE__)) );    w
     wp_enqueue_style( 'automobile-owl-carousel', plugins_url('assets/style/owl.carousel.css', dirname(__FILE__)) );
-    wp_enqueue_style( 'automobile-bootstrap', plugins_url('assets/style/bootstrap.min.css', dirname(__FILE__)) );   
+    wp_enqueue_style( 'automobile-bootstrap', plugins_url('assets/style/bootstrap.min.css', dirname(__FILE__)) );  
+	wp_enqueue_style( 'user-style', plugins_url('assets/style/user_style.css', dirname(__FILE__)) ); 
     wp_enqueue_style( 'automobile-style', plugins_url('assets/style/style.css', dirname(__FILE__)) ); 
     
     wp_enqueue_style( 'font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css', null, '4.0.1' );   
@@ -159,6 +160,14 @@ else
 if(is_page( 'shopping-cart' )){
 $template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-shopping-cart.php';
 }
+if(is_page( 'auto-mobile' )){
+$template_path = plugin_dir_path( __FILE__ ) . '/template/automobile.php';
+}
+
+if(is_page( 'automobile-checkout' )){
+$template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-checkout.php';
+}
+
 return $template_path;
 }
     function getFeaturedImage( $post_id = NULL, $size = 'large', $arr=false) {
