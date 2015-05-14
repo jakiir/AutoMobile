@@ -8,7 +8,8 @@ get_header(); ?>
     <?php  while ( have_posts() ) : the_post();    
     $pid=$post->ID;   
     $post_image= wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
-    $author = get_the_author(get_the_ID($post->ID));?>
+    $author = get_the_author(get_the_ID($post->ID));
+	?>
 
 <div class="container-fluid">
     <div class="content-wrapper">	

@@ -3,10 +3,15 @@ if (!class_exists('atm_activation'))
 {
   class atm_activation
   {
+	  
+	public $atm_shop_name;
+	public $atm_shop_title;
+	public $atm_shop_page_name;
+	public $page_id;
+	
 	public $cart_name;
 	public $cart_page_title;
-	public $cart_page_name;
-	public $page_id;
+	public $cart_page_name;	
 	
 	public $checkout_name;
 	public $checkout_page_title;
@@ -16,7 +21,13 @@ if (!class_exists('atm_activation'))
 	public $atm_account_title;
 	public $atm_account_page_name;
 		
-	function __construct(){                          
+	function __construct(){  
+	
+		$this->atm_shop_name      = 'auto-mobile';
+		$this->atm_shop_title = 'Auto Mobile';
+		$this->atm_shop_page_name  = $this->atm_shop_name;
+		$this->page_id    = '0';  
+	
 		$this->cart_name      = 'shopping-cart';
 		$this->cart_page_title = 'Shopping Cart';
 		$this->cart_page_name  = $this->cart_name;
@@ -36,7 +47,48 @@ if (!class_exists('atm_activation'))
 	
 	public function atm_activate()
     {
-      global $wpdb;      
+      global $wpdb; 
+
+	 delete_option($this->atm_shop_name.'_page_title');
+      add_option($this->atm_shop_name.'_page_title', $this->atm_shop_title, '', 'yes');
+
+      delete_option($this->atm_shop_name.'_page_name');
+      add_option($this->atm_shop_name.'_page_name', $this->atm_shop_page_name, '', 'yes');
+
+      delete_option($this->atm_shop_name.'_page_id');
+      add_option($this->atm_shop_name.'_page_id', $this->page_id, '', 'yes');
+
+      $the_shop_page = get_page_by_title($this->atm_shop_title);
+
+      if (!$the_shop_page)
+      {
+        // Create post object
+        $_p = array();
+        $_p['post_title']     = $this->atm_shop_title;
+        $_p['post_content']   = "AutoMobile Shop Page";
+        $_p['post_status']    = 'publish';
+        $_p['post_type']      = 'page';
+        $_p['comment_status'] = 'closed';
+        $_p['ping_status']    = 'closed';
+        $_p['post_category'] = array(1); // the default 'Uncatrgorised'
+
+        // Insert the post into the database
+        $this->page_id = wp_insert_post($_p);
+      }
+      else
+      {
+        // the plugin may have been previously active and the page may just be trashed...
+        $this->page_id = $the_shop_page->ID;
+
+        //make sure the page is not trashed...
+        $the_shop_page->post_status = 'publish';
+        $this->page_id = wp_update_post($the_shop_page);
+      }
+
+      delete_option($this->atm_shop_name.'_page_id');
+      add_option($this->atm_shop_name.'_page_id', $this->page_id);
+	  
+	  //Cart Page	  
 
       delete_option($this->cart_name.'_page_title');
       add_option($this->cart_name.'_page_title', $this->cart_page_title, '', 'yes');
@@ -165,14 +217,14 @@ if (!class_exists('atm_activation'))
 
     public function atm_deactivate()
     {
-      $this->atm_deletePage();
-      $this->atm_deleteOptions();
+      //$this->atm_deletePage();
+      //$this->atm_deleteOptions();
     }
 
     public function atm_uninstall()
     {
-      $this->atm_deletePage(true);
-      $this->atm_deleteOptions();
+      //$this->atm_deletePage(true);
+      //$this->atm_deleteOptions();
     }
 
     public function atm_query_parser($q)
@@ -224,6 +276,13 @@ if (!class_exists('atm_activation'))
         wp_delete_post($accid, true);
       elseif($accid && $hard == false)
         wp_delete_post($accid);	
+	
+	$shopid = get_option($this->atm_shop_name.'_page_id');
+      if($shopid && $shopid == true)
+        wp_delete_post($shopid, true);
+      elseif($shopid && $hard == false)
+        wp_delete_post($shopid);
+		
 		
     }
 
@@ -240,6 +299,10 @@ if (!class_exists('atm_activation'))
 	  delete_option($this->atm_account_name.'_checkout_page_title');
       delete_option($this->atm_account_name.'_checkout_page_name');
       delete_option($this->atm_account_name.'_page_id');
+	  
+	  delete_option($this->atm_shop_name.'_checkout_page_title');
+      delete_option($this->atm_shop_name.'_checkout_page_name');
+      delete_option($this->atm_shop_name.'_page_id');
 	  
     }
   }
