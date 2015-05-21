@@ -50,10 +50,10 @@ function auto_mobile_thumbnail($placeholderImge = '') {
                     <div class="row">
                         <div class="col-xs-12 col-md-6">
                             <span class="automobile-price">
-                               Price: <?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); ?></span>
+                               Price: <?php $itemPriec = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); if($itemPriec): echo '$'.$itemPriec; endif; ?></span>
                         </div>
                         <div class="col-xs-12 col-md-6">
-                            <a class="btn btn-success" href="<?php the_permalink(); ?>">Add to cart</a>
+                            <a data-item_id="<?php echo get_the_ID(); ?>" data-item_sku="<?php echo esc_html(get_post_meta(get_the_ID(), 'txt_automobile_sku', true)); ?>" data-quantity="1" data-item_price="<?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); ?>" class="btn btn-success auto_mobile_add_to_cart" href="<?php echo esc_url(home_url('/auto-mobile/?addToCart='.get_the_ID())); ?>">Add to cart</a>
                         </div>
                     </div>
                 </div>

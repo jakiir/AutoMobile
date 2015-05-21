@@ -1,4 +1,87 @@
 <?php 
+function autoMobileAddToCart(){	
+		$itemId = $_POST['itemId'];
+		if(itemId):
+		$itemSku = $_POST['itemSku'];
+		$quantity = $_POST['quantity'];
+		$itemPrice = $_POST['itemPrice'];
+		@session_start();    
+		$sessionId = session_id();
+		
+		$autoMobielSession = '_auto_mobile_session_'.$sessionId;
+		if ( get_option( $autoMobielSession ) !== false ) {	
+			update_option( $autoMobielSession, $sessionId );					
+		} else {
+			add_option( $autoMobielSession, $sessionId, '', 'yes' );
+		}
+		
+		
+		
+		$item_info = array(			
+			'item_1' 	=> array(
+						'item_id'			=> $itemId,
+						'item_sku'			=> $itemSku,
+						'item_quantity'		=> $quantity,
+						'item_price'		=> $itemPrice			
+					)			
+		);		
+		$item_information = serialize($item_info);
+
+		$auto_mobile_info = '_auto_mobile_info_'.$sessionId;
+		if ( get_option( $auto_mobile_info ) !== false ) {	
+			
+			$get_mobile_info = get_option( $auto_mobile_info );
+			$get_mobile_info_uns = unserialize($get_mobile_info);
+			$incr = 1;
+			foreach($get_mobile_info_uns as $key => $get_mobile_info_unss){
+				
+				if($get_mobile_info_unss['item_id'] === $itemId){
+					$itemQuantity = $get_mobile_info_unss['item_quantity']+1;
+					$item_price = $get_mobile_info_unss['item_price']+ $itemPrice;
+					$itemInfo = array(			
+						$key 	=> array(
+									'item_id'			=> $get_mobile_info_unss['item_id'],
+									'item_sku'			=> $itemSku,
+									'item_quantity'		=> $itemQuantity,
+									'item_price'		=> $item_price			
+								)			
+					);		
+					$item_inform = serialize($itemInfo);					
+					update_option( $auto_mobile_info, $item_inform );
+				} else {
+					
+					$itemInfo1 = array(			
+						$key 	=> $get_mobile_info_unss			
+					);
+					
+					$itemInfo2 = array(			
+						'item_'.$incr 	=> array(
+									'item_id'			=> $itemId,
+									'item_sku'			=> $itemSku,
+									'item_quantity'		=> $quantity,
+									'item_price'		=> $itemPrice			
+								)			
+					);		
+					$itemInfo_result = array_merge($itemInfo1, $itemInfo2);
+					$item_inform2 = serialize($itemInfo_result);
+					
+					update_option( $auto_mobile_info, $item_inform2 );
+				}
+				$incr++;
+			}		
+								
+		} else {			
+			add_option( $auto_mobile_info, $item_information, '', 'yes' );
+		}		
+		
+		endif;
+		
+		
+		
+  die();
+  }
+add_action( 'wp_ajax_nopriv_autoMobileAddToCart','autoMobileAddToCart' );
+add_action( 'wp_ajax_autoMobileAddToCart','autoMobileAddToCart' );
 
 //add colume
 
@@ -166,6 +249,10 @@ $template_path = plugin_dir_path( __FILE__ ) . '/template/automobile.php';
 
 if(is_page( 'automobile-checkout' )){
 $template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-checkout.php';
+}
+
+if(is_page( 'automobile-account' )){
+$template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-register.php';
 }
 
 return $template_path;

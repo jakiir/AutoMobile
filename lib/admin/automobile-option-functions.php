@@ -41,7 +41,11 @@ if (!is_admin()){
 if (!function_exists('automobile_js')) {
     function automobile_js() {	
            wp_enqueue_script( 'automobile_theme_options', plugins_url('assets/js/custom_automobile.js',dirname(__FILE__)) );
-           
+           wp_localize_script(
+			'automobile_theme_options',
+			'adminUrl',
+			 array( 'ajaxurl' => admin_url('admin-ajax.php') )
+		  );
           
     }
   }

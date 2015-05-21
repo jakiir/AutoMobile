@@ -7,9 +7,8 @@ get_header(); ?>
     <div id="" role="main">
     <?php  while ( have_posts() ) : the_post();    
     $pid=$post->ID;   
-    $post_image = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
+    $post_image= wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
     $author = get_the_author(get_the_ID($post->ID));
-	global $autoMobile;
 	?>
 
 <div class="container-fluid">
@@ -20,8 +19,7 @@ get_header(); ?>
             <h2><?php echo esc_attr($automobile_options['automobile_order_send_email']); ?></h2>
             	<div class="col-md-5 service-image-left">				                   
 						<center>
-							<?php $autoMobile->auto_mobile_thumbnail('400x250'); ?>
-							<!--<img id="item-display" src="<?php echo $post_image; ?>" alt=""></img>-->
+							<img id="item-display" src="<?php echo $post_image; ?>" alt=""></img>
 						</center>				
 				</div>					
 				<div class="col-md-7">

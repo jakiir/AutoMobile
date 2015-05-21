@@ -63,3 +63,13 @@
 ul#previous{
 	float:left
 }
+
+.addToCartLodding:after{
+  background-image: url('../images/loadingIcon.gif');
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  content: "";
+  width: 20px;
+  display: inline-block;
+  height: 20px;
+}

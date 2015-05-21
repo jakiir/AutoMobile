@@ -116,13 +116,14 @@ function automobile_discount_meta_box($post, $args){
         <p><span class=" add_more button button-primary button-large" style="margin-left:5px; margin-top:5xp;">Add More</span></p>
         <?php else:            
 			$get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
-			$get_automobile_mpn_uns = unserialize($get_automobile_mpn);			
+			$get_automobile_mpn_uns = unserialize($get_automobile_mpn);
+			if($get_automobile_mpn_uns):
 			foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>
 				<p>
 					<input size="50" name='txt_automobile_mpn[]' type='text' class='in_box'  value="<?php echo $get_automobile_mpn_un; ?>" />
 					<span class="rem"><a href='javascript:void(0);' ><span class="dashicons dashicons-dismiss"></span></a></span>
 				</p>
-			<?php endforeach; ?>
+			<?php endforeach; endif; ?>
             <p> <span class="add_more button button-primary button-large"><?php _e('Add More', 'automobile_plugin'); ?></span> </p>
         <?php endif;?>
     </div> 

@@ -65,7 +65,7 @@ if (!class_exists( 'AutoMobile' )){
 
 		  //add_filter('parse_query', array($this, 'atm_query_parser'));
 		  //add_filter('the_posts', array($this, 'atm_page_filter'));
-			
+		  			
 		  }
         function init(){
             
@@ -82,3 +82,5 @@ if (!class_exists( 'AutoMobile' )){
 }
 	
 ?>
+
+		
