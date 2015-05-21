@@ -32,44 +32,50 @@ function autoMobileAddToCart(){
 			
 			$get_mobile_info = get_option( $auto_mobile_info );
 			$get_mobile_info_uns = unserialize($get_mobile_info);
-			$incr = 1;
-			foreach($get_mobile_info_uns as $key => $get_mobile_info_unss){
-				
-				if($get_mobile_info_unss['item_id'] === $itemId){
-					$itemQuantity = $get_mobile_info_unss['item_quantity']+1;
-					$item_price = $get_mobile_info_unss['item_price']+ $itemPrice;
-					$itemInfo = array(			
-						$key 	=> array(
-									'item_id'			=> $get_mobile_info_unss['item_id'],
-									'item_sku'			=> $itemSku,
-									'item_quantity'		=> $itemQuantity,
-									'item_price'		=> $item_price			
-								)			
-					);		
-					$item_inform = serialize($itemInfo);					
-					update_option( $auto_mobile_info, $item_inform );
+
+			foreach ($get_mobile_info_uns as $key => $value){
+				$singleArray[$key] = $value['item_id'];
+			}
+			
+			
+				if (in_array($itemId, $singleArray)) {	
+
+				foreach ($get_mobile_info_uns as $key => $get_mobile_info_unss){
+					if($get_mobile_info_unss['item_id'] === $itemId){
+						$itemQuantity = $get_mobile_info_unss['item_quantity']+1;
+						$item_price = $get_mobile_info_unss['item_price']+ $itemPrice;					
+						$itemInfo = array(			
+							$key 	=> array(
+										'item_id'			=> $get_mobile_info_unss['item_id'],
+										'item_sku'			=> $itemSku,
+										'item_quantity'		=> $itemQuantity,
+										'item_price'		=> $item_price			
+									)			
+						);	
+						$itemInfoResult = array_merge($get_mobile_info_uns, $itemInfo );
+						$item_inform = serialize($itemInfoResult);					
+						update_option( $auto_mobile_info, $item_inform );
+					}					
+				}
+					
 				} else {
-					
-					$itemInfo1 = array(			
-						$key 	=> $get_mobile_info_unss			
-					);
-					
-					$itemInfo2 = array(			
-						'item_'.$incr 	=> array(
+					$lastKey = substr(end(array_keys($get_mobile_info_uns)), -1);
+					$incrLast = $lastKey+1;					
+					$item_info2 = array(			
+						'item_'.$incrLast 	=> array(
 									'item_id'			=> $itemId,
 									'item_sku'			=> $itemSku,
 									'item_quantity'		=> $quantity,
 									'item_price'		=> $itemPrice			
 								)			
-					);		
-					$itemInfo_result = array_merge($itemInfo1, $itemInfo2);
-					$item_inform2 = serialize($itemInfo_result);
-					
+					);
+				
+					$itemInfo_result = array_merge($get_mobile_info_uns, $item_info2 );
+					$item_inform2 = serialize($itemInfo_result);					
 					update_option( $auto_mobile_info, $item_inform2 );
+				
 				}
-				$incr++;
-			}		
-								
+							
 		} else {			
 			add_option( $auto_mobile_info, $item_information, '', 'yes' );
 		}		
