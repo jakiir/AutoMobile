@@ -16,7 +16,6 @@ function autoMobileAddToCart(){
 		}
 		
 		
-		
 		$item_info = array(			
 			'item_1' 	=> array(
 						'item_id'			=> $itemId,
@@ -55,6 +54,12 @@ function autoMobileAddToCart(){
 						$itemInfoResult = array_merge($get_mobile_info_uns, $itemInfo );
 						$item_inform = serialize($itemInfoResult);					
 						update_option( $auto_mobile_info, $item_inform );
+						
+						if ( is_user_logged_in() ) {
+							$user_ID = get_current_user_id();
+							update_user_meta( $user_ID, 'auto_mobile_shopping_cart', $item_inform );
+						}
+						
 					}					
 				}
 					
@@ -73,11 +78,22 @@ function autoMobileAddToCart(){
 					$itemInfo_result = array_merge($get_mobile_info_uns, $item_info2 );
 					$item_inform2 = serialize($itemInfo_result);					
 					update_option( $auto_mobile_info, $item_inform2 );
+					
+					if ( is_user_logged_in() ) {
+						$user_ID = get_current_user_id();
+						update_user_meta( $user_ID, 'auto_mobile_shopping_cart', $item_inform2 );
+					}
 				
 				}
 							
 		} else {			
 			add_option( $auto_mobile_info, $item_information, '', 'yes' );
+			
+			if ( is_user_logged_in() ) {
+				$user_ID = get_current_user_id();
+				update_user_meta( $user_ID, 'auto_mobile_shopping_cart', $item_information );
+			}
+			
 		}		
 		
 		endif;
@@ -112,6 +128,10 @@ function autoMobileRemoveCart(){
 			$item_inform2 = serialize($get_mobile_info_uns);					
 			update_option( $auto_mobile_info, $item_inform2 );
 			
+			if ( is_user_logged_in() ) {
+				$user_ID = get_current_user_id();
+				update_user_meta( $user_ID, 'auto_mobile_shopping_cart', $item_inform2 );
+			}
 		
 		endif;
 		
