@@ -44,7 +44,10 @@ function auto_mobile_thumbnail($placeholderImge = '') {
 				</a>
                 <div class="caption">
                     <h4 class="group inner list-group-item-heading">
-                        <?php the_title(); ?></h4>
+							<a href="<?php the_permalink(); ?>">
+								<?php the_title(); ?>
+							</a>
+					</h4>
                     <p class="group inner list-group-item-text">
                         <?php echo $automobile_content; ?></p>
                     <div class="row">

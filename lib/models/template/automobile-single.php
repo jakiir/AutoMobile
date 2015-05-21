@@ -55,9 +55,7 @@ get_header(); ?>
                     
                     
 					<div class="btn-group cart">
-						<button type="button" class="btn btn-success">
-							Add to cart 
-						</button>
+						<a data-item_id="<?php echo get_the_ID(); ?>" data-item_sku="<?php echo esc_html(get_post_meta(get_the_ID(), 'txt_automobile_sku', true)); ?>" data-quantity="1" data-item_price="<?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); ?>" class="btn btn-success auto_mobile_add_to_cart" href="<?php echo esc_url(home_url('/auto-mobile/?addToCart='.get_the_ID())); ?>">Add to cart</a>
 					</div>	
                     
                     			
@@ -88,10 +86,11 @@ get_header(); ?>
                     <ul>
 						<?php 
 						$get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
-						$get_automobile_mpn_uns = unserialize($get_automobile_mpn);			
+						$get_automobile_mpn_uns = unserialize($get_automobile_mpn);	
+						if($get_automobile_mpn_uns):
 						foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>
 							<li><?php echo $get_automobile_mpn_un; ?></li>
-						<?php endforeach; ?>
+						<?php endforeach; endif; ?>
                     </ul>
                     </section>
 						

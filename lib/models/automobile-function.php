@@ -89,6 +89,38 @@ function autoMobileAddToCart(){
 add_action( 'wp_ajax_nopriv_autoMobileAddToCart','autoMobileAddToCart' );
 add_action( 'wp_ajax_autoMobileAddToCart','autoMobileAddToCart' );
 
+
+
+function autoMobileRemoveCart(){	
+		$itemId = $_POST['itemId'];
+		if(itemId):
+		$item_key = $_POST['item_key'];
+		@session_start();    
+		$sessionId = session_id();
+		
+				
+		$item_information = serialize($item_info);
+
+		$auto_mobile_info = '_auto_mobile_info_'.$sessionId;			
+			
+			$get_mobile_info = get_option( $auto_mobile_info );
+			$get_mobile_info_uns = unserialize($get_mobile_info);		
+			
+			unset($get_mobile_info_uns[$item_key]);
+			
+			//print_r($get_mobile_info_uns);
+			$item_inform2 = serialize($get_mobile_info_uns);					
+			update_option( $auto_mobile_info, $item_inform2 );
+			
+		
+		endif;
+		
+		
+		
+  die();
+  }
+add_action( 'wp_ajax_nopriv_autoMobileRemoveCart','autoMobileRemoveCart' );
+add_action( 'wp_ajax_autoMobileRemoveCart','autoMobileRemoveCart' );
 //add colume
 
 function automobile_columns( $columns ) {
