@@ -1,4 +1,4 @@
- <?php
+<?php
 /* Template Name: Automobile archive */
 ?>
 <?php get_header(); ?>
@@ -18,22 +18,22 @@
         </div>
     </div>
     <div id="products" class="row list-group">
-        
+
         <?php if ( have_posts() ) : ?>
           <header class="page-header">
           <h1 class="page-title">Movie Reviews</h1>
-         </header>        
-        <?php 
-		$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-		$args = array(
-			'post_type' => 'tlp_automobile',
-			'post_status' => 'publish',
-			'posts_per_page' => 3,
-			'paged' => $paged
-		);	
-		global $autoMobile;
-		$autoMobile->get_all_automobiles($args);
-		$autoMobile->automobile_pagination($args);
+         </header>
+        <?php
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+        $args = array(
+            'post_type' => 'tlp_automobile',
+            'post_status' => 'publish',
+            'posts_per_page' => 3,
+            'paged' => $paged
+        );
+        global $autoMobile;
+        $autoMobile->get_all_automobiles($args);
+        $autoMobile->automobile_pagination($args);
  endif; ?>
     </div>
 </div>

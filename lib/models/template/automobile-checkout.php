@@ -1,6 +1,5 @@
 <?php
- /*Template Name: checkout
- */
+ /*Template Name: checkout*/
  
  $automobile_options = get_option('automobile_options');
  

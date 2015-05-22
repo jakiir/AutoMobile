@@ -3,53 +3,53 @@ if (!class_exists('atm_activation'))
 {
   class atm_activation
   {
-	  
-	public $atm_shop_name;
-	public $atm_shop_title;
-	public $atm_shop_page_name;
-	public $page_id;
-	
-	public $cart_name;
-	public $cart_page_title;
-	public $cart_page_name;	
-	
-	public $checkout_name;
-	public $checkout_page_title;
-	public $checkout_page_name;
-	
-	public $atm_account_name;
-	public $atm_account_title;
-	public $atm_account_page_name;
-		
-	function __construct(){  
-	
-		$this->atm_shop_name      = 'auto-mobile';
-		$this->atm_shop_title = 'Auto Mobile';
-		$this->atm_shop_page_name  = $this->atm_shop_name;
-		$this->page_id    = '0';  
-	
-		$this->cart_name      = 'shopping-cart';
-		$this->cart_page_title = 'Shopping Cart';
-		$this->cart_page_name  = $this->cart_name;
-		$this->page_id    = '0';  
-		
-		$this->checkout_name      = 'automobile-checkout';
-		$this->checkout_page_title = 'Automobile Checkout';
-		$this->checkout_page_name  = $this->checkout_name;
-		$this->page_id    = '0';
-		
-		$this->atm_account_name      = 'automobile-account';
-		$this->atm_account_title = 'Automobile Account';
-		$this->atm_account_page_name  = $this->atm_account_name;
-		$this->page_id    = '0';
-    }
-	
-	
-	public function atm_activate()
-    {
-      global $wpdb; 
 
-	 delete_option($this->atm_shop_name.'_page_title');
+    public $atm_shop_name;
+    public $atm_shop_title;
+    public $atm_shop_page_name;
+    public $page_id;
+
+    public $cart_name;
+    public $cart_page_title;
+    public $cart_page_name;
+
+    public $checkout_name;
+    public $checkout_page_title;
+    public $checkout_page_name;
+
+    public $atm_account_name;
+    public $atm_account_title;
+    public $atm_account_page_name;
+
+    function __construct(){
+
+        $this->atm_shop_name      = 'auto-mobile';
+        $this->atm_shop_title = 'Auto Mobile';
+        $this->atm_shop_page_name  = $this->atm_shop_name;
+        $this->page_id    = '0';
+
+        $this->cart_name      = 'shopping-cart';
+        $this->cart_page_title = 'Shopping Cart';
+        $this->cart_page_name  = $this->cart_name;
+        $this->page_id    = '0';
+
+        $this->checkout_name      = 'automobile-checkout';
+        $this->checkout_page_title = 'Automobile Checkout';
+        $this->checkout_page_name  = $this->checkout_name;
+        $this->page_id    = '0';
+
+        $this->atm_account_name      = 'automobile-account';
+        $this->atm_account_title = 'Automobile Account';
+        $this->atm_account_page_name  = $this->atm_account_name;
+        $this->page_id    = '0';
+    }
+
+
+    public function atm_activate()
+    {
+      global $wpdb;
+
+     delete_option($this->atm_shop_name.'_page_title');
       add_option($this->atm_shop_name.'_page_title', $this->atm_shop_title, '', 'yes');
 
       delete_option($this->atm_shop_name.'_page_name');
@@ -87,8 +87,8 @@ if (!class_exists('atm_activation'))
 
       delete_option($this->atm_shop_name.'_page_id');
       add_option($this->atm_shop_name.'_page_id', $this->page_id);
-	  
-	  //Cart Page	  
+
+      //Cart Page
 
       delete_option($this->cart_name.'_page_title');
       add_option($this->cart_name.'_page_title', $this->cart_page_title, '', 'yes');
@@ -128,10 +128,10 @@ if (!class_exists('atm_activation'))
 
       delete_option($this->cart_name.'_page_id');
       add_option($this->cart_name.'_page_id', $this->page_id);
-	  
-	  // Checkout page
-	  
-	  delete_option($this->checkout_name.'_page_title');
+
+      // Checkout page
+
+      delete_option($this->checkout_name.'_page_title');
       add_option($this->checkout_name.'_page_title', $this->checkout_page_title, '', 'yes');
 
       delete_option($this->checkout_name.'_page_name');
@@ -169,11 +169,11 @@ if (!class_exists('atm_activation'))
 
       delete_option($this->checkout_name.'_page_id');
       add_option($this->checkout_name.'_page_id', $this->page_id);
-	  
-	  
-	  // AutoMobile Account page
-	  
-	  delete_option($this->atm_account_name.'_page_title');
+
+
+      // AutoMobile Account page
+
+      delete_option($this->atm_account_name.'_page_title');
       add_option($this->atm_account_name.'_page_title', $this->atm_account_title, '', 'yes');
 
       delete_option($this->atm_account_name.'_page_name');
@@ -211,8 +211,8 @@ if (!class_exists('atm_activation'))
 
       delete_option($this->atm_account_name.'_page_id');
       add_option($this->atm_account_name.'_page_id', $this->page_id);
-	  
-	  
+
+
     }
 
     public function atm_deactivate()
@@ -264,26 +264,26 @@ if (!class_exists('atm_activation'))
         wp_delete_post($id, true);
       elseif($id && $hard == false)
         wp_delete_post($id);
-		
-	 $chid = get_option($this->checkout_name.'_page_id');
+
+     $chid = get_option($this->checkout_name.'_page_id');
       if($chid && $hard == true)
         wp_delete_post($chid, true);
       elseif($chid && $hard == false)
         wp_delete_post($chid);
-		
-	$accid = get_option($this->atm_account_name.'_page_id');
+
+    $accid = get_option($this->atm_account_name.'_page_id');
       if($accid && $hard == true)
         wp_delete_post($accid, true);
       elseif($accid && $hard == false)
-        wp_delete_post($accid);	
-	
-	$shopid = get_option($this->atm_shop_name.'_page_id');
+        wp_delete_post($accid);
+
+    $shopid = get_option($this->atm_shop_name.'_page_id');
       if($shopid && $shopid == true)
         wp_delete_post($shopid, true);
       elseif($shopid && $hard == false)
         wp_delete_post($shopid);
-		
-		
+
+
     }
 
     private function atm_deleteOptions()
@@ -291,19 +291,19 @@ if (!class_exists('atm_activation'))
       delete_option($this->cart_name.'_cart_page_title');
       delete_option($this->cart_name.'_cart_page_name');
       delete_option($this->cart_name.'_page_id');
-	  
-	  delete_option($this->checkout_name.'_checkout_page_title');
+
+      delete_option($this->checkout_name.'_checkout_page_title');
       delete_option($this->checkout_name.'_checkout_page_name');
       delete_option($this->checkout_name.'_page_id');
-	  
-	  delete_option($this->atm_account_name.'_checkout_page_title');
+
+      delete_option($this->atm_account_name.'_checkout_page_title');
       delete_option($this->atm_account_name.'_checkout_page_name');
       delete_option($this->atm_account_name.'_page_id');
-	  
-	  delete_option($this->atm_shop_name.'_checkout_page_title');
+
+      delete_option($this->atm_shop_name.'_checkout_page_title');
       delete_option($this->atm_shop_name.'_checkout_page_name');
       delete_option($this->atm_shop_name.'_page_id');
-	  
+
     }
   }
 }
