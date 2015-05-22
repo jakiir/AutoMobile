@@ -146,4 +146,48 @@ function automobile_set_font_style($fontstyle){
     return $stack;
 }
 
+function add_automobile_make(){
+    $make_val = $_POST['make_val'];
+    $success = false;
+    if($make_val !=''){
+        $make_info = array(
+            'make_1'    =>   $make_val
+        );
+        $make_info2 = serialize($make_info);
+        $auto_mobile_make = '_auto_mobile_make';
+        if ( get_option( $auto_mobile_make ) !== false ) {
+
+           $get_auto_mobile_make = get_option( $auto_mobile_make );
+            $get_auto_mobile_make_uns = unserialize($get_auto_mobile_make);
+
+            $lastKey = substr(end(array_keys($get_auto_mobile_make_uns)), -1);
+            $incrLast = intval($lastKey) + 1;
+            $item_info2 = array(
+                'make_'.$incrLast => $make_val
+            );
+            $itemInfo_result = array_merge($get_auto_mobile_make_uns, $item_info2 );
+            $item_inform2 = serialize($itemInfo_result);
+           update_option( $auto_mobile_make, $item_inform2 );
+
+        } else {
+            add_option( $auto_mobile_make, $make_info2, '', 'yes' );
+        }
+
+
+        $success = true;
+        $value = $make_val;
+    } else {
+        $success = false;
+        $value = 'Required field!';
+    }
+    $results = array(
+        'success'   => $success,
+        'value'     => $value
+    );
+    echo json_encode($results);
+    die();
+}
+add_action( 'wp_ajax_nopriv_add_automobile_make','add_automobile_make' );
+add_action( 'wp_ajax_add_automobile_make','add_automobile_make' );
+
 ?>

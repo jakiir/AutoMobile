@@ -19,6 +19,11 @@ function automobile_register_admin_scripts() {
     wp_enqueue_script( 'automobile_colorpicker', plugins_url('js/colorpicker.js',__FILE__  ) );
     wp_enqueue_script( 'automobile_select_js', plugins_url('js/jquery.customSelect.min.js',__FILE__  ) );
     wp_enqueue_script('automobile_theme_options', plugins_url('js/automobile-options.js',__FILE__ ) );
+    wp_localize_script(
+        'automobile_theme_options',
+        'adminUrl',
+        array( 'ajaxurl' => admin_url('admin-ajax.php') )
+    );
     wp_enqueue_script('automobile_meta_latest', plugins_url('js/jquery-latest.js',__FILE__ ) );
 
     // Enqueue Datepicker + jQuery UI CSS
@@ -184,8 +189,8 @@ function automobile_theme_options_page() {
                                             <p class="reset-info"><?php _e('If you want to reset the theme settings.', 'automobileoptions');?> </p>
                                             <input type="submit" name="automobile_options[reset]" class="button-primary" value="<?php _e( 'Reset Settings', 'automobileoptions' ); ?>" />
                                         </div>
-                                    </div>	<!-- /fields_wrap -->
-                            </div>	<!-- /tab_block -->
+                                    </div><!-- /fields_wrap -->
+                            </div><!-- /tab_block -->
 
                         </div> <!-- /option -->
 
@@ -198,7 +203,7 @@ function automobile_theme_options_page() {
         </form>
 
         </div> <!-- /automobile-admin -->
-        </div>	<!-- /tab_block -->
+        </div><!-- /tab_block -->
 
 
     <?php

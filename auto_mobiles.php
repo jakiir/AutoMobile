@@ -86,7 +86,7 @@ if (!class_exists( 'AutoMobile' )){
             if ( has_post_thumbnail() ) {
                 if(@file_exists($check_image_dir)){
                     //$automobile_image   = automobile_resize( $thumb_url,400,250, true );
-                    echo '<img class="group list-group-image" src="'.$placeholderImage.'" alt="" />';
+                    echo '<img class="group list-group-image" src="'.$thumb_url.'" alt="" />';
                 } else {
                     echo '<img src="http://placehold.it/'.$placeholderImage.'" />';
                 }
@@ -102,18 +102,18 @@ if (!class_exists( 'AutoMobile' )){
      * @since 1.0
      */
     static function install_db() {
-        //global $wpdb;
+        global $wpdb;
 
-       // $auto_mobile_order     = $wpdb->prefix . 'auto_mobile_order';
-        //$auto_mobile_order_meta      = $wpdb->prefix . 'auto_mobile_order_meta';
+       $auto_mobile_order     = $wpdb->prefix . 'auto_mobile_order';
+        $auto_mobile_order_meta      = $wpdb->prefix . 'auto_mobile_order_meta';
 
-        // Explicitly set the character set and collation when creating the tables
-        //$charset = ( defined( 'DB_CHARSET' && '' !== DB_CHARSET ) ) ? DB_CHARSET : 'utf8';
-        //$collate = ( defined( 'DB_COLLATE' && '' !== DB_COLLATE ) ) ? DB_COLLATE : 'utf8_general_ci';
+        //Explicitly set the character set and collation when creating the tables
+        $charset = ( defined( 'DB_CHARSET' && '' !== DB_CHARSET ) ) ? DB_CHARSET : 'utf8';
+        $collate = ( defined( 'DB_COLLATE' && '' !== DB_COLLATE ) ) ? DB_COLLATE : 'utf8_general_ci';
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-       /* $order_sql = "CREATE TABLE $auto_mobile_order (
+       $order_sql = "CREATE TABLE $auto_mobile_order (
               order_item_id bigint(20) NOT NULL AUTO_INCREMENT,
               order_item_name longtext COLLATE utf8mb4_unicode_ci NOT NULL,
               order_item_type varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -134,7 +134,7 @@ if (!class_exists( 'AutoMobile' )){
 
         // Create or Update database tables
         dbDelta( $order_sql );
-        dbDelta( $order_meta_sql );*/
+        dbDelta( $order_meta_sql );
     }
     }
     global $autoMobile;

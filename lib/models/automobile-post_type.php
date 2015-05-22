@@ -47,6 +47,90 @@ function automobile_taxonomies() {
         )
     );
 }
+
+add_action( 'admin_menu', 'automobile_submenu', 2 );
+function automobile_submenu() {
+    add_submenu_page(
+        'edit.php?post_type=tlp_automobile',
+        'Attributes', /*page title*/
+        'Attributes', /*menu title*/
+        'manage_options', /*roles and capabiliyt needed*/
+        'attributes',
+        'automobile_attributes' /*replace with your own function*/
+    );
+
+}
+
+function automobile_attributes(){
+    ?>
+    <div id="automobile-admin">
+        <div class="header">
+            <div class="main">
+                <div class="left">
+                    <h2><?php echo _e('Attributes', 'automobileoptions'); ?></h2>
+                </div>
+            </div>
+        </div><!-- /header -->
+        <div class="options-wrap">
+            <div class="automobile">
+                <ul>
+                    <li class="general first"><a href="#automobile_make"><i class="icon-cogs"></i><?php echo _e('Make', 'automobileoptions'); ?></a></li>
+                    <li class="shortcode"><a href="#automobile_model"><i class="icon-trello"></i><?php echo _e('Model', 'automobileoptions'); ?></a></li>
+
+                </ul>
+            </div><!-- /subheader -->
+
+
+                <div class="options-form">
+
+                    <div class="automobile_content">
+                        <div id="automobile_make" class="automobile_block">
+
+
+                            <h2><?php _e('Automobile make', 'automobileoptions'); ?></h2>
+                            <div class="fields_wrap">
+                                <label for="automobile_make_id">Add automobile make</label>
+                                <input type="text" name="automobile_make" class="" id="automobile_make_id"/>
+                                <input type="submit" name="automobile_make_submit" id="automobile_make_submit" class="button-primary" value="Add New">
+                                <span class="reloadIcon" style="display:none"></span>
+                                <span class="message"></span>
+                                <ul id="make_display_area">
+                                    <?php
+                                    $auto_mobile_make = '_auto_mobile_make';
+                                    $get_auto_mobile_make = get_option( $auto_mobile_make );
+                                    $get_auto_mobile_make_uns = unserialize($get_auto_mobile_make);
+                                    foreach($get_auto_mobile_make_uns as $get_auto_mobile_make_unss):
+                                         echo "<li>$get_auto_mobile_make_unss</li>";
+                                        endforeach;
+                                    ?>
+
+                                </ul>
+                            </div> <!-- /fields-wrap -->
+
+
+                        </div><!-- /fields_wrap -->
+
+
+                        <div id="automobile_model" class="automobile_block">
+                            <h2><?php _e('Automobile model', 'automobileoptions'); ?></h2>
+                            automobile_model
+                            <div class="fields_wrap">
+
+                            </div> <!-- /fields-wrap -->
+
+                        </div><!-- /tab_block -->
+                    </div> <!-- /option -->
+
+                </div>
+                <div class="options-footer">
+
+                </div>
+        </div> <!-- /automobile-admin -->
+    </div><!-- /tab_block -->
+<?php
+}
+
+
 add_filter( 'manage_edit-tlp_automobile_columns', 'automobile_columns' );
 
  function tlp_automobile_meta_box()
@@ -114,7 +198,7 @@ function automobile_discount_meta_box($post){
         <p><label for="txt_automobile_mpn2"></label>
             <input type="text" name="txt_automobile_mpn" id="txt_automobile_mpn2" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>" />
         </p>
-        <p><span class=" add_more button button-primary button-large" style="margin-left:5px; margin-top:5xp;">Add More</span></p>
+        <p><span class=" add_more button button-primary button-large" style="margin-left:5px; margin-top:5px;">Add More</span></p>
         <?php else:
             $get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
             $get_automobile_mpn_uns = unserialize($get_automobile_mpn);

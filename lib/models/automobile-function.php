@@ -44,7 +44,7 @@ function autoMobileAddToCart(){
                         $itemQuantity = $get_mobile_info_unss['item_quantity']+1;
                         $item_price = $get_mobile_info_unss['item_price']+ $itemPrice;
                         $itemInfo = array(
-                            $key 	=> array(
+                            $key => array(
                                         'item_id'           => $get_mobile_info_unss['item_id'],
                                         'item_sku'          => $itemSku,
                                         'item_quantity'     => $itemQuantity,
