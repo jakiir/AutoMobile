@@ -26,7 +26,8 @@ if (!class_exists( 'AutoMobile' )){
         public $prefixLong  = 'auto_mobile_';
         public $website     = 'http://jakirhossain.com';
         
-        function __construct(){ 
+        function __construct(){
+            global $wpdb;
             $this->file             = __FILE__;
             $this->pluginSlug       = plugin_basename(__FILE__);
             $this->pluginPath       = dirname( __FILE__ );
@@ -65,14 +66,62 @@ if (!class_exists( 'AutoMobile' )){
 
 		  //add_filter('parse_query', array($this, 'atm_query_parser'));
 		  //add_filter('the_posts', array($this, 'atm_page_filter'));
+
+
+
+            // Setup global database table names
+            //$this->auto_mobile_order 	= $wpdb->prefix . 'auto_mobile_order';
+            //$this->auto_mobile_order_meta 		= $wpdb->prefix . 'auto_mobile_order_meta';
 		  			
 		  }
         function init(){
             
-            $this->pluginInit(); 
+            $this->pluginInit();
+
+            $this->install_db();
 			
         }
 		
+		/**
+	 * Install database tables
+	 *
+	 * @since 1.0
+	 */
+	static function install_db() {
+		global $wpdb;
+
+		$auto_mobile_order     = $wpdb->prefix . 'auto_mobile_order';
+		$auto_mobile_order_meta      = $wpdb->prefix . 'auto_mobile_order_meta';
+
+		// Explicitly set the character set and collation when creating the tables
+		$charset = ( defined( 'DB_CHARSET' && '' !== DB_CHARSET ) ) ? DB_CHARSET : 'utf8';
+		$collate = ( defined( 'DB_COLLATE' && '' !== DB_COLLATE ) ) ? DB_COLLATE : 'utf8_general_ci';
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+		$order_sql = "CREATE TABLE $auto_mobile_order (
+			  order_item_id bigint(20) NOT NULL AUTO_INCREMENT,
+			  order_item_name longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+			  order_item_type varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+			  order_id bigint(20) NOT NULL,
+			  PRIMARY KEY (order_item_id),
+			  KEY order_id (order_id)
+			) DEFAULT CHARACTER SET $charset COLLATE $collate;";
+
+		$order_meta_sql = "CREATE TABLE $auto_mobile_order_meta (
+				  meta_id bigint(20) NOT NULL AUTO_INCREMENT,
+                  order_item_id bigint(20) NOT NULL,
+                  meta_key varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+                  meta_value longtext COLLATE utf8mb4_unicode_ci,
+                  PRIMARY KEY (meta_id),
+                  KEY order_item_id (order_item_id),
+                  KEY meta_key (meta_key(191))
+			) DEFAULT CHARACTER SET $charset COLLATE $collate;";
+
+		// Create or Update database tables
+		dbDelta( $order_sql );
+		dbDelta( $order_meta_sql );
+	}
 	        
         
     }

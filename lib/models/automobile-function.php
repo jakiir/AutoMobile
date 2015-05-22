@@ -106,7 +106,6 @@ add_action( 'wp_ajax_nopriv_autoMobileAddToCart','autoMobileAddToCart' );
 add_action( 'wp_ajax_autoMobileAddToCart','autoMobileAddToCart' );
 
 
-
 function autoMobileRemoveCart(){	
 		$itemId = $_POST['itemId'];
 		if(itemId):
