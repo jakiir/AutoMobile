@@ -7,17 +7,6 @@
 
 if ( ! function_exists( 'wp_img_resizer_src' ) ) {
 
-    /**
-     * Retrieve an image to represent an url on the fly
-     *
-     * @param   $args  Array with
-     *          url    => path to the image
-     *          width  =>
-     *          height => Optional
-     *          crop   => Optional, Whether to crop image or resize. | default is FALSE
-     *          single => Optional, true for single url on return $image, false for Array | default is TRUE
-     * @return  $image Array with url, width, height
-     */
     function wp_img_resizer_src( $args = '' ) {
 
         // set defaults
@@ -35,7 +24,7 @@ if ( ! function_exists( 'wp_img_resizer_src' ) ) {
             apply_filters( 'wp_img_resizer_args', $defaults )
         );
 
-        // validate inputsan is an @ToDo
+        // validate inputsan is an @ToDo_
         if ( ! $args['url'] )
             return FALSE;
 
@@ -159,23 +148,6 @@ if ( ! function_exists( 'wp_img_resizer_src' ) ) {
 
 if ( ! function_exists( 'wp_img_resizer' ) ) {
 
-    /**
-     * Get an HTML img element representing an image url
-     *
-     * @param   $args  Array with
-     *          url    => path to the image
-     *          width  =>
-     *          height => Optional
-     *          crop   => Optional, Whether to crop image or resize. | default is FALSE
-     *          single => Optional, true for single url on return $image, false for Array | default is TRUE
-     *          echo   => Optional, true for echo the html, false for an return | default is true
-     * @param   $attr  Array for attributes of html in img-tag
-     *          src    =>
-     *          class  =>
-     *          alt    =>
-     *          title  =>
-     * @return  $image Array with url, width, height
-     */
     function wp_img_resizer( $args = '', $attr = '' ) {
 
         // set to get an array
@@ -214,9 +186,13 @@ if ( ! function_exists( 'wp_img_resizer' ) ) {
         }
         $html .= ' />';
 
-        if ( $args['echo'] )
+        if ( $args['echo'] ) {
             echo $html;
-        else
+        }
+        if(!$args['echo']) {
             return $html;
+        } else {
+            return null;
+        }
     }
 }

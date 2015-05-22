@@ -77,6 +77,25 @@ if (!class_exists( 'AutoMobile' )){
 
         }
 
+        function auto_mobile_thumbnail($placeholderImage = '') {
+            $uploads_dir = wp_upload_dir();
+            $upload_url = $uploads_dir['baseurl']."/";
+            $upload_dir = $uploads_dir['basedir']."/";
+            $thumb_url = wp_get_attachment_url( get_post_thumbnail_id( get_the_ID(), 'medium' ) );
+            $check_image_dir = str_replace($upload_url, $upload_dir, $thumb_url);
+            if ( has_post_thumbnail() ) {
+                if(@file_exists($check_image_dir)){
+                    //$automobile_image   = automobile_resize( $thumb_url,400,250, true );
+                    echo '<img class="group list-group-image" src="'.$placeholderImage.'" alt="" />';
+                } else {
+                    echo '<img src="http://placehold.it/'.$placeholderImage.'" />';
+                }
+            }
+            else {
+                echo '<img src="http://placehold.it/'.$placeholderImage.'" />';
+            }
+        }
+
         /**
      * Install database tables
      *

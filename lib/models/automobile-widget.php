@@ -14,7 +14,7 @@
             return $category_list;
         }else{
             $parent_id = get_term_by('slug', $parent, $category_name);
-            $get_category = get_categories( array( 'taxonomy' => $category_name, 'child_of' => $parent_id->term_id, 'hide_empty' => 0	));
+            $get_category = get_categories( array( 'taxonomy' => $category_name, 'child_of' => $parent_id->term_id, 'hide_empty' => 0));
             $category_list = array( '0' => $parent );
 
             if( !empty($get_category) ){
@@ -49,16 +49,16 @@ class Recent_team extends WP_Widget {
         //if($port_cat == "All"){ $port_cat = ''; }
 
         // Opening of widget
-        echo $before_widget;
+       // echo $before_widget;
 
         // Open of title tag
         if ( $title ){
-            echo $before_title . $title . $after_title;
+            //echo $before_title . $title . $after_title;
         }
 
         // Widget Content
         wp_reset_query();
-        $current_post = array(get_the_ID());
+        //$current_post = array(get_the_ID());
         $custom_posts = get_posts( array('post_type'=>'your_team', 'suppress_filters' => 0, 'showposts'=>$show_num) );
 
         //print_r($custom_posts);
@@ -93,7 +93,7 @@ class Recent_team extends WP_Widget {
         }
 
         // Closing of widget
-        echo $after_widget;
+       // echo $after_widget;
     }
 
     // Widget Form
@@ -104,7 +104,7 @@ class Recent_team extends WP_Widget {
             $show_num = esc_attr( $instance[ 'show_num' ] );
         } else {
             $title = '';
-            $port_cat = '';
+            //$port_cat = '';
             $show_num = '6';
         }
         ?>

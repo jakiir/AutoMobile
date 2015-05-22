@@ -33,7 +33,7 @@
         );
         global $autoMobile;
         $autoMobile->get_all_automobiles($args);
-        $autoMobile->automobile_pagination($args);
+        echo $autoMobile->automobile_pagination($args);
  endif; ?>
     </div>
 </div>

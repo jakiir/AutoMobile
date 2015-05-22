@@ -4,5 +4,5 @@
  
  $automobile_options = get_option('automobile_options');
  
-get_header(); ?>
-<?php get_footer(); ?>
+get_header();
+get_footer();

@@ -64,15 +64,15 @@ add_action( 'wp_enqueue_scripts', 'automobile_public_css' );
 
 function automobile_custom_styles(){
     $options = get_option('automobile_options');
-    $automobile_text_color = $options['automobile_text_color'];
+    //$automobile_text_color = $options['automobile_text_color'];
     $automobile_background_color = $options['automobile_background_color'];
     $automobile_hover_background_color = $options['automobile_hover_background_color'];
     $automobile_links_hover_color = $options['automobile_links_hover_color'];
-    $automobile_fontsize = $options['automobile_fontsize'];
+    //$automobile_fontsize = $options['automobile_fontsize'];
     $automobile_links_color = $options['automobile_links_color'];
-    $automobile_line_height = $options['automobile_line_height'];
-    $automobile_padding_top_bottom = $options['automobile_padding_top_bottom'];
-    $automobile_padding_left_right = $options['automobile_padding_left_right'];
+    //$automobile_line_height = $options['automobile_line_height'];
+    //$automobile_padding_top_bottom = $options['automobile_padding_top_bottom'];
+    //$automobile_padding_left_right = $options['automobile_padding_left_right'];
 
     $custom_css = "
                 div.bhoechie-tab-container{

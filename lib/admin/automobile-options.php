@@ -118,14 +118,14 @@ function automobile_theme_options_page() {
                     <li class="reset"><a href="#reset"><i class="icon-refresh"></i><?php echo _e('Reset', 'wellthemes'); ?></a></li>
                 </ul>
             </div><!-- /subheader -->
-
+            <form action="options.php" method="post">
             <div class="options-form">
 
                     <?php if ( isset( $_GET['settings-updated'] ) ) : ?>
                         <div class="updated fade"><p><?php _e('automobile settings updated successfully', 'automobileoptions'); ?></p></div>
                     <?php endif; ?>
 
-                    <form action="options.php" method="post">
+
 
                         <?php settings_fields( 'automobile_options' ); ?>
                         <?php $options = get_option('automobile_options'); ?>
@@ -192,8 +192,8 @@ function automobile_theme_options_page() {
 
 
             </div>
-            <div class="options-footer">
-            <input type="submit" name="automobile_options[submit]" class="button-primary" value="<?php _e( 'Save Settings', 'automobileoptions' ); ?>" />
+     <div class="options-footer">
+         <input type="submit" name="automobile_options[submit]" class="button-primary" value="<?php _e( 'Save Settings', 'automobileoptions' ); ?>" />
         </div>
         </form>
 
@@ -217,7 +217,7 @@ function automobile_default_options() {
 /**
  * Sanitize and validate options
  */
-function automobile_validate_options( $input ) {
+function automobile_validate_options( $input='' ) {
     $submit = ( ! empty( $input['submit'] ) ? true : false );
     $reset = ( ! empty( $input['reset'] ) ? true : false );
     if( $submit ) :
@@ -240,7 +240,7 @@ if ( ! function_exists( 'automobile_get_option' ) ) :
  * @uses get_option() To retrieve the options array
  */
 function automobile_get_option( $option ) {
-    $options = get_option( 'automobile_options', automobile_default_options() );
-    return $options[ $option ];
+    //$options = get_option( 'automobile_options', automobile_default_options() );
+    //return $options[ $option ];
 }
 endif;

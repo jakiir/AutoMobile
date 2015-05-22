@@ -31,20 +31,21 @@ get_header(); ?>
                 <tbody>
 
                 <?php
-
+                $totalPrice =0;
+                $incr = 0;
                 foreach($get_mobile_info_uns as $key=>$get_mobile_info_unss):
                 $itemId = $get_mobile_info_unss['item_id'];
                 $item_quantity = $get_mobile_info_unss['item_quantity'];
                 $item_price = $get_mobile_info_unss['item_price'];
                 $post_image = wp_get_attachment_url( get_post_thumbnail_id($itemId) );
-                if($post_image): $post_image = $post_image; else : $post_image = 'http://placehold.it/72x72'; endif;
+                if($post_image): $postImage = $post_image; else : $postImage = 'http://placehold.it/72x72'; endif;
                 $totalPrice += $item_price;
                 ?>
                     <tr>
                         <td class="col-sm-8 col-md-6">
                         <div class="media">
                             <a class="thumbnail pull-left" href="<?php echo get_permalink( $itemId ); ?>">
-                            <img class="media-object" src="<?php echo $post_image; ?>" style="width: 72px; height: 72px;">
+                            <img class="media-object" src="<?php echo $postImage; ?>" style="width: 72px; height: 72px;">
                             </a>
                             <div class="media-body">
                                 <h4 class="media-heading"><a href="<?php echo get_permalink( $itemId ); ?>"><?php echo get_the_title( $itemId ); ?></a></h4>
@@ -58,7 +59,8 @@ get_header(); ?>
                             </div>
                         </div></td>
                         <td class="col-sm-1 col-md-1" style="text-align: center">
-                        <input type="number" class="form-control" id="" value="<?php echo $item_quantity; ?>">
+                            <label for="item_quantity<?php echo $incr; ?>"></label>
+                        <input type="number" class="form-control" id="item_quantity<?php echo $incr; ?>" value="<?php echo $item_quantity; ?>">
                         </td>
                         <td class="col-sm-1 col-md-1 text-center"><strong>$<?php echo $item_price/$item_quantity; ?></strong></td>
                         <td class="col-sm-1 col-md-1 text-center"><strong>$<?php echo $item_price; ?></strong></td>
@@ -67,7 +69,7 @@ get_header(); ?>
                             <span class="glyphicon glyphicon-remove"></span> Remove
                         </a></td>
                     </tr>
-                <?php endforeach; ?>
+                <?php $incr++; endforeach; ?>
 
                     <tr>
                         <td>   </td>

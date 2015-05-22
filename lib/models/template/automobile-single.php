@@ -6,6 +6,7 @@ get_header(); ?>
 <div id="">
     <div id="" role="main">
     <?php  while ( have_posts() ) : the_post();
+        global $post;
     $pid=$post->ID;
     $post_image = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
     $author = get_the_author(get_the_ID($post->ID));
@@ -19,10 +20,10 @@ get_header(); ?>
 
             <h2><?php echo esc_attr($automobile_options['automobile_order_send_email']); ?></h2>
                 <div class="col-md-5 service-image-left">
-                        <center>
+                        <div style="margin:0 auto;">
                             <?php $autoMobile->auto_mobile_thumbnail('400x250'); ?>
-                            <!--<img id="item-display" src="<?php echo $post_image; ?>" alt=""></img>-->
-                        </center>
+                            <!--<img id="item-display" src="<?php //echo $post_image; ?>" alt=""></img>-->
+                        </div>
                 </div>
                 <div class="col-md-7">
                     <div class="product-title"><?php the_title(); ?></div>

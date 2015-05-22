@@ -123,6 +123,3 @@ if (!class_exists( 'autoMobileCore' )){
 
 
 }
-
-
-?>

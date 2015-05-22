@@ -1,7 +1,7 @@
 <?php
 function autoMobileAddToCart(){
         $itemId = $_POST['itemId'];
-        if(itemId):
+        if($itemId):
         $itemSku = $_POST['itemSku'];
         $quantity = $_POST['quantity'];
         $itemPrice = $_POST['itemPrice'];
@@ -31,7 +31,7 @@ function autoMobileAddToCart(){
 
             $get_mobile_info = get_option( $auto_mobile_info );
             $get_mobile_info_uns = unserialize($get_mobile_info);
-
+            $singleArray = array();
             foreach ($get_mobile_info_uns as $key => $value){
                 $singleArray[$key] = $value['item_id'];
             }
@@ -65,9 +65,9 @@ function autoMobileAddToCart(){
 
                 } else {
                     $lastKey = substr(end(array_keys($get_mobile_info_uns)), -1);
-                    $incrLast = $lastKey+1;
+                    $incrLast = intval($lastKey) + 1;
                     $item_info2 = array(
-                        'item_'.$incrLast 	=> array(
+                        'item_'.$incrLast => array(
                                     'item_id'           => $itemId,
                                     'item_sku'          => $itemSku,
                                     'item_quantity'     => $quantity,
@@ -108,13 +108,10 @@ add_action( 'wp_ajax_autoMobileAddToCart','autoMobileAddToCart' );
 
 function autoMobileRemoveCart(){
         $itemId = $_POST['itemId'];
-        if(itemId):
+        if($itemId):
         $item_key = $_POST['item_key'];
         @session_start();
         $sessionId = session_id();
-
-
-        $item_information = serialize($item_info);
 
         $auto_mobile_info = '_auto_mobile_info_'.$sessionId;
 
@@ -315,13 +312,16 @@ $template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-register.ph
 return $template_path;
 }
     function getFeaturedImage( $post_id = NULL, $size = 'large', $arr=false) {
-        global $id;
+        //global $id;
+        $src = '';
+
             $post_thumbnail_id = get_post_thumbnail_id( $post_id );
             $image = wp_get_attachment_image_src($post_thumbnail_id, $size);
             if(!$image)return false;
             if($arr) return $image;
             if ( $image ) {
-            list($src, $width, $height) = $image;
+            list($src) = $image;
+                //list($src, $widthd, $height) = $image;
             }
         return $src;
     }
@@ -335,15 +335,6 @@ return $template_path;
 
     if ( ! function_exists( 'automobile_resize' ) ) {
 
-    /**
-     * Mahabub hasan Manik
-     *
-     * @param string $url    - (required) must be uploaded using wp media uploader
-     * @param int    $width  - (required)
-     * @param int    $height - (optional)
-     * @param bool   $crop   - (optional) default to soft crop
-     * @param bool   $single - (optional) returns an array if false
-     */
     function automobile_resize( $url = '', $width = '', $height = NULL, $crop = NULL, $single = TRUE ) {
 
         if ( empty( $url ) )
@@ -363,5 +354,3 @@ return $template_path;
         return wp_img_resizer_src( $args );
     }
 }
-
-?>

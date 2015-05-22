@@ -70,7 +70,7 @@ if (!class_exists('automobilePagination'))
             if ($page == $i) {
                 $echo .= '<li class="active"><span class="active">' . str_pad( (int)$i, 2, '0', STR_PAD_LEFT ) . '</span></li>';
             } else {
-                $echo .= sprintf( '<li><a href="%s">%002d</a></li>', esc_attr( get_pagenum_link($i) ), $i );
+                $echo .=  '<li><a href="'.esc_attr( get_pagenum_link($i) ).'">$i</a></li>';
             }
         }
     }
@@ -84,10 +84,13 @@ if (!class_exists('automobilePagination'))
     if ( $lastpage ) {
         $echo .= '<li class="next"><a href="' . $lastpage . '">' . __( 'Last', 'text-domain' ) . '</a></li>';
     }
-    if ( isset($echo) )
-        echo $args['before_output'] . $echo . $args['after_output'];
+    if ( isset($echo) ) {
+        $outPut = $args['before_output'] . $echo . $args['after_output'];
+        return $outPut;
+         } else {
+        return null;
+    }
     }
 
   }
 }
-?>

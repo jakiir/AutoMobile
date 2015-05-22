@@ -49,7 +49,7 @@ function automobile_taxonomies() {
 }
 add_filter( 'manage_edit-tlp_automobile_columns', 'automobile_columns' );
 
- function tlp_automobile_meta_box($post_type, $post)
+ function tlp_automobile_meta_box()
         {
             add_meta_box(
             'tlp_automobile_discount',
@@ -62,7 +62,7 @@ add_filter( 'manage_edit-tlp_automobile_columns', 'automobile_columns' );
     }
 
  add_action('add_meta_boxes', 'tlp_automobile_meta_box', 10, 2);
-function automobile_discount_meta_box($post, $args){
+function automobile_discount_meta_box($post){
    wp_nonce_field(plugins_url(__FILE__), 'automobile_plugin_noncename');
    $prfx_stored_meta = get_post_meta( $post->ID );
 ?>
@@ -77,24 +77,24 @@ function automobile_discount_meta_box($post, $args){
   <div id='general'>
     <p>
        <label class="left-lable"  for="txt_automobile_sku"><?php _e('SKU', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_sku" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_sku', true); ?>" />
+       <input type="text" name="txt_automobile_sku" id="txt_automobile_sku" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_sku', true); ?>" />
        <!--<span class="tip"><a rel="tooltip" title="A paragraph typically consists of a unifying main point, thought, or idea accompanied by <b>supporting details</b>">paragraph</a></span>-->
    </p>
    <div class="border-sep"></div>
    <p>
        <label class="left-lable"  for="txt_automobile_regular_price"><?php _e('Regular Price ($)', 'automobile_plugin'); ?>: </label>
-       <input type="number" name="txt_automobile_regular_price" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_regular_price', true); ?>" />
+       <input type="number" name="txt_automobile_regular_price" id="txt_automobile_regular_price" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_regular_price', true); ?>" />
        <em></em>
    </p>
   <p>
        <label class="left-lable"  for="txt_automobile_price"><?php _e('Price ($)', 'automobile_plugin'); ?>: </label>
-       <input type="number" name="txt_automobile_price" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_price', true); ?>" />
+       <input type="number" name="txt_automobile_price" id="txt_automobile_price" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_price', true); ?>" />
        <em></em>
    </p>
    <div class="border-sep"></div>
    <p>
 
-    <label for="left-lable" class="left-lable"><?php _e( 'Stock status', 'automobile_plugin' )?>:</label>
+    <label for="meta-select" class="left-lable"><?php _e( 'Stock status', 'automobile_plugin' )?>:</label>
     <select name="automobile-product-status" id="meta-select">
         <option value="instock" <?php if ( isset ( $prfx_stored_meta['automobile-product-status'] ) ) selected( $prfx_stored_meta['automobile-product-status'][0], 'instock' ); ?>><?php _e( 'In stock', 'automobile_plugin' )?></option>';
         <option value="Outofstock" <?php if ( isset ( $prfx_stored_meta['automobile-product-status'] ) ) selected( $prfx_stored_meta['automobile-product-status'][0], 'Outofstock' ); ?>><?php _e( 'Out of stock', 'automobile_plugin' )?></option>';
@@ -102,7 +102,7 @@ function automobile_discount_meta_box($post, $args){
 </p>
    <p>
        <label class="left-lable"  for="txt_automobile_qty"><?php _e('Qty', 'automobile_plugin'); ?>: </label>
-       <input type="number" name="txt_automobile_qty" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_qty', true); ?>" />
+       <input type="number" name="txt_automobile_qty" id="txt_automobile_qty" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_qty', true); ?>" />
        <em></em>
    </p>
   </div>
@@ -110,20 +110,23 @@ function automobile_discount_meta_box($post, $args){
   <div id='mpn'>
     <div class="automobile_mpn">
         <?php if(empty($prfx_stored_meta)): ?>
-        <p>
-            <input type="text" name="txt_automobile_mpn" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>" />
+        <p><label for="txt_automobile_mpn"></label>
+        <p><label for="txt_automobile_mpn2"></label>
+            <input type="text" name="txt_automobile_mpn" id="txt_automobile_mpn2" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>" />
         </p>
         <p><span class=" add_more button button-primary button-large" style="margin-left:5px; margin-top:5xp;">Add More</span></p>
         <?php else:
             $get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
             $get_automobile_mpn_uns = unserialize($get_automobile_mpn);
             if($get_automobile_mpn_uns):
+                $incr = 0;
             foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>
                 <p>
-                    <input size="50" name='txt_automobile_mpn[]' type='text' class='in_box'  value="<?php echo $get_automobile_mpn_un; ?>" />
+                    <label for="txt_automobile_mpn_<?php echo $incr; ?>"></label>
+                    <input size="50" id="txt_automobile_mpn_<?php echo $incr; ?>" name='txt_automobile_mpn[]' type='text' class='in_box'  value="<?php echo $get_automobile_mpn_un; ?>" />
                     <span class="rem"><a href='javascript:void(0);' ><span class="dashicons dashicons-dismiss"></span></a></span>
                 </p>
-            <?php endforeach; endif; ?>
+            <?php $incr++; endforeach; endif; ?>
             <p> <span class="add_more button button-primary button-large"><?php _e('Add More', 'automobile_plugin'); ?></span> </p>
         <?php endif;?>
     </div>
@@ -136,12 +139,12 @@ $get_advanced_automobile = unserialize($get_advanced_automobile_array);
 ?>
 <p>
        <label class="left-lable"  for="txt_automobile_make"><?php _e('Make', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_make" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_make']; ?>" />
+       <input type="text" name="txt_automobile_make" id="txt_automobile_make" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_make']; ?>" />
        <em></em>
    </p>
     <p>
        <label class="left-lable"  for="txt_automobile_model"><?php _e('Model', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_model" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_model']; ?>" />
+       <input type="text" name="txt_automobile_model" id="txt_automobile_model" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_model']; ?>" />
        <em></em>
    </p>
 
@@ -152,17 +155,17 @@ $get_advanced_automobile = unserialize($get_advanced_automobile_array);
    </p>
    <p>
        <label class="left-lable"  for="txt_automobile_color"><?php _e('Color', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_color" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_color']; ?>" />
+       <input type="text" name="txt_automobile_color" id="txt_automobile_color" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_color']; ?>" />
        <em></em>
    </p>
    <p>
        <label class="left-lable"  for="txt_automobile_position"><?php _e('Position', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_position" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_position']; ?>" />
+       <input type="text" name="txt_automobile_position" id="txt_automobile_position" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_position']; ?>" />
        <em></em>
    </p>
    <p>
        <label class="left-lable"  for="txt_automobile_weight"><?php _e('Weight (oz)', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_weight" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_weight']; ?>" />
+       <input type="text" name="txt_automobile_weight" size="50" id="txt_automobile_weight" value="<?php echo $get_advanced_automobile['txt_automobile_weight']; ?>" />
        <em></em>
    </p>
 </div>
@@ -174,7 +177,7 @@ $get_advanced_automobile = unserialize($get_advanced_automobile_array);
     </p>
      <p>
        <label class="left-lable"  for="txt_automobile_weight2"><?php _e('if need meta box (EX:Jakir vi)', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_weight2" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_weight2', true); ?>" />
+       <input type="text" name="txt_automobile_weight2" id="txt_automobile_weight2" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_weight2', true); ?>" />
        <em></em>
    </p>
   </div>
@@ -185,7 +188,7 @@ $get_advanced_automobile = unserialize($get_advanced_automobile_array);
 
 }
 add_action('save_post', 'automobile_save_meta_box', 10, 2);
-function automobile_save_meta_box($post_id, $post)
+function automobile_save_meta_box($post_id)
 {
    if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
        return;
@@ -247,11 +250,11 @@ function automobile_save_meta_box($post_id, $post)
 
         $advanced_automobile_array = array(
             'txt_automobile_make'   => $txt_automobile_make,
-            'txt_automobile_model'	=> $txt_automobile_model,
-            'txt_automobile_year'	=> $txt_automobile_year,
-            'txt_automobile_color'	=> $txt_automobile_color,
+            'txt_automobile_model'  => $txt_automobile_model,
+            'txt_automobile_year'   => $txt_automobile_year,
+            'txt_automobile_color'  => $txt_automobile_color,
             'txt_automobile_position' => $txt_automobile_position,
-            'txt_automobile_weight'		=> $txt_automobile_weight
+            'txt_automobile_weight' => $txt_automobile_weight
             );
 
         $advanced_automobile = serialize($advanced_automobile_array);
