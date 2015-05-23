@@ -108,7 +108,7 @@ function automobile_attributes(){
                                     $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
                                     if($get_auto_mobile_make_uns) {
                                         foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss):
-                                            echo "<li>$get_auto_mobile_make_unss <a href='javascript:void(0)' class='make_del delIcon' onclick='make_del(this)' data-keys='".$key."'><i class='fa fa-times'></i></a><a href='javascript:void(0)' class='make_edit editIcon' onclick='make_edit(this)' data-keys='".$key."' data-make_value='".$get_auto_mobile_make_unss."'><i class='fa fa-pencil-square-o'></i></a></li>";
+                                            echo "<li class='".$key."'>$get_auto_mobile_make_unss <a href='javascript:void(0)' class='make_del delIcon' onclick='make_del(this)' data-keys='".$key."'><i class='fa fa-times'></i></a><a href='javascript:void(0)' class='make_edit editIcon' onclick='make_edit(this)' data-keys='".$key."' data-make_value='".$get_auto_mobile_make_unss."'><i class='fa fa-pencil-square-o'></i></a></li>";
                                         endforeach;
                                     }
                                     ?>
@@ -121,10 +121,33 @@ function automobile_attributes(){
 
 
                         <div id="automobile_model" class="automobile_block">
-                            <h2><?php _e('Automobile model', 'automobileoptions'); ?></h2>
-                            automobile_model
+                            <h2><?php _e('Automobile model', 'automobileoptions'); ?></h2>                            
                             <div class="fields_wrap">
+                                <span id="automobile_model_add">
+                                <label for="automobile_model_id">Add automobile model</label>
+                                <input type="text" name="automobile_model" class="" id="automobile_model_id"/>
+                                <input type="submit" name="automobile_model_submit" id="automobile_model_submit" class="button-primary" value="Add New">
+                                </span>
+                                <span id="automobile_model_edit" style="display:none">
+                                <label for="edit_automobile_model">Edit automobile model</label>
+                                <input type="text" name="edit_automobile_model" class="" id="edit_automobile_model"/>
+                                <input type="submit" name="automobile_model_edit_submit" id="automobile_model_edit_submit" class="button-primary" value="Edit">
+                                </span>
+                                <span class="reloadIcon" style="display:none"></span>
+                                <span class="message"></span>
+                                <ul id="model_display_area">
+                                    <?php
+                                    $auto_mobile_model = '_auto_mobile_model';
+                                    $get_auto_mobile_model = get_option( $auto_mobile_model );
+                                    $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+                                    if($get_auto_mobile_model_uns) {
+                                        foreach ($get_auto_mobile_model_uns as $key=>$get_auto_mobile_model_unss):
+                                            echo "<li class='".$key."'>$get_auto_mobile_model_unss <a href='javascript:void(0)' class='model_del delIcon' onclick='model_del(this)' data-keys='".$key."'><i class='fa fa-times'></i></a><a href='javascript:void(0)' class='model_edit editIcon' onclick='model_edit(this)' data-keys='".$key."' data-model_value='".$get_auto_mobile_model_unss."'><i class='fa fa-pencil-square-o'></i></a></li>";
+                                        endforeach;
+                                    }
+                                    ?>
 
+                                </ul>
                             </div> <!-- /fields-wrap -->
 
                         </div><!-- /tab_block -->
@@ -227,25 +250,56 @@ function automobile_discount_meta_box($post){
   </div>
 <div id='advanced'>
 <?php
+global $post;
 $get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);
-$get_advanced_automobile = unserialize($get_advanced_automobile_array);
+if(!$get_advanced_automobile_array): add_post_meta( $post->ID, 'advanced_automobile', '' ); endif;
+$get_advanced_automobile = @unserialize($get_advanced_automobile_array);
 ?>
-<p>
-       <label class="left-lable"  for="txt_automobile_make"><?php _e('Make', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_make" id="txt_automobile_make" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_make']; ?>" />
-       <em></em>
-   </p>
     <p>
-       <label class="left-lable"  for="txt_automobile_model"><?php _e('Model', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_model" id="txt_automobile_model" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_model']; ?>" />
+        <label for="txt_automobile_make" class="left-lable"><?php _e( 'Make', 'automobile_plugin' )?></label>
+        <select name="txt_automobile_make" id="txt_automobile_make">
+            <option value="">None</option>
+            <?php
+            $auto_mobile_make = '_auto_mobile_make';
+            $get_auto_mobile_make = get_option( $auto_mobile_make );
+            $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+            if($get_auto_mobile_make_uns) {
+                foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss): ?>
+                    <option value="<?php echo $key; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) ) selected( $get_advanced_automobile['txt_automobile_make'], $key ); ?>><?php _e( $get_auto_mobile_make_unss, 'automobile_plugin' )?></option>';
+                <?php  endforeach;
+            }
+            ?>
+        </select>
+    </p>
+	<p>
+        <label for="txt_automobile_model" class="left-lable"><?php _e( 'Model', 'automobile_plugin' )?></label>
+        <select name="txt_automobile_model" id="txt_automobile_model">
+            <option value="">None</option>
+            <?php
+            $auto_mobile_model = '_auto_mobile_model';
+            $get_auto_mobile_model = get_option( $auto_mobile_model );
+            $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+            if($get_auto_mobile_model_uns) {
+                foreach ($get_auto_mobile_model_uns as $key=>$get_auto_mobile_model_unss): ?>
+                    <option value="<?php echo $key; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) ) selected( $get_advanced_automobile['txt_automobile_model'], $key ); ?>><?php _e( $get_auto_mobile_model_unss, 'automobile_plugin' )?></option>';
+                <?php  endforeach;
+            }
+            ?>
+        </select>
+    </p>
+    <p>
+    <label class="left-lable"  for="txt_automobile_year"><?php _e('Year', 'automobile_plugin'); ?>: </label>
+    <?php
+        //$already_selected_value = 1984;
+        $earliest_year = 1980; ?>
+       <select name="txt_automobile_year"  id="txt_automobile_year">
+           <option value="">None</option>
+        <?php foreach (range(date('Y'), $earliest_year) as $x) { ?>
+            <option value="<?php echo $x; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php echo $x; ?></option>
+       <?php } ?>
+       </select>
        <em></em>
-   </p>
-
-   <p>
-       <label class="left-lable"  for="txt_automobile_year"><?php _e('Year', 'automobile_plugin'); ?>: </label>
-       <input type="text" class="txt_automobile_year" id="txt_automobile_year" name="txt_automobile_year" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_year']; ?>" />
-       <em></em>
-   </p>
+   </p>   
    <p>
        <label class="left-lable"  for="txt_automobile_color"><?php _e('Color', 'automobile_plugin'); ?>: </label>
        <input type="text" name="txt_automobile_color" id="txt_automobile_color" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_color']; ?>" />

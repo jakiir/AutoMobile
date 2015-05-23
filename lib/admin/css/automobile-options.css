@@ -582,7 +582,7 @@ span.customSelect.changed {
     display: inline-block;
     height: 20px;
 }
-#make_display_area{
+#make_display_area,#model_display_area{
     clear: both;
     width:200px;
     height: auto;
@@ -590,7 +590,7 @@ span.customSelect.changed {
     padding-top: 13px;
 }
 
-#automobile_make .message{
+#automobile_make .message,#automobile_model .message{
     margin-left:10px;
 }
 

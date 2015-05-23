@@ -146,6 +146,7 @@ function automobile_set_font_style($fontstyle){
     return $stack;
 }
 
+//make
 function add_automobile_make(){
     $make_val = $_POST['make_val'];
     $success = false;
@@ -224,5 +225,86 @@ function edit_automobile_make(){
 }
 add_action( 'wp_ajax_nopriv_edit_automobile_make','edit_automobile_make' );
 add_action( 'wp_ajax_edit_automobile_make','edit_automobile_make' );
+
+// Model
+
+function add_automobile_model(){
+    $model_val = $_POST['model_val'];
+    $success = false;
+    if($model_val !=''){
+        $model_info = array(
+            'model_1'    =>   $model_val
+        );
+        $model_info2 = serialize($model_info);
+        $auto_mobile_model = '_auto_mobile_model';
+        if ( get_option( $auto_mobile_model ) !== false ) {
+
+           $get_auto_mobile_model = get_option( $auto_mobile_model );
+            $get_auto_mobile_model_uns = unserialize($get_auto_mobile_model);
+
+            $lastKey = substr(end(array_keys($get_auto_mobile_model_uns)), -1);
+            $incrLast = intval($lastKey) + 1;
+            $item_info2 = array(
+                'model_'.$incrLast => $model_val
+            );
+            $itemInfo_result = array_merge($get_auto_mobile_model_uns, $item_info2 );
+            $item_inform2 = serialize($itemInfo_result);
+           update_option( $auto_mobile_model, $item_inform2 );
+
+        } else {
+            $incrLast = 1;
+            add_option( $auto_mobile_model, $model_info2, '', 'yes' );
+        }
+
+
+        $success = true;
+        $value = $model_val;
+        $keys = 'model_'.$incrLast;
+    } else {
+        $success = false;
+        $value = 'Required field!';
+        $keys = '';
+    }
+    $results = array(
+        'success'   => $success,
+        'value'     => $value,
+        'key'     => $keys
+    );
+    echo json_encode($results);
+    die();
+}
+add_action( 'wp_ajax_nopriv_add_automobile_model','add_automobile_model' );
+add_action( 'wp_ajax_add_automobile_model','add_automobile_model' );
+
+function del_automobile_model(){
+    $data_keys = $_POST['data_keys'];
+    if($data_keys):
+        $auto_mobile_model = '_auto_mobile_model';
+        $get_mobile_model = get_option( $auto_mobile_model );
+        $get_mobile_model_uns = unserialize($get_mobile_model);
+        unset($get_mobile_model_uns[$data_keys]);
+        $item_inform2 = serialize($get_mobile_model_uns);
+        update_option( $auto_mobile_model, $item_inform2 );
+    endif;
+    die();
+}
+add_action( 'wp_ajax_nopriv_del_automobile_model','del_automobile_model' );
+add_action( 'wp_ajax_del_automobile_model','del_automobile_model' );
+
+function edit_automobile_model(){
+    $data_keys = $_POST['data_keys'];
+    $model_value = $_POST['model_value'];
+    if($data_keys):
+        $auto_mobile_model = '_auto_mobile_model';
+        $get_mobile_model = get_option( $auto_mobile_model );
+        $get_mobile_model_uns = unserialize($get_mobile_model);
+        $get_mobile_model_uns[$data_keys] = $model_value;
+        $item_inform2 = serialize($get_mobile_model_uns);
+        update_option( $auto_mobile_model, $item_inform2 );
+    endif;
+    die();
+}
+add_action( 'wp_ajax_nopriv_edit_automobile_model','edit_automobile_model' );
+add_action( 'wp_ajax_edit_automobile_model','edit_automobile_model' );
 
 ?>
