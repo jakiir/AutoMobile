@@ -130,9 +130,6 @@ function autoMobileRemoveCart(){
             }
 
         endif;
-
-
-
   die();
   }
 add_action( 'wp_ajax_nopriv_autoMobileRemoveCart','autoMobileRemoveCart' );

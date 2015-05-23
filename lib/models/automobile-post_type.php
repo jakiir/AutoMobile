@@ -89,19 +89,28 @@ function automobile_attributes(){
 
                             <h2><?php _e('Automobile make', 'automobileoptions'); ?></h2>
                             <div class="fields_wrap">
+                                <span id="automobile_make_add">
                                 <label for="automobile_make_id">Add automobile make</label>
                                 <input type="text" name="automobile_make" class="" id="automobile_make_id"/>
                                 <input type="submit" name="automobile_make_submit" id="automobile_make_submit" class="button-primary" value="Add New">
+                                </span>
+                                <span id="automobile_make_edit" style="display:none">
+                                <label for="edit_automobile_make">Edit automobile make</label>
+                                <input type="text" name="edit_automobile_make" class="" id="edit_automobile_make"/>
+                                <input type="submit" name="automobile_make_edit_submit" id="automobile_make_edit_submit" class="button-primary" value="Edit">
+                                </span>
                                 <span class="reloadIcon" style="display:none"></span>
                                 <span class="message"></span>
                                 <ul id="make_display_area">
                                     <?php
                                     $auto_mobile_make = '_auto_mobile_make';
                                     $get_auto_mobile_make = get_option( $auto_mobile_make );
-                                    $get_auto_mobile_make_uns = unserialize($get_auto_mobile_make);
-                                    foreach($get_auto_mobile_make_uns as $get_auto_mobile_make_unss):
-                                         echo "<li>$get_auto_mobile_make_unss</li>";
+                                    $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+                                    if($get_auto_mobile_make_uns) {
+                                        foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss):
+                                            echo "<li>$get_auto_mobile_make_unss <a href='javascript:void(0)' class='make_del delIcon' onclick='make_del(this)' data-keys='".$key."'><i class='fa fa-times'></i></a><a href='javascript:void(0)' class='make_edit editIcon' onclick='make_edit(this)' data-keys='".$key."' data-make_value='".$get_auto_mobile_make_unss."'><i class='fa fa-pencil-square-o'></i></a></li>";
                                         endforeach;
+                                    }
                                     ?>
 
                                 </ul>
@@ -201,7 +210,7 @@ function automobile_discount_meta_box($post){
         <p><span class=" add_more button button-primary button-large" style="margin-left:5px; margin-top:5px;">Add More</span></p>
         <?php else:
             $get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
-            $get_automobile_mpn_uns = unserialize($get_automobile_mpn);
+            $get_automobile_mpn_uns = @unserialize($get_automobile_mpn);
             if($get_automobile_mpn_uns):
                 $incr = 0;
             foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>

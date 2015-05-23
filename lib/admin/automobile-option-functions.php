@@ -170,24 +170,59 @@ function add_automobile_make(){
            update_option( $auto_mobile_make, $item_inform2 );
 
         } else {
+            $incrLast = 1;
             add_option( $auto_mobile_make, $make_info2, '', 'yes' );
         }
 
 
         $success = true;
         $value = $make_val;
+        $keys = 'make_'.$incrLast;
     } else {
         $success = false;
         $value = 'Required field!';
+        $keys = '';
     }
     $results = array(
         'success'   => $success,
-        'value'     => $value
+        'value'     => $value,
+        'key'     => $keys
     );
     echo json_encode($results);
     die();
 }
 add_action( 'wp_ajax_nopriv_add_automobile_make','add_automobile_make' );
 add_action( 'wp_ajax_add_automobile_make','add_automobile_make' );
+
+function del_automobile_make(){
+    $data_keys = $_POST['data_keys'];
+    if($data_keys):
+        $auto_mobile_make = '_auto_mobile_make';
+        $get_mobile_make = get_option( $auto_mobile_make );
+        $get_mobile_make_uns = unserialize($get_mobile_make);
+        unset($get_mobile_make_uns[$data_keys]);
+        $item_inform2 = serialize($get_mobile_make_uns);
+        update_option( $auto_mobile_make, $item_inform2 );
+    endif;
+    die();
+}
+add_action( 'wp_ajax_nopriv_del_automobile_make','del_automobile_make' );
+add_action( 'wp_ajax_del_automobile_make','del_automobile_make' );
+
+function edit_automobile_make(){
+    $data_keys = $_POST['data_keys'];
+    $make_value = $_POST['make_value'];
+    if($data_keys):
+        $auto_mobile_make = '_auto_mobile_make';
+        $get_mobile_make = get_option( $auto_mobile_make );
+        $get_mobile_make_uns = unserialize($get_mobile_make);
+        $get_mobile_make_uns[$data_keys] = $make_value;
+        $item_inform2 = serialize($get_mobile_make_uns);
+        update_option( $auto_mobile_make, $item_inform2 );
+    endif;
+    die();
+}
+add_action( 'wp_ajax_nopriv_edit_automobile_make','edit_automobile_make' );
+add_action( 'wp_ajax_edit_automobile_make','edit_automobile_make' );
 
 ?>

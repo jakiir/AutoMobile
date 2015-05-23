@@ -593,3 +593,14 @@ span.customSelect.changed {
 #automobile_make .message{
     margin-left:10px;
 }
+
+.editIcon, .delIcon{
+    float: right;
+    margin-left: 6px;
+}
+.delIcon{color:red;}
+
+.editIcon:focus, .delIcon:focus {
+    -webkit-box-shadow:none;
+    box-shadow: none;
+}
