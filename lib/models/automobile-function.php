@@ -165,14 +165,11 @@ function automobile_populate_columns( $column ) {
 		//print_r($product_categories);
 		if($product_categories): 
 		foreach($product_categories as $product_category):		
-			echo '<a href="edit.php?post_status=all&post_type=tlp_automobile&automobile_product_category='.$product_category->term_taxonomy_id.'">'.$product_category->name.'</a>';	
-			if (next($product_categories )) {
-				echo ',';
-			}
+			$resultstr[] = '<a href="edit.php?post_status=all&post_type=tlp_automobile&automobile_product_category='.$product_category->term_taxonomy_id.'">'.$product_category->name.'</a>';				
 		endforeach;	
-		endif;
-        //$txt_automobile_categories = get_the_category(51);
-        //echo $txt_automobile_categories;
+		$result = implode(",<br>",$resultstr);
+		echo $result;
+		endif;        
     }
 }
 
