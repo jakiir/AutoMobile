@@ -153,12 +153,19 @@ function automobile_populate_columns( $column ) {
     if ( 'automobile_make' == $column ) {		          
         if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )		
         $txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
-        echo $txt_automobile_make;
+	
+		$auto_mobile_make = '_auto_mobile_make';
+		$get_auto_mobile_make = get_option( $auto_mobile_make );
+		$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);		
+        echo $get_auto_mobile_make_uns[$txt_automobile_make];
     }
     elseif ( 'automobile_model' == $column ) {
 		if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
         $txt_automobile_model = $get_advanced_automobile['txt_automobile_model'];
-        echo $txt_automobile_model;
+		$auto_mobile_model = '_auto_mobile_model';
+		$get_auto_mobile_model = get_option( $auto_mobile_model );
+		$get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+        echo $get_auto_mobile_model_uns[$txt_automobile_model];
     }
     elseif ( 'automobile_categories' == $column ) {
 		$product_categories = wp_get_post_terms($post->ID, 'automobile_product_category', array("fields" => "all"));
@@ -224,6 +231,24 @@ function automobile_filter_list() {
             'show_count' => false,
             'hide_empty' => true,
         ) );
+    }
+}
+
+add_action( 'restrict_manage_posts', 'automobile_filter_automobile_mak' );
+function automobile_filter_automobile_mak() {	
+    $screen = get_current_screen();
+    global $wp_query;
+    if ( $screen->post_type == 'tlp_automobile' ) {
+        $auto_mobile_make = '_auto_mobile_make';
+		$get_auto_mobile_make = get_option( $auto_mobile_make );
+		$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+		echo '<select name="txt_automobile_make" id="txt_automobile_make"><option value="">Show All Make</option>';
+		if($get_auto_mobile_make_uns) {
+			foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss): ?>
+				<option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_make'] ) ) selected( $_GET['txt_automobile_make'], $key ); ?>><?php _e( $get_auto_mobile_make_unss, 'automobile_plugin' )?></option>';
+			<?php  endforeach;
+		}
+		echo '</select>';
     }
 }
 
