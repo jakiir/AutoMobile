@@ -411,6 +411,7 @@ function automobile_save_meta_box($post_id)
 
         $advanced_automobile = serialize($advanced_automobile_array);
         update_post_meta($post_id, 'advanced_automobile', $advanced_automobile);
+		
 		update_post_meta($post_id, 'advanced_automobile_make', $txt_automobile_make);
 		update_post_meta($post_id, 'advanced_automobile_model', $txt_automobile_model);
 		
