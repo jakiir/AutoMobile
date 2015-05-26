@@ -378,22 +378,27 @@ function automobile_save_meta_box($post_id)
                     } else {delete_post_meta( $post_id, 'automobile-product-status' ); }
 
 
-            if( isset( $_POST[ 'txt_automobile_make' ] ) )
-            { $txt_automobile_make = $_POST[ 'txt_automobile_make' ]; } else { $txt_automobile_make = ''; }
-            if( isset( $_POST[ 'txt_automobile_model' ] ) )
-            { $txt_automobile_model = $_POST['txt_automobile_model'];} else { $txt_automobile_model = ''; }
+	if( isset( $_POST[ 'txt_automobile_make' ] ) )
+	{ 
+		$txt_automobile_make = $_POST[ 'txt_automobile_make' ]; } else { $txt_automobile_make = ''; 
+		
+	}
+	if( isset( $_POST[ 'txt_automobile_model' ] ) )
+	{ 
+		$txt_automobile_model = $_POST['txt_automobile_model'];} else { $txt_automobile_model = '';
+	}
 
-            if( isset( $_POST[ 'txt_automobile_year' ] ) )
-            { $txt_automobile_year = $_POST[ 'txt_automobile_year' ]; } else { $txt_automobile_year = ''; }
+	if( isset( $_POST[ 'txt_automobile_year' ] ) )
+	{ $txt_automobile_year = $_POST[ 'txt_automobile_year' ]; } else { $txt_automobile_year = ''; }
 
-            if( isset( $_POST[ 'txt_automobile_color' ] ) )
-            { $txt_automobile_color = $_POST[ 'txt_automobile_color' ]; } else { $txt_automobile_color = ''; }
+	if( isset( $_POST[ 'txt_automobile_color' ] ) )
+	{ $txt_automobile_color = $_POST[ 'txt_automobile_color' ]; } else { $txt_automobile_color = ''; }
 
-            if( isset( $_POST[ 'txt_automobile_position' ] ) )
-            { $txt_automobile_position = $_POST[ 'txt_automobile_position' ]; } else { $txt_automobile_position = ''; }
+	if( isset( $_POST[ 'txt_automobile_position' ] ) )
+	{ $txt_automobile_position = $_POST[ 'txt_automobile_position' ]; } else { $txt_automobile_position = ''; }
 
-            if( isset( $_POST[ 'txt_automobile_weight' ] ) )
-            { $txt_automobile_weight = $_POST[ 'txt_automobile_weight' ]; } else { $txt_automobile_weight = ''; }
+	if( isset( $_POST[ 'txt_automobile_weight' ] ) )
+	{ $txt_automobile_weight = $_POST[ 'txt_automobile_weight' ]; } else { $txt_automobile_weight = ''; }
 
         $advanced_automobile_array = array(
             'txt_automobile_make'   => $txt_automobile_make,
@@ -406,6 +411,9 @@ function automobile_save_meta_box($post_id)
 
         $advanced_automobile = serialize($advanced_automobile_array);
         update_post_meta($post_id, 'advanced_automobile', $advanced_automobile);
+		update_post_meta($post_id, 'advanced_automobile_make', $txt_automobile_make);
+		update_post_meta($post_id, 'advanced_automobile_model', $txt_automobile_model);
+		
 
 
             if( isset( $_POST[ 'txt_automobile_mpn' ] ) )

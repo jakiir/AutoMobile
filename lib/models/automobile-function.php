@@ -214,8 +214,6 @@ function automobile_column_orderby ( $vars ) {
 // CREATE FILTERS WITH CUSTOM TAXONOMIES
 
 add_action( 'restrict_manage_posts', 'automobile_filter_list' );
-
-
 function automobile_filter_list() {
     $screen = get_current_screen();
     global $wp_query;
@@ -234,8 +232,8 @@ function automobile_filter_list() {
     }
 }
 
-add_action( 'restrict_manage_posts', 'automobile_filter_automobile_mak' );
-function automobile_filter_automobile_mak() {	
+add_action( 'restrict_manage_posts', 'automobile_filter_automobile_make' );
+function automobile_filter_automobile_make() {	
     $screen = get_current_screen();
     global $wp_query;
     if ( $screen->post_type == 'tlp_automobile' ) {
@@ -252,17 +250,53 @@ function automobile_filter_automobile_mak() {
     }
 }
 
+add_action( 'restrict_manage_posts', 'automobile_filter_automobile_model' );
+function automobile_filter_automobile_model() {	
+    $screen = get_current_screen();
+    global $wp_query;
+    if ( $screen->post_type == 'tlp_automobile' ) {
+        $auto_mobile_model = '_auto_mobile_model';
+            $get_auto_mobile_model = get_option( $auto_mobile_model );
+            $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+			echo '<select name="txt_automobile_model" id="txt_automobile_model"><option value="">Show All Model</option>';
+            if($get_auto_mobile_model_uns) {
+                foreach ($get_auto_mobile_model_uns as $key=>$get_auto_mobile_model_unss): ?>
+                    <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_model'] ) ) selected( $_GET['txt_automobile_model'], $key ); ?>><?php _e( $get_auto_mobile_model_unss, 'automobile_plugin' )?></option>';
+                <?php  endforeach;
+            }
+		echo '</select>';
+    }
+}
 
 
 add_filter( 'parse_query','automobile_perform_filtering' );
 
 function automobile_perform_filtering( $query ) {
     $qv = &$query->query_vars;
+	global $pagenow;
     if ( ( $qv['automobile_product_category'] ) && is_numeric( $qv['automobile_product_category'] ) ) {
         $term = get_term_by( 'id', $qv['automobile_product_category'], 'automobile_product_category' );
         $qv['automobile_product_category'] = $term->slug;
+    }	
+	
+    
+	
+	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_make'] != '') {
+        $qv['meta_key'] = 'advanced_automobile_make';
+    if (isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_make'] != '')
+        $qv['meta_value'] = $_GET['txt_automobile_make'];
     }
+	
+	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_model']) && $_GET['txt_automobile_model'] != '') {
+        $qv['meta_key'] = 'advanced_automobile_model';
+    if (isset($_GET['txt_automobile_model']) && $_GET['txt_automobile_model'] != '')
+        $qv['meta_value'] = $_GET['txt_automobile_model'];
+    }
+	
+	
 }
+
+
 
 
 if (!is_admin()){
