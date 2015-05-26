@@ -147,17 +147,32 @@ function automobile_columns( $columns ) {
 
 
 function automobile_populate_columns( $column ) {
-    if ( 'automobile_make' == $column ) {
-        $txt_automobile_make = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_make', true ) );
+	global $post;
+	$get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);		
+	$get_advanced_automobile = @unserialize($get_advanced_automobile_array);  
+    if ( 'automobile_make' == $column ) {		          
+        if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )		
+        $txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
         echo $txt_automobile_make;
     }
     elseif ( 'automobile_model' == $column ) {
-        $txt_automobile_model = get_post_meta( get_the_ID(), 'txt_automobile_model', true );
+		if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
+        $txt_automobile_model = $get_advanced_automobile['txt_automobile_model'];
         echo $txt_automobile_model;
     }
     elseif ( 'automobile_categories' == $column ) {
-        $txt_automobile_categories = get_post_meta( get_the_ID(), 'txt_automobile_categories', true );
-        echo $txt_automobile_categories;
+		$product_categories = wp_get_post_terms($post->ID, 'automobile_product_category', array("fields" => "all"));
+		//print_r($product_categories);
+		if($product_categories): 
+		foreach($product_categories as $product_category):		
+			echo '<a href="edit.php?post_status=all&post_type=tlp_automobile&automobile_product_category='.$product_category->term_taxonomy_id.'">'.$product_category->name.'</a>';	
+			if (next($product_categories )) {
+				echo ',';
+			}
+		endforeach;	
+		endif;
+        //$txt_automobile_categories = get_the_category(51);
+        //echo $txt_automobile_categories;
     }
 }
 
