@@ -277,28 +277,39 @@ function automobile_perform_filtering( $query ) {
     if ( ( $qv['automobile_product_category'] ) && is_numeric( $qv['automobile_product_category'] ) ) {
         $term = get_term_by( 'id', $qv['automobile_product_category'], 'automobile_product_category' );
         $qv['automobile_product_category'] = $term->slug;
-    }	
+    }	    
 	
-    
-	
-	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_make'] != '') {
+	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_make'] != '' && $_GET['txt_automobile_model'] == '') {
         $qv['meta_key'] = 'advanced_automobile_make';
     if (isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_make'] != '')
         $qv['meta_value'] = $_GET['txt_automobile_make'];
     }
 	
-	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_model']) && $_GET['txt_automobile_model'] != '') {
+	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_model']) && $_GET['txt_automobile_model'] != '' && $_GET['txt_automobile_make'] == '') {
         $qv['meta_key'] = 'advanced_automobile_model';
     if (isset($_GET['txt_automobile_model']) && $_GET['txt_automobile_model'] != '')
         $qv['meta_value'] = $_GET['txt_automobile_model'];
     }
 	
-	
-	
+	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_model']) && isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_model'] != '' && $_GET['txt_automobile_make'] != '') {
+		
+		$qv['meta_query'] = array(
+			'relation' => 'AND',
+			array(
+				'key' => 'advanced_automobile_make',
+				'value' => $_GET['txt_automobile_make'],
+				'compare' => '='
+			),
+
+			array(
+				'key' => 'advanced_automobile_model',
+				'value' => $_GET['txt_automobile_model'],
+				'compare' => '='
+			)
+		);
+		
+    }	
 }
-
-
-
 
 if (!is_admin()){
     add_action('wp_footer', 'owl_team_js');
