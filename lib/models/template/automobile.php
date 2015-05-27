@@ -1,7 +1,9 @@
 <?php
 /* Template Name: Automobile archive */
 ?>
-<?php get_header(); ?>
+<?php get_header(); 
+global $autoMobile;
+?>
 
 
 <section id="primary">
@@ -16,6 +18,7 @@
             </span>List</a> <a href="#" id="grid" class="btn btn-default btn-sm"><span
                 class="glyphicon glyphicon-th"></span>Grid</a>
         </div>
+		<span class="mini_cart"><?php echo $autoMobile->mini_cart(); ?></span>
     </div>
     <div id="products" class="row list-group">
 
@@ -30,8 +33,7 @@
             'post_status' => 'publish',
             'posts_per_page' => 3,
             'paged' => $paged
-        );
-        global $autoMobile;
+        );        
         $autoMobile->get_all_automobiles($args);
         echo $autoMobile->automobile_pagination($args);
  endif; ?>

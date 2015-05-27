@@ -14,6 +14,7 @@ get_header(); ?>
     ?>
 
 <div class="container-fluid">
+<span class="mini_cart"><?php echo $autoMobile->mini_cart(); ?></span>
     <div class="content-wrapper">
         <div class="item-container">
             <div class="container">

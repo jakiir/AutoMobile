@@ -8,6 +8,37 @@ if (!class_exists('autoMobileHelper'))
     function __construct(){
 
     }
+	
+	function mini_cart(){
+		$output = '';
+		@session_start();
+        $sessionId = session_id();
+        $auto_mobile_info = '_auto_mobile_info_'.$sessionId;
+        $get_mobile_info = get_option( $auto_mobile_info );
+		$get_mobile_info_uns = @unserialize($get_mobile_info);
+        if($get_mobile_info_uns){
+			foreach($get_mobile_info_uns as $key=>$get_mobile_info_unss):
+				$item_quantity = $get_mobile_info_unss['item_quantity'];
+				$item_price = $get_mobile_info_unss['item_price'];
+				$quantity += $item_quantity;
+				$totalPrice += $item_price;
+			endforeach;
+			
+			$shopping_cart = home_url('/shopping-cart/');
+			
+			$output = '<span class="cart_item" data-qty="'.$quantity.'">'.$quantity.'</span> ';		
+			$output .= ' <span class="cart_price" data-price="'.$totalPrice.'">$'.$totalPrice.'</span> ';
+			$output .= ' <span class="view_cart" style="display:none;"><a href="'.$shopping_cart.'" alt="view cart" title="view cart" target="_self">View Cart</a></span>';
+		}
+		if($output != ''){
+			return $output;
+		} else {
+			$output_empty = '<span class="cart_item" data-qty="0"></span> ';			
+			$output_empty .= ' <span class="cart_price" data-price="0"></span> ';
+			$output_empty .= ' <span class="view_cart" style="display:none;"><a href="'.$shopping_cart.'" alt="view cart" title="view cart" target="_self">View Cart</a></span>';
+			return $output_empty;
+		}
+	}
 
 
 
