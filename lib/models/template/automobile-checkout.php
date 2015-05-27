@@ -111,7 +111,8 @@ get_header(); ?>
 <!-- Select Basic -->
 <div class="control-group">
   <label class="control-label" for="town_city">Town / City</label>
-  <div class="controls checkout_town_city">
+  <div class="controls">
+	<span class="checkout_town_city"></span>
     <select id="checkout_town_city" name="town_city" class="form-control">
       <option value="">Select One</option>      
     </select>
