@@ -30,6 +30,7 @@ if (!class_exists( 'AutoMobile' )){
             $this->pluginSlug       = plugin_basename(__FILE__);
             $this->pluginPath       = dirname( __FILE__ );
             $this->modelsPath       = $this->pluginPath . '/lib/models/';
+			$this->statesPath       = $this->pluginPath . '/inc/states/';
             $this->adminPath       = $this->pluginPath . '/lib/admin/';
             $this->controllersPath  = $this->pluginPath . '/lib/controllers/';
             $this->viewsPath        = $this->pluginPath . '/lib/views/';

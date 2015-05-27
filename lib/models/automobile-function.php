@@ -134,6 +134,23 @@ function autoMobileRemoveCart(){
   }
 add_action( 'wp_ajax_nopriv_autoMobileRemoveCart','autoMobileRemoveCart' );
 add_action( 'wp_ajax_autoMobileRemoveCart','autoMobileRemoveCart' );
+
+function get_country_state(){
+        $country = $_POST['country'];
+        if($country):
+		global $autoMobile;		
+		$statesPath = $autoMobile->statesPath;
+		
+		if (!file_exists($statesPath)) return;            
+			require_once( $statesPath . $country . '.php' );   
+			//print_r($states);
+			echo json_encode($states);			
+		endif;		
+  die();
+  }
+add_action( 'wp_ajax_nopriv_get_country_state','get_country_state' );
+add_action( 'wp_ajax_get_country_state','get_country_state' );
+
 //add colume
 
 function automobile_columns( $columns ) {

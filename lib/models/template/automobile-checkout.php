@@ -79,6 +79,26 @@ get_header(); ?>
   </div>
 </div>
 
+<div class="control-group">
+  <label class="control-label" for="selectbasic">Select Country</label>
+  <div class="controls">
+  <?php
+		global $autoMobile;
+		$countryList = $autoMobile->create_countryList();
+		
+	?>
+    <select id="selectCountry" name="selectCountry" class="form-control">
+		<option value="">Country</option>
+		<?php 
+		foreach($countryList as $ckey => $cvalue) {
+			$marked = ( $ckey == $_REQUEST['country'] ? 'selected="selected"' : null );
+			echo "<option value='$ckey' $marked>$cvalue</option>";
+		}
+		?>
+    </select>
+  </div>
+</div>
+
 <!-- Text input-->
 <div class="control-group">
   <label class="control-label" for="postcode">Postcode / Zip</label>
@@ -113,6 +133,15 @@ get_header(); ?>
 </form>
     </div>
     <div class="col-sm-6 col-md-6">
+	<?php
+        @session_start();
+        $sessionId = session_id();
+        $auto_mobile_info = '_auto_mobile_info_'.$sessionId;
+        $get_mobile_info = get_option( $auto_mobile_info );
+        if($get_mobile_info){
+        $get_mobile_info_uns = @unserialize($get_mobile_info);
+        if($get_mobile_info_uns){
+        ?>
     <table class="table table-hover">
                 <thead>
                     <tr>
@@ -124,64 +153,89 @@ get_header(); ?>
                     </tr>
                 </thead>
                 <tbody>
+				<?php
+                $totalPrice =0;
+                $incr = 0;
+                foreach($get_mobile_info_uns as $key=>$get_mobile_info_unss):
+                $itemId = $get_mobile_info_unss['item_id'];
+                $item_quantity = $get_mobile_info_unss['item_quantity'];
+                $item_price = $get_mobile_info_unss['item_price'];
+                $post_image = wp_get_attachment_url( get_post_thumbnail_id($itemId) );
+                if($post_image): $postImage = $post_image; else : $postImage = 'http://placehold.it/72x72'; endif;
+                $totalPrice += $item_price;
+                ?>
                     <tr>
                         <td class="col-sm-8 col-md-6">
                         <div class="media">
                           
                             <div class="media-body">
-                                <h4 class="media-heading"><a href="#">Product name</a></h4>
+                                <h4 class="media-heading"><a href="#"><?php echo get_the_title( $itemId ); ?></a></h4>
                                 <h5 class="media-heading"> by <a href="#">Brand name</a></h5>
                                
                             </div>
                         </div></td>
                         <td class="col-sm-1 col-md-1" style="text-align: center">
-                        <span>5</span>
+                        <span><?php echo $item_quantity; ?></span>
                         </td>
-                        <td class="col-sm-1 col-md-1 text-center"><strong>$4.87</strong></td>
-                        <td class="col-sm-1 col-md-1 text-center"><strong>$14.61</strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>$<?php echo $item_price/$item_quantity; ?></strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong>$<?php echo $item_price; ?></strong></td>
                        
                     </tr>
-                    <tr>
-                        <td class="col-md-6">
-                        <div class="media">
-                            
-                            <div class="media-body">
-                                <h4 class="media-heading"><a href="#">Product name</a></h4>
-                                <h5 class="media-heading"> by <a href="#">Brand name</a></h5>
-                               
-                            </div>
-                        </div></td>
-                        <td class="col-md-1" style="text-align: center">
-                        <span>5</span>
-                        </td>
-                        <td class="col-md-1 text-center"><strong>$4.99</strong></td>
-                        <td class="col-md-1 text-center"><strong>$9.98</strong></td>
-                       
-                    </tr>
+			<?php $incr++; endforeach; ?>
+                    
                     <tr>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
                         <td><h5>Subtotal</h5></td>
-                        <td class="text-right"><h5><strong>$24.59</strong></h5></td>
+                        <td class="text-right"><h5><strong>$<?php echo $totalPrice; ?></strong></h5></td>
                     </tr>
                     <tr>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
                         <td><h5>Estimated shipping</h5></td>
-                        <td class="text-right"><h5><strong>$6.94</strong></h5></td>
+                        <td class="text-right"><h5><strong>$0.00</strong></h5></td>
                     </tr>
                     <tr>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
                         <td><h3>Total</h3></td>
-                        <td class="text-right"><h3><strong>$31.53</strong></h3></td>
+                        <td class="text-right"><h3><strong>$<?php echo $totalPrice; ?></strong></h3></td>
                     </tr>
                     
                 </tbody>
             </table>
+			<?php } else { ?>
+        <article id="post-5" class="post-5 page type-page status-publish hentry">
+                <header class="entry-header">
+
+                <h1 class="entry-title">Cart</h1>
+                </header><!-- .entry-header -->
+
+                <div class="entry-content">
+                <div class="">
+                <p class="cart-empty">Your cart is currently empty.</p>
+                <p class="return-to-auto-mobile"><a class="button wc-backward" href="<?php echo home_url('/auto-mobile/'); ?>">Return To Auto Mobile</a></p>
+                </div>
+                </div>
+            </article>
+        <?php } } else { ?>
+            <article id="post-5" class="post-5 page type-page status-publish hentry">
+                <header class="entry-header">
+
+                <h1 class="entry-title">Cart</h1>
+                </header><!-- .entry-header -->
+
+                <div class="entry-content">
+                <div class="">
+                <p class="cart-empty">Your cart is currently empty.</p>
+                <p class="return-to-auto-mobile"><a class="button wc-backward" href="<?php echo home_url('/auto-mobile/'); ?>">Return To Auto Mobile</a></p>
+                </div>
+                </div>
+            </article>
+        <?php } ?>
             <div class="control-group pull-right">
   <label class="control-label" for="Place order">Place order</label>
   <div class="controls">
