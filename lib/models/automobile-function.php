@@ -141,10 +141,16 @@ function get_country_state(){
 		global $autoMobile;		
 		$statesPath = $autoMobile->statesPath;
 		
-		if (!file_exists($statesPath)) return;            
-			require_once( $statesPath . $country . '.php' );   
-			//print_r($states);
-			echo json_encode($states);			
+		if (!file_exists($statesPath . $country . '.php')) {
+			$result = array(
+				'success' => false
+			);
+			echo json_encode($result);
+		} else {            
+			require_once( $statesPath . $country . '.php' ); 
+			$states['success'] = true; 
+			echo json_encode($states);	
+		}			
 		endif;		
   die();
   }
