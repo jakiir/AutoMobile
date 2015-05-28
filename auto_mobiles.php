@@ -78,7 +78,7 @@ if (!class_exists( 'AutoMobile' )){
 
         }
 
-        function auto_mobile_thumbnail($placeholderImage = '') {
+        function auto_mobile_thumbnail($placeholderImage = '') {			
             $uploads_dir = wp_upload_dir();
             $upload_url = $uploads_dir['baseurl']."/";
             $upload_dir = $uploads_dir['basedir']."/";
@@ -87,14 +87,15 @@ if (!class_exists( 'AutoMobile' )){
             if ( has_post_thumbnail() ) {
                 if(@file_exists($check_image_dir)){
                     //$automobile_image   = automobile_resize( $thumb_url,400,250, true );
-                    echo '<img class="group list-group-image" src="'.$thumb_url.'" alt="" />';
+                    $output = '<img class="group list-group-image" src="'.$thumb_url.'" alt="" />';
                 } else {
-                    echo '<img src="http://placehold.it/'.$placeholderImage.'" />';
+                    $output = '<img src="http://placehold.it/'.$placeholderImage.'" />';
                 }
             }
             else {
-                echo '<img src="http://placehold.it/'.$placeholderImage.'" />';
+                $output = '<img src="http://placehold.it/'.$placeholderImage.'" />';
             }
+			return $output;
         }
 
         /**

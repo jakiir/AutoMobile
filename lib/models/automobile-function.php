@@ -138,20 +138,19 @@ add_action( 'wp_ajax_autoMobileRemoveCart','autoMobileRemoveCart' );
 function get_country_state(){
         $country = $_POST['country'];
         if($country):
-		global $autoMobile;		
-		$statesPath = $autoMobile->statesPath;
-		
-		if (!file_exists($statesPath . $country . '.php')) {
-			$result = array(
-				'success' => false
-			);
-			echo json_encode($result);
-		} else {            
-			require_once( $statesPath . $country . '.php' ); 
-			$states['success'] = true; 
-			echo json_encode($states);	
-		}			
-		endif;		
+        global $autoMobile;
+        $statesPath = $autoMobile->statesPath;
+        if (!file_exists($statesPath . $country . '.php')) {
+            $result = array(
+                'success' => false
+            );
+            echo json_encode($result);
+        } else {
+            require_once( $statesPath . $country . '.php' );
+            $states['success'] = true;
+            echo json_encode($states);
+        }
+        endif;
   die();
   }
 add_action( 'wp_ajax_nopriv_get_country_state','get_country_state' );
@@ -159,50 +158,71 @@ add_action( 'wp_ajax_get_country_state','get_country_state' );
 
 function add_customer_info(){
         $checkout_email = $_POST['checkout_email'];
-		$checkout_password = $_POST['checkout_password'];
-		$checkout_first_name = $_POST['checkout_first_name'];
-		$checkout_last_name = $_POST['checkout_last_name'];
-		$checkout_address = $_POST['checkout_address'];
-		$checkout_phone = $_POST['checkout_phone'];
-		$checkout_company_name = $_POST['checkout_company_name'];
-		$selectCountry = $_POST['selectCountry'];
-		$checkout_postcode = $_POST['checkout_postcode'];
-		$checkout_town_city = $_POST['checkout_town_city'];
-		$checkout_notes = $_POST['checkout_notes'];
-		$registrationId = $_POST['registrationId'];
-		global $wpdb;
-		if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset($registrationId) && isset($checkout_email) && isset($checkout_password)) :	
-		
-		$username = username_exists( $checkout_email );
-		$userEmail = email_exists( $checkout_email );
-		if($username){
-			$resutl = array(
-				'success' => false
-			);
-		}
-		elseif($userEmail){
-			$resutl = array(
-				'success' => false
-			);
-		} else{
-			$resutl = array(
-				'success' => true
-			);
-		}		
-		
-		
-		else :
-		$resutl = array(
-			'success' => false
-		);		
-		endif;	
-		echo json_encode($resutl);		
+        $checkout_password = $_POST['checkout_password'];
+        $checkout_first_name = $_POST['checkout_first_name'];
+        $checkout_last_name = $_POST['checkout_last_name'];
+        $checkout_address = $_POST['checkout_address'];
+        $checkout_phone = $_POST['checkout_phone'];
+        $checkout_company_name = $_POST['checkout_company_name'];
+        $selectCountry = $_POST['selectCountry'];
+        $checkout_postcode = $_POST['checkout_postcode'];
+        $checkout_town_city = $_POST['checkout_town_city'];
+        $checkout_notes = $_POST['checkout_notes'];
+        $registrationId = $_POST['registrationId'];
+        //global $wpdb;
+        if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset($registrationId) && isset($checkout_email) && isset($checkout_password)) :
+
+        $username = username_exists( $checkout_email );
+        $userEmail = email_exists( $checkout_email );
+        if($username){
+            $result = array(
+                'success' => false,
+                'mess'    => 'Email address already exist!'
+            );
+        }
+        elseif($userEmail){
+            $result = array(
+                'success' => false,
+                'mess'    => 'Email address already exist!'
+            );
+        } else{
+            $customerData = array(
+                'user_login' => $checkout_email,
+                'first_name' => $checkout_first_name,
+                'last_name' => $checkout_last_name,
+                'user_pass' => $checkout_password,
+                'user_email' => $checkout_email,
+                'user_url' => '',
+                'role' => 'atm_customer'
+            );
+            $createUser = wp_insert_user( $customerData );
+            if($createUser){
+                add_user_meta( $createUser, 'checkout_address', $checkout_address, true );
+                add_user_meta( $createUser, 'checkout_phone', $checkout_phone, true );
+                add_user_meta( $createUser, 'checkout_company_name', $checkout_company_name, true );
+                add_user_meta( $createUser, 'selectCountry', $selectCountry, true );
+                add_user_meta( $createUser, 'checkout_postcode', $checkout_postcode, true );
+                add_user_meta( $createUser, 'checkout_town_city', $checkout_town_city, true );
+                add_user_meta( $createUser, 'checkout_notes', $checkout_notes, true );
+            }
+
+            $result = array(
+                'success' => true,
+                'mess'    => 'ok'
+            );
+        }
+
+        else :
+            $result = array(
+                'success' => false,
+                'mess'    => 'Error found'
+        );
+        endif;
+        echo json_encode($result);
   die();
   }
 add_action( 'wp_ajax_nopriv_add_customer_info','add_customer_info' );
 add_action( 'wp_ajax_add_customer_info','add_customer_info' );
-
-//add colume
 
 function automobile_columns( $columns ) {
     $columns['automobile_make'] = 'Make';
@@ -215,36 +235,39 @@ function automobile_columns( $columns ) {
 
 
 function automobile_populate_columns( $column ) {
-	global $post;
-	$get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);		
-	$get_advanced_automobile = @unserialize($get_advanced_automobile_array);  
-    if ( 'automobile_make' == $column ) {		          
-        if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )		
+    global $post;
+    $txt_automobile_model = '';
+    $txt_automobile_make = '';
+    $get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);
+    $get_advanced_automobile = @unserialize($get_advanced_automobile_array);
+    if ( 'automobile_make' == $column ) {
+        if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )
         $txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
-	
-		$auto_mobile_make = '_auto_mobile_make';
-		$get_auto_mobile_make = get_option( $auto_mobile_make );
-		$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);		
+
+        $auto_mobile_make = '_auto_mobile_make';
+        $get_auto_mobile_make = get_option( $auto_mobile_make );
+        $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
         echo $get_auto_mobile_make_uns[$txt_automobile_make];
     }
     elseif ( 'automobile_model' == $column ) {
-		if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
+        if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
         $txt_automobile_model = $get_advanced_automobile['txt_automobile_model'];
-		$auto_mobile_model = '_auto_mobile_model';
-		$get_auto_mobile_model = get_option( $auto_mobile_model );
-		$get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+        $auto_mobile_model = '_auto_mobile_model';
+        $get_auto_mobile_model = get_option( $auto_mobile_model );
+        $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
         echo $get_auto_mobile_model_uns[$txt_automobile_model];
     }
     elseif ( 'automobile_categories' == $column ) {
-		$product_categories = wp_get_post_terms($post->ID, 'automobile_product_category', array("fields" => "all"));
-		//print_r($product_categories);
-		if($product_categories): 
-		foreach($product_categories as $product_category):		
-			$resultstr[] = '<a href="edit.php?post_status=all&post_type=tlp_automobile&automobile_product_category='.$product_category->term_taxonomy_id.'">'.$product_category->name.'</a>';				
-		endforeach;	
-		$result = implode(",<br>",$resultstr);
-		echo $result;
-		endif;        
+        $product_categories = wp_get_post_terms($post->ID, 'automobile_product_category', array("fields" => "all"));
+        //print_r($product_categories);
+        if($product_categories):
+            $result_str = array();
+        foreach($product_categories as $product_category):
+            $result_str[] = '<a href="edit.php?post_status=all&post_type=tlp_automobile&automobile_product_category='.$product_category->term_taxonomy_id.'">'.$product_category->name.'</a>';
+        endforeach;
+        $result = implode(",<br>",$result_str);
+        echo $result;
+        endif;
     }
 }
 
@@ -301,38 +324,36 @@ function automobile_filter_list() {
 }
 
 add_action( 'restrict_manage_posts', 'automobile_filter_automobile_make' );
-function automobile_filter_automobile_make() {	
+function automobile_filter_automobile_make() {
     $screen = get_current_screen();
-    global $wp_query;
+    //global $wp_query;
     if ( $screen->post_type == 'tlp_automobile' ) {
         $auto_mobile_make = '_auto_mobile_make';
-		$get_auto_mobile_make = get_option( $auto_mobile_make );
-		$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
-		echo '<select name="txt_automobile_make" id="txt_automobile_make"><option value="">Show All Make</option>';
-		if($get_auto_mobile_make_uns) {
-			foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss): ?>
-				<option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_make'] ) ) selected( $_GET['txt_automobile_make'], $key ); ?>><?php _e( $get_auto_mobile_make_unss, 'automobile_plugin' )?></option>';
-			<?php  endforeach;
-		}
-		echo '</select>';
+        $get_auto_mobile_make = get_option( $auto_mobile_make );
+        $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+        echo '<select name="txt_automobile_make" id="txt_automobile_make"><option value="">Show All Make</option>';         if($get_auto_mobile_make_uns) {
+            foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss): ?>
+                <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_make'] ) ) selected( $_GET['txt_automobile_make'], $key ); ?>><?php _e( $get_auto_mobile_make_unss, 'automobile_plugin' )?></option>';         <?php  endforeach;
+        }
+        echo '</select>';
     }
 }
 
 add_action( 'restrict_manage_posts', 'automobile_filter_automobile_model' );
-function automobile_filter_automobile_model() {	
+function automobile_filter_automobile_model() {
     $screen = get_current_screen();
-    global $wp_query;
+    //global $wp_query;
     if ( $screen->post_type == 'tlp_automobile' ) {
         $auto_mobile_model = '_auto_mobile_model';
             $get_auto_mobile_model = get_option( $auto_mobile_model );
             $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
-			echo '<select name="txt_automobile_model" id="txt_automobile_model"><option value="">Show All Model</option>';
+        echo '<select name="txt_automobile_model" id="txt_automobile_model"><option value="">Show All Model</option>';
             if($get_auto_mobile_model_uns) {
                 foreach ($get_auto_mobile_model_uns as $key=>$get_auto_mobile_model_unss): ?>
                     <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_model'] ) ) selected( $_GET['txt_automobile_model'], $key ); ?>><?php _e( $get_auto_mobile_model_unss, 'automobile_plugin' )?></option>';
                 <?php  endforeach;
             }
-		echo '</select>';
+        echo '</select>';
     }
 }
 
@@ -341,42 +362,42 @@ add_filter( 'parse_query','automobile_perform_filtering' );
 
 function automobile_perform_filtering( $query ) {
     $qv = &$query->query_vars;
-	global $pagenow;
+    global $pagenow;
     if ( ( $qv['automobile_product_category'] ) && is_numeric( $qv['automobile_product_category'] ) ) {
         $term = get_term_by( 'id', $qv['automobile_product_category'], 'automobile_product_category' );
         $qv['automobile_product_category'] = $term->slug;
-    }	    
-	
-	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_make'] != '' && $_GET['txt_automobile_model'] == '') {
+    }
+
+    if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_make'] != '' && $_GET['txt_automobile_model'] == '') {
         $qv['meta_key'] = 'advanced_automobile_make';
     if (isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_make'] != '')
         $qv['meta_value'] = $_GET['txt_automobile_make'];
     }
-	
-	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_model']) && $_GET['txt_automobile_model'] != '' && $_GET['txt_automobile_make'] == '') {
+
+    if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_model']) && $_GET['txt_automobile_model'] != '' && $_GET['txt_automobile_make'] == '') {
         $qv['meta_key'] = 'advanced_automobile_model';
     if (isset($_GET['txt_automobile_model']) && $_GET['txt_automobile_model'] != '')
         $qv['meta_value'] = $_GET['txt_automobile_model'];
     }
-	
-	if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_model']) && isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_model'] != '' && $_GET['txt_automobile_make'] != '') {
-		
-		$qv['meta_query'] = array(
-			'relation' => 'AND',
-			array(
-				'key' => 'advanced_automobile_make',
-				'value' => $_GET['txt_automobile_make'],
-				'compare' => '='
-			),
 
-			array(
-				'key' => 'advanced_automobile_model',
-				'value' => $_GET['txt_automobile_model'],
-				'compare' => '='
-			)
-		);
-		
-    }	
+    if ( is_admin() && $pagenow=='edit.php' && isset($_GET['txt_automobile_model']) && isset($_GET['txt_automobile_make']) && $_GET['txt_automobile_model'] != '' && $_GET['txt_automobile_make'] != '') {
+
+        $qv['meta_query'] = array(
+            'relation' => 'AND',
+            array(
+                'key' => 'advanced_automobile_make',
+                'value' => $_GET['txt_automobile_make'],
+                'compare' => '='
+            ),
+
+            array(
+                'key' => 'advanced_automobile_model',
+                'value' => $_GET['txt_automobile_model'],
+                'compare' => '='
+            )
+        );
+
+    }
 }
 
 if (!is_admin()){

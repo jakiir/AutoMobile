@@ -107,11 +107,9 @@ function automobile_attributes(){
                                     $get_auto_mobile_make = get_option( $auto_mobile_make );
                                     $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
                                     if($get_auto_mobile_make_uns) {
-                                        foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss):
-                                            echo "<li class='".$key."'>$get_auto_mobile_make_unss <a href='javascript:void(0)' class='make_del delIcon' onclick='make_del(this)' data-keys='".$key."'><i class='fa fa-times'></i></a><a href='javascript:void(0)' class='make_edit editIcon' onclick='make_edit(this)' data-keys='".$key."' data-make_value='".$get_auto_mobile_make_unss."'><i class='fa fa-pencil-square-o'></i></a></li>";
-                                        endforeach;
-                                    }
-                                    ?>
+                                        foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss): ?>
+                                            <li class='<?php echo $key; ?>'><?php echo $get_auto_mobile_make_unss; ?> <a href='javascript:void(0)' class='make_del delIcon' onclick='make_del(this)' data-keys='<?php echo $key; ?>'><i class='fa fa-times'></i></a><a href='javascript:void(0)' class='make_edit editIcon' onclick='make_edit(this)' data-keys='<?php echo $key; ?>' data-make_value='<?php echo $get_auto_mobile_make_unss; ?>'><i class='fa fa-pencil-square-o'></i></a></li>
+                                    <?php endforeach; } ?>
 
                                 </ul>
                             </div> <!-- /fields-wrap -->

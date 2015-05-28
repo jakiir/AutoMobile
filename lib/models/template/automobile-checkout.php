@@ -29,7 +29,7 @@ get_header();
 <div class="control-group">
   <label class="control-label" for="checkout_password">Password</label>
   <div class="controls">
-    <input id="checkout_password" name="checkout_password" placeholder="placeholder" class="form-control" required="" type="password">
+    <input id="checkout_password" name="checkout_password" placeholder="******" class="form-control" required="" type="password">
     
   </div>
 </div>
@@ -82,18 +82,17 @@ get_header();
   <label class="control-label" for="selectCountry">Select Country</label>
   <div class="controls">
   <?php
-		global $autoMobile;
-		$countryList = $autoMobile->create_countryList();
-		
-	?>
+  global $autoMobile;
+  $countryList = $autoMobile->create_countryList();
+  ?>
     <select id="selectCountry" name="selectCountry" class="form-control">
-		<option value="">Country</option>
-		<?php 
-		foreach($countryList as $ckey => $cvalue) {
-			$marked = ( $ckey == $_REQUEST['country'] ? 'selected="selected"' : null );
-			echo "<option value='$ckey' $marked>$cvalue</option>";
-		}
-		?>
+        <option value="">Country</option>
+        <?php
+        foreach($countryList as $ckey => $cvalue) {
+            $marked = ( $ckey == $_REQUEST['country'] ? 'selected="selected"' : null );
+            echo "<option value='$ckey' $marked>$cvalue</option>";
+        }
+        ?>
     </select>
   </div>
 </div>
@@ -132,7 +131,7 @@ get_header();
 </form>
     </div>
     <div class="col-sm-6 col-md-6">
-	<?php
+        <?php
         @session_start();
         $sessionId = session_id();
         $auto_mobile_info = '_auto_mobile_info_'.$sessionId;
@@ -142,6 +141,7 @@ get_header();
         if($get_mobile_info_uns){
         ?>
     <table class="table table-hover">
+        <form action="" method="">
                 <thead>
                     <tr>
                         <th>Product</th>
@@ -152,7 +152,7 @@ get_header();
                     </tr>
                 </thead>
                 <tbody>
-				<?php
+                <?php
                 $totalPrice =0;
                 $incr = 0;
                 foreach($get_mobile_info_uns as $key=>$get_mobile_info_unss):
@@ -164,6 +164,11 @@ get_header();
                 $totalPrice += $item_price;
                 ?>
                     <tr>
+<input type="hidden" name="product_names[]" value="<?php echo get_the_title( $itemId ); ?>"/>
+<input type="hidden" name="product_item_price[]" value="<?php echo $item_price/$item_quantity; ?>"/>
+<input type="hidden" name="product_total_price[]" value="<?php echo $item_price; ?>"/>
+<input type="hidden" name="product_quantity[]" value="<?php echo $item_quantity; ?>"/>
+<input type="hidden" name="product_shipping" value="0.00"/>
                         <td class="col-sm-8 col-md-6">
                         <div class="media">
                           
@@ -180,7 +185,7 @@ get_header();
                         <td class="col-sm-1 col-md-1 text-center"><strong>$<?php echo $item_price; ?></strong></td>
                        
                     </tr>
-			<?php $incr++; endforeach; ?>
+                    <?php $incr++; endforeach; ?>
                     
                     <tr>
                         <td>   </td>
@@ -205,8 +210,9 @@ get_header();
                     </tr>
                     
                 </tbody>
+        </form>
             </table>
-			<?php } else { ?>
+        <?php } else { ?>
         <article id="post-5" class="post-5 page type-page status-publish hentry">
                 <header class="entry-header">
 
@@ -252,5 +258,5 @@ get_header();
   
 </div>
 </div>
-<?php get_footer(); ?>       
+<?php get_footer(); ?>
               

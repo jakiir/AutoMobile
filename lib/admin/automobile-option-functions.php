@@ -125,10 +125,10 @@ function admin_automobile_style() {
 /**
  * Set font styles
  */
-function automobile_set_font_style($fontstyle){
+function automobile_set_font_style($font_style){
     $stack = '';
 
-    switch ( $fontstyle ) {
+    switch ( $font_style ) {
 
         case "normal":
             $stack .= "";
@@ -149,7 +149,7 @@ function automobile_set_font_style($fontstyle){
 //make
 function add_automobile_make(){
     $make_val = $_POST['make_val'];
-    $success = false;
+    //$success = false;
     if($make_val !=''){
         $make_info = array(
             'make_1'    =>   $make_val
@@ -230,7 +230,7 @@ add_action( 'wp_ajax_edit_automobile_make','edit_automobile_make' );
 
 function add_automobile_model(){
     $model_val = $_POST['model_val'];
-    $success = false;
+    //$success = false;
     if($model_val !=''){
         $model_info = array(
             'model_1'    =>   $model_val
@@ -307,4 +307,12 @@ function edit_automobile_model(){
 add_action( 'wp_ajax_nopriv_edit_automobile_model','edit_automobile_model' );
 add_action( 'wp_ajax_edit_automobile_model','edit_automobile_model' );
 
-?>
+add_role(
+    'atm_customer',
+    __( 'Customer' ),
+    array(
+        'read'         => true,
+        'edit_posts'   => false,
+        'delete_posts' => false
+    )
+);
