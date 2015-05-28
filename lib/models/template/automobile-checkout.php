@@ -3,7 +3,8 @@
  
  $automobile_options = get_option('automobile_options');
  
-get_header(); ?>
+get_header(); 
+?>
 <div style="height: 200px;"></div>
 <div class="container">
     <div class="row">
@@ -14,73 +15,71 @@ get_header(); ?>
 
 <!-- Form Name -->
 <legend>Form Name</legend>
-
+<div id="checkout_mess"></div>
 <!-- Text input-->
 <div class="control-group">
-  <label class="control-label" for="email">Email Address *</label>
+  <label class="control-label" for="checkout_email">Email Address *</label>
   <div class="controls">
-    <input id="email" name="email" placeholder="Email Address " class="form-control" type="text">
+    <input id="checkout_email" name="email" placeholder="Email Address " class="form-control" type="text">
     
   </div>
 </div>
 
 <!-- Password input-->
 <div class="control-group">
-  <label class="control-label" for="passwordinput">Password</label>
+  <label class="control-label" for="checkout_password">Password</label>
   <div class="controls">
-    <input id="passwordinput" name="passwordinput" placeholder="placeholder" class="form-control" required="" type="password">
+    <input id="checkout_password" name="checkout_password" placeholder="placeholder" class="form-control" required="" type="password">
     
   </div>
 </div>
 
 <!-- Text input-->
 <div class="control-group">
-  <label class="control-label" for="textinput">First Name</label>
+  <label class="control-label" for="checkout_first_name">First Name</label>
   <div class="controls">
-    <input id="textinput" name="textinput" placeholder="First Name" class="form-control" type="text">
+    <input id="checkout_first_name" name="checkout_first_name" placeholder="First Name" class="form-control" type="text">
     
   </div>
 </div>
 
 <!-- Text input-->
 <div class="control-group">
-  <label class="control-label" for="last_name">Last Name</label>
+  <label class="control-label" for="checkout_last_name">Last Name</label>
   <div class="controls">
-    <input id="last_name" name="last_name" placeholder="Last Name" class="form-control" type="text">
+    <input id="checkout_last_name" name="checkout_last_name" placeholder="Last Name" class="form-control" type="text">
     
   </div>
 </div>
 
 <!-- Textarea -->
 <div class="control-group">
-  <label class="control-label" for="address">Address</label>
+  <label class="control-label" for="checkout_address">Address</label>
   <div class="controls">                     
-    <textarea id="address" class="form-control" name="address">Address</textarea>
+    <textarea id="checkout_address" class="form-control" name="checkout_address">Address</textarea>
   </div>
 </div>
 
 <!-- Text input-->
 <div class="control-group">
-  <label class="control-label" for="phone ">Phone </label>
+  <label class="control-label" for="checkout_phone">Phone</label>
   <div class="controls">
-    <input id="phone " name="phone " placeholder="Phone " class="form-control" required="" type="text">
+    <input id="checkout_phone" name="checkout_phone" placeholder="Phone " class="form-control" required="" type="text">
     
   </div>
 </div>
 
-<!-- Select Basic -->
+<!-- Text input-->
 <div class="control-group">
-  <label class="control-label" for="selectbasic">Select Basic</label>
+  <label class="control-label" for="checkout_company_name">Company Name</label>
   <div class="controls">
-    <select id="selectbasic" name="selectbasic" class="form-control">
-      <option>Option one</option>
-      <option>Option two</option>
-    </select>
+    <input id="checkout_company_name" name="checkout_company_name" placeholder="Company Name" class="form-control" required="" type="text">
+    
   </div>
 </div>
 
 <div class="control-group">
-  <label class="control-label" for="selectbasic">Select Country</label>
+  <label class="control-label" for="selectCountry">Select Country</label>
   <div class="controls">
   <?php
 		global $autoMobile;
@@ -101,29 +100,29 @@ get_header(); ?>
 
 <!-- Text input-->
 <div class="control-group">
-  <label class="control-label" for="postcode">Postcode / Zip</label>
+  <label class="control-label" for="checkout_postcode">Postcode / Zip</label>
   <div class="controls">
-    <input id="postcode" name="postcode" placeholder="Postcode / Zip" class="form-control" type="text">
+    <input id="checkout_postcode" onkeyup="check_number(this)" onkeypress="check_number(this)" name="checkout_postcode" placeholder="Postcode / Zip" class="form-control" type="text">
     
   </div>
 </div>
 
 <!-- Select Basic -->
 <div class="control-group">
-  <label class="control-label" for="town_city">Town / City</label>
-  <div class="controls">
-	<span class="checkout_town_city"></span>
+  <label class="control-label" for="checkout_town_city">Town / City</label>
+  <div class="controls">	
     <select id="checkout_town_city" name="town_city" class="form-control">
       <option value="">Select One</option>      
     </select>
+	<span class="checkout_town_city"></span>
   </div>
 </div>
 
 <!-- Textarea -->
 <div class="control-group">
-  <label class="control-label" for="Notes ">Notes </label>
+  <label class="control-label" for="checkout_notes">Notes </label>
   <div class="controls">                     
-    <textarea  class="form-control" id="Notes " name="Notes ">Notes </textarea>
+    <textarea  class="form-control" id="checkout_notes" name="checkout_notes">Notes</textarea>
   </div>
 </div>
 
@@ -236,10 +235,10 @@ get_header(); ?>
                 </div>
             </article>
         <?php } ?>
-            <div class="control-group pull-right">
+<div class="control-group pull-right">
   <label class="control-label" for="Place order">Place order</label>
   <div class="controls">
-    <button id="Place order" name="Place order" class="btn btn-primary">Place order</button>
+    <a id="automobile_place_order" href="javascript:void(0)" name="automobile_place_order" class="btn btn-primary">Place order</a>
   </div>
 </div>
             </div>

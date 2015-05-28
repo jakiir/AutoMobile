@@ -387,4 +387,7 @@ del span.amount, ins span.amount{
 del span.amount{
     color:#333;
 }
-
+.error{
+	color:red;
+	font-weight:bold;
+}

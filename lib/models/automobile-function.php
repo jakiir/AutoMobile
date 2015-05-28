@@ -157,6 +157,51 @@ function get_country_state(){
 add_action( 'wp_ajax_nopriv_get_country_state','get_country_state' );
 add_action( 'wp_ajax_get_country_state','get_country_state' );
 
+function add_customer_info(){
+        $checkout_email = $_POST['checkout_email'];
+		$checkout_password = $_POST['checkout_password'];
+		$checkout_first_name = $_POST['checkout_first_name'];
+		$checkout_last_name = $_POST['checkout_last_name'];
+		$checkout_address = $_POST['checkout_address'];
+		$checkout_phone = $_POST['checkout_phone'];
+		$checkout_company_name = $_POST['checkout_company_name'];
+		$selectCountry = $_POST['selectCountry'];
+		$checkout_postcode = $_POST['checkout_postcode'];
+		$checkout_town_city = $_POST['checkout_town_city'];
+		$checkout_notes = $_POST['checkout_notes'];
+		$registrationId = $_POST['registrationId'];
+		global $wpdb;
+		if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset($registrationId) && isset($checkout_email) && isset($checkout_password)) :	
+		
+		$username = username_exists( $checkout_email );
+		$userEmail = email_exists( $checkout_email );
+		if($username){
+			$resutl = array(
+				'success' => false
+			);
+		}
+		elseif($userEmail){
+			$resutl = array(
+				'success' => false
+			);
+		} else{
+			$resutl = array(
+				'success' => true
+			);
+		}		
+		
+		
+		else :
+		$resutl = array(
+			'success' => false
+		);		
+		endif;	
+		echo json_encode($resutl);		
+  die();
+  }
+add_action( 'wp_ajax_nopriv_add_customer_info','add_customer_info' );
+add_action( 'wp_ajax_add_customer_info','add_customer_info' );
+
 //add colume
 
 function automobile_columns( $columns ) {
