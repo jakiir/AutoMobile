@@ -78,7 +78,7 @@ if (!class_exists( 'AutoMobile' )){
 
         }
 
-        function auto_mobile_thumbnail($placeholderImage = '') {			
+        function auto_mobile_thumbnail($placeholderImage = '') {
             $uploads_dir = wp_upload_dir();
             $upload_url = $uploads_dir['baseurl']."/";
             $upload_dir = $uploads_dir['basedir']."/";
@@ -95,7 +95,7 @@ if (!class_exists( 'AutoMobile' )){
             else {
                 $output = '<img src="http://placehold.it/'.$placeholderImage.'" />';
             }
-			return $output;
+            return $output;
         }
 
         /**
@@ -106,7 +106,7 @@ if (!class_exists( 'AutoMobile' )){
     static function install_db() {
         global $wpdb;
 
-       $auto_mobile_order     = $wpdb->prefix . 'auto_mobile_order';
+        $auto_mobile_order     = $wpdb->prefix . 'auto_mobile_order';
         $auto_mobile_order_meta      = $wpdb->prefix . 'auto_mobile_order_meta';
 
         //Explicitly set the character set and collation when creating the tables

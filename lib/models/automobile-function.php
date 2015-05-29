@@ -161,6 +161,7 @@ function add_customer_info(){
         $checkout_password = $_POST['checkout_password'];
         $checkout_first_name = $_POST['checkout_first_name'];
         $checkout_last_name = $_POST['checkout_last_name'];
+        $display_name = $checkout_first_name.' '.$checkout_last_name;
         $checkout_address = $_POST['checkout_address'];
         $checkout_phone = $_POST['checkout_phone'];
         $checkout_company_name = $_POST['checkout_company_name'];
@@ -169,11 +170,17 @@ function add_customer_info(){
         $checkout_town_city = $_POST['checkout_town_city'];
         $checkout_notes = $_POST['checkout_notes'];
         $registrationId = $_POST['registrationId'];
-        //global $wpdb;
+        date_default_timezone_set("GMT");
+        $date = date("F j, Y, g:i a");
+        $post_title = 'atm_order-' . $date;
+        $now_time = time();
+        $post_pwd = 'atm_order_'.$now_time;
+    //global $wpdb;
         if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset($registrationId) && isset($checkout_email) && isset($checkout_password)) :
 
         $username = username_exists( $checkout_email );
         $userEmail = email_exists( $checkout_email );
+            if ( !is_user_logged_in() ) {
         if($username){
             $result = array(
                 'success' => false,
@@ -186,31 +193,121 @@ function add_customer_info(){
                 'mess'    => 'Email address already exist!'
             );
         } else{
-            $customerData = array(
-                'user_login' => $checkout_email,
-                'first_name' => $checkout_first_name,
-                'last_name' => $checkout_last_name,
-                'user_pass' => $checkout_password,
-                'user_email' => $checkout_email,
-                'user_url' => '',
-                'role' => 'atm_customer'
-            );
-            $createUser = wp_insert_user( $customerData );
-            if($createUser){
-                add_user_meta( $createUser, 'checkout_address', $checkout_address, true );
-                add_user_meta( $createUser, 'checkout_phone', $checkout_phone, true );
-                add_user_meta( $createUser, 'checkout_company_name', $checkout_company_name, true );
-                add_user_meta( $createUser, 'selectCountry', $selectCountry, true );
-                add_user_meta( $createUser, 'checkout_postcode', $checkout_postcode, true );
-                add_user_meta( $createUser, 'checkout_town_city', $checkout_town_city, true );
-                add_user_meta( $createUser, 'checkout_notes', $checkout_notes, true );
-            }
+                $customerData = array(
+                    'user_login' => $checkout_email,
+                    'display_name' => $display_name,
+                    'first_name' => $checkout_first_name,
+                    'last_name' => $checkout_last_name,
+                    'user_pass' => $checkout_password,
+                    'user_email' => $checkout_email,
+                    'user_url' => '',
+                    'role' => 'atm_customer'
+                );
+                $createUser = wp_insert_user($customerData);
+                if ($createUser) {
+                    add_user_meta($createUser, 'checkout_address', $checkout_address, true);
+                    add_user_meta($createUser, 'checkout_phone', $checkout_phone, true);
+                    add_user_meta($createUser, 'checkout_company_name', $checkout_company_name, true);
+                    add_user_meta($createUser, 'selectCountry', $selectCountry, true);
+                    add_user_meta($createUser, 'checkout_postcode', $checkout_postcode, true);
+                    add_user_meta($createUser, 'checkout_town_city', $checkout_town_city, true);
+                    add_user_meta($createUser, 'checkout_notes', $checkout_notes, true);
+
+                    $the_order_post = get_page_by_title($post_title);
+                    if (!$the_order_post) {
+                        // Create order post object
+                        $post = array(
+                            'post_title' => $post_title,
+                            'post_content' => '',
+                            'post_status' => 'atm-on-hold',
+                            'post_type' => 'automobile_order',
+                            'post_author' => $createUser,
+                            'ping_status' => 'closed',
+                            'post_parent' => 0,
+                            'menu_order' => 0,
+                            'to_ping' => '',
+                            'pinged' => '',
+                            'post_password' => $post_pwd,
+                            'guid' => '',
+                            'post_content_filtered' => '',
+                            'post_excerpt' => '',
+                            'import_id' => 0
+                        );
+                        // Insert the automobile order post into the database
+                        wp_insert_post($post);
+                    }
+
+                }
+
 
             $result = array(
                 'success' => true,
                 'mess'    => 'ok'
             );
         }
+            } else {
+                $user_ID = get_current_user_id();
+                $updateData = '';
+                if($checkout_password == ''){
+                    $updateData = array(
+                        'ID' => $user_ID,
+                        'user_email' => $checkout_email,
+                        'display_name' => $display_name,
+                        'first_name' => $checkout_first_name,
+                        'last_name' => $checkout_last_name
+                    );
+                }
+                if($checkout_password != ''){
+                    $updateData = array(
+                        'ID' => $user_ID,
+                        'user_pass' => $checkout_password,
+                        'user_email' => $checkout_email,
+                        'display_name' => $display_name,
+                        'first_name' => $checkout_first_name,
+                        'last_name' => $checkout_last_name
+                    );
+                }
+                wp_update_user( $updateData );
+
+                update_user_meta($user_ID, 'checkout_address', $checkout_address);
+                update_user_meta($user_ID, 'checkout_phone', $checkout_phone);
+                update_user_meta($user_ID, 'checkout_company_name', $checkout_company_name);
+                update_user_meta($user_ID, 'selectCountry', $selectCountry);
+                update_user_meta($user_ID, 'checkout_postcode', $checkout_postcode);
+                update_user_meta($user_ID, 'checkout_town_city', $checkout_town_city);
+                update_user_meta($user_ID, 'checkout_notes', $checkout_notes);
+
+                $the_order_post = get_page_by_title($post_title);
+                $orderId = '';
+                if (!$the_order_post) {
+                    // Create order post object
+                    $post = array(
+                        'post_title' => $post_title,
+                        'post_content' => '',
+                        'post_status' => 'atm-on-hold',
+                        'post_type' => 'automobile_order',
+                        'post_author' => $user_ID,
+                        'ping_status' => 'closed',
+                        'post_parent' => 0,
+                        'menu_order' => 0,
+                        'to_ping' => '',
+                        'pinged' => '',
+                        'post_password' => $post_pwd,
+                        'guid' => '',
+                        'post_content_filtered' => '',
+                        'post_excerpt' => '',
+                        'import_id' => 0
+                    );
+                    // Insert the automobile order post into the database
+                    $orderId = wp_insert_post($post);
+                }
+
+                $result = array(
+                    'success' => true,
+                    'mess'    => 'ok',
+                    'post_id' => $orderId
+                );
+            }
 
         else :
             $result = array(

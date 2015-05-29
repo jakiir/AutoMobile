@@ -3,7 +3,24 @@
  
  $automobile_options = get_option('automobile_options');
  
-get_header(); 
+get_header();
+$userEmail = '';
+$display_name = '';
+if ( is_user_logged_in() ) {
+    $userId = get_current_user_id();
+    $user_info = get_userdata($userId);
+    $userEmail = $user_info->data->user_email;
+    $display_name = $user_info->data->display_name;
+    $first_last_name = explode(' ', $display_name);
+    $checkout_address = get_user_meta($userId, 'checkout_address', true);
+    $checkout_phone = get_user_meta($userId, 'checkout_phone', true);
+    $checkout_company_name = get_user_meta($userId, 'checkout_company_name', true);
+    $selectCountry = get_user_meta($userId, 'selectCountry', true);
+    $checkout_postcode = get_user_meta($userId, 'checkout_postcode', true);
+    $checkout_town_city = get_user_meta($userId, 'checkout_town_city', true);
+    $checkout_notes = get_user_meta($userId, 'checkout_notes', true);
+
+}
 ?>
 <div style="height: 200px;"></div>
 <div class="container">
@@ -20,7 +37,7 @@ get_header();
 <div class="control-group">
   <label class="control-label" for="checkout_email">Email Address *</label>
   <div class="controls">
-    <input id="checkout_email" name="email" placeholder="Email Address " class="form-control" type="text">
+    <input id="checkout_email" name="email" value="<?php if($userEmail): echo $userEmail; endif; ?>" placeholder="Email Address " class="form-control" type="text">
     
   </div>
 </div>
@@ -38,7 +55,7 @@ get_header();
 <div class="control-group">
   <label class="control-label" for="checkout_first_name">First Name</label>
   <div class="controls">
-    <input id="checkout_first_name" name="checkout_first_name" placeholder="First Name" class="form-control" type="text">
+    <input id="checkout_first_name" name="checkout_first_name" value="<?php if($display_name): echo $first_last_name[0]; endif; ?>" placeholder="First Name" class="form-control" type="text">
     
   </div>
 </div>
@@ -47,7 +64,7 @@ get_header();
 <div class="control-group">
   <label class="control-label" for="checkout_last_name">Last Name</label>
   <div class="controls">
-    <input id="checkout_last_name" name="checkout_last_name" placeholder="Last Name" class="form-control" type="text">
+    <input id="checkout_last_name" name="checkout_last_name" value="<?php if($display_name): echo $first_last_name[1]; endif; ?>" placeholder="Last Name" class="form-control" type="text">
     
   </div>
 </div>
@@ -56,7 +73,7 @@ get_header();
 <div class="control-group">
   <label class="control-label" for="checkout_address">Address</label>
   <div class="controls">                     
-    <textarea id="checkout_address" class="form-control" name="checkout_address">Address</textarea>
+    <textarea id="checkout_address" class="form-control" name="checkout_address"><?php if($checkout_address): echo $checkout_address; endif; ?></textarea>
   </div>
 </div>
 
@@ -64,7 +81,7 @@ get_header();
 <div class="control-group">
   <label class="control-label" for="checkout_phone">Phone</label>
   <div class="controls">
-    <input id="checkout_phone" name="checkout_phone" placeholder="Phone " class="form-control" required="" type="text">
+    <input id="checkout_phone" value="<?php if($checkout_phone): echo $checkout_phone; endif; ?>" name="checkout_phone" placeholder="Phone " class="form-control" required="" type="text">
     
   </div>
 </div>
@@ -73,7 +90,7 @@ get_header();
 <div class="control-group">
   <label class="control-label" for="checkout_company_name">Company Name</label>
   <div class="controls">
-    <input id="checkout_company_name" name="checkout_company_name" placeholder="Company Name" class="form-control" required="" type="text">
+    <input value="<?php if($checkout_company_name): echo $checkout_company_name; endif; ?>" id="checkout_company_name" name="checkout_company_name" placeholder="Company Name" class="form-control" required="" type="text">
     
   </div>
 </div>
@@ -89,7 +106,7 @@ get_header();
         <option value="">Country</option>
         <?php
         foreach($countryList as $ckey => $cvalue) {
-            $marked = ( $ckey == $_REQUEST['country'] ? 'selected="selected"' : null );
+            $marked = ( $ckey == $selectCountry ? 'selected="selected"' : null );
             echo "<option value='$ckey' $marked>$cvalue</option>";
         }
         ?>
@@ -101,7 +118,7 @@ get_header();
 <div class="control-group">
   <label class="control-label" for="checkout_postcode">Postcode / Zip</label>
   <div class="controls">
-    <input id="checkout_postcode" onkeyup="check_number(this)" onkeypress="check_number(this)" name="checkout_postcode" placeholder="Postcode / Zip" class="form-control" type="text">
+    <input value="<?php if($checkout_postcode): echo $checkout_postcode; endif; ?>" id="checkout_postcode" onkeyup="check_number(this)" onkeypress="check_number(this)" name="checkout_postcode" placeholder="Postcode / Zip" class="form-control" type="text">
     
   </div>
 </div>
@@ -109,11 +126,11 @@ get_header();
 <!-- Select Basic -->
 <div class="control-group">
   <label class="control-label" for="checkout_town_city">Town / City</label>
-  <div class="controls">	
+  <div class="controls">
     <select id="checkout_town_city" name="town_city" class="form-control">
-      <option value="">Select One</option>      
+      <option value="">Select one</option>
     </select>
-	<span class="checkout_town_city"></span>
+      <span class="checkout_town_city"></span>
   </div>
 </div>
 
@@ -121,7 +138,7 @@ get_header();
 <div class="control-group">
   <label class="control-label" for="checkout_notes">Notes </label>
   <div class="controls">                     
-    <textarea  class="form-control" id="checkout_notes" name="checkout_notes">Notes</textarea>
+    <textarea  class="form-control" id="checkout_notes" name="checkout_notes"><?php if($checkout_notes): echo $checkout_notes; endif; ?></textarea>
   </div>
 </div>
 
@@ -244,7 +261,7 @@ get_header();
 <div class="control-group pull-right">
   <label class="control-label" for="Place order">Place order</label>
   <div class="controls">
-    <a id="automobile_place_order" href="javascript:void(0)" name="automobile_place_order" class="btn btn-primary">Place order</a>
+    <a id="automobile_place_order" href="javascript:void(0)" data-logged="<?php if ( is_user_logged_in() ) : echo 'yes'; else : echo 'no'; endif; ?>" name="automobile_place_order" class="btn btn-primary">Place order</a>
   </div>
 </div>
             </div>
@@ -258,5 +275,14 @@ get_header();
   
 </div>
 </div>
+
+<?php if($selectCountry): ?>
+<script type="text/javascript">
+    jQuery( function( $ ) {
+        get_state_city('<?php echo $selectCountry; ?>','<?php echo $checkout_town_city; ?>');
+    });
+</script>
+<?php endif; ?>
+
 <?php get_footer(); ?>
               
