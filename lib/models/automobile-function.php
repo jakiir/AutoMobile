@@ -328,9 +328,9 @@ function automobile_columns( $columns ) {
     unset( $columns['comments'] );
     return $columns;
 }
-    add_action( 'manage_posts_custom_column', 'automobile_populate_columns' );
 
 
+add_action( 'manage_posts_custom_column', 'automobile_populate_columns' );
 function automobile_populate_columns( $column ) {
     global $post;
     $txt_automobile_model = '';

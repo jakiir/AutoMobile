@@ -77,6 +77,8 @@ if (!class_exists( 'AutoMobile' )){
             $this->install_db();
 
         }
+		
+		
 
         function auto_mobile_thumbnail($placeholderImage = '') {
             $uploads_dir = wp_upload_dir();

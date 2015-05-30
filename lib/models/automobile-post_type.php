@@ -27,8 +27,49 @@ function automobile_product() {
             'has_archive' => true
         )
     );
+	
+	atm_register_order_type(
+			'automobile_order',
+			apply_filters( 'automobile_register_post_type_automobile_order',
+				array(
+					'labels'              => array(
+							'name'               => __( 'Orders', 'automobile' ),
+							'singular_name'      => __( 'Order', 'automobile' ),
+							'add_new'            => __( 'Add Order', 'automobile' ),
+							'add_new_item'       => __( 'Add New Order', 'automobile' ),
+							'edit'               => __( 'Edit', 'automobile' ),
+							'edit_item'          => __( 'Edit Order', 'automobile' ),
+							'new_item'           => __( 'New Order', 'automobile' ),
+							'view'               => __( 'View Order', 'automobile' ),
+							'view_item'          => __( 'View Order', 'automobile' ),
+							'search_items'       => __( 'Search Orders', 'automobile' ),
+							'not_found'          => __( 'No Orders found', 'automobile' ),
+							'not_found_in_trash' => __( 'No Orders found in trash', 'automobile' ),
+							'parent'             => __( 'Parent Orders', 'automobile' ),
+							'menu_name'          => _x( 'Orders', 'Admin menu name', 'automobile' )
+						),
+					'description'         => __( 'This is where store orders are stored.', 'automobile' ),
+					'public'              => false,
+					'show_ui'             => true,	
+					'capability_type'     => 'post',
+					'map_meta_cap'        => true,
+					'publicly_queryable'  => false,
+					'exclude_from_search' => true,
+					'show_in_menu'        => current_user_can( 'edit_theme_options' ) ? 'automobile_options' : true,
+					'hierarchical'        => false,
+					'show_in_nav_menus'   => false,
+					'rewrite'             => false,
+					'query_var'           => false,
+					'supports'            => array( 'title', 'comments', 'custom-fields' ),
+					'has_archive'         => false,
+				)
+			)
+		);
+	
 }
 
+add_filter( 'manage_automobile_order_posts_columns', 'automobile_order_columns'  );
+add_action( 'manage_automobile_order_posts_custom_column', 'render_automobile_order_columns', 2 );
 
 add_action( 'init', 'automobile_taxonomies', 0 );
 function automobile_taxonomies() {

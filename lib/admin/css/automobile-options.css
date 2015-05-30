@@ -604,3 +604,22 @@ span.customSelect.changed {
     -webkit-box-shadow:none;
     box-shadow: none;
 }
+a.atm_processing,a.atm_complete,a.atm_view{
+	float: left;
+  margin: 0 4px 2px 0 !important;
+  cursor: pointer;
+  padding: 3px 4px;
+  height: auto;
+  display: block;  
+  position: relative;
+  padding: 0!important;
+  height: 2em!important;
+  width: 2em;
+  width: 2em;  
+}
+
+a.atm_processing .fa, a.atm_complete .fa, a.atm_view .fa{
+	padding:5px;
+}
+
+
