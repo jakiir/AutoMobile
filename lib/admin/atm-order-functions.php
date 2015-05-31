@@ -62,9 +62,7 @@ function automobile_order_columns( $existing_columns ) {
 
 		switch ( $column ) {
 			case 'order_status' :
-
-				echo 'jakir';
-
+				echo '<mark class="on-hold tips atm-tooltip" data-tooltip="On Hold"><i class="fa fa-minus"></i></mark>';
 			break;
 			case 'order_date' :
 
@@ -96,9 +94,13 @@ function automobile_order_columns( $existing_columns ) {
 			case 'order_actions' :
 
 				?><p>
-					<a class="button tips atm_processing" href="#"><i class="fa fa-ellipsis-h"></i></a>
-					<a class="button tips atm_complete" href="#"><i class="fa fa-check"></i></a>
-					<a class="button tips atm_view" href="#"><i class="fa fa-book"></i></a>				
+					<a class="button tips atm_processing atm-tooltip" data-tooltip="Processing" href="#">
+						<i class="fa fa-ellipsis-h"></i>
+					</a>
+					<a class="button tips atm_complete atm-tooltip" data-tooltip="Complete" href="#">
+						<i class="fa fa-check"></i>
+					</a>
+					<a class="button tips atm_view atm-tooltip" data-tooltip="View" href="#"><i class="fa fa-book"></i></a>				
 				</p>
 					<?php
 

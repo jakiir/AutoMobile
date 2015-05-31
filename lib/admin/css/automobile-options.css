@@ -605,7 +605,7 @@ span.customSelect.changed {
     box-shadow: none;
 }
 a.atm_processing,a.atm_complete,a.atm_view{
-	float: left;
+  float: left;
   margin: 0 4px 2px 0 !important;
   cursor: pointer;
   padding: 3px 4px;
@@ -622,4 +622,49 @@ a.atm_processing .fa, a.atm_complete .fa, a.atm_view .fa{
 	padding:5px;
 }
 
+mark.tips{
+  display: block;  
+  position: relative;  
+  background: 0 0;
+  font-size: 10px;
+  margin: 0 auto;
+  margin: 0 auto;
+  width: 1em;
+  height: 1em;
+  cursor: help;
+  text-decoration: none;
+}
+mark.tips .fa{  
+  border: 1px solid #000;
+  border-radius: 50%;
+  line-height: 5px;
+  padding: 6px;
+}
+.atm-tooltip{
+    display: inline;
+    position: relative;
+}
+.atm-tooltip:hover:after{
+    background: #333;
+    background: rgba(0,0,0,.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(data-tooltip);
+    left: 1%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+	white-space: nowrap;
+}
+.atm-tooltip:hover:before{
+    border: solid;
+    border-color: #333 transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+}
 
