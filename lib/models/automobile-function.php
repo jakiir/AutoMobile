@@ -169,6 +169,17 @@ function add_customer_info(){
         $checkout_postcode = $_POST['checkout_postcode'];
         $checkout_town_city = $_POST['checkout_town_city'];
         $checkout_notes = $_POST['checkout_notes'];
+		$subTotalPrice = $_POST['subTotalPrice'];
+		$productTotalPrice = $_POST['productTotalPrice'];
+		$productTotalItem = $_POST['productTotalItem'];
+		
+		$product_info['product_names'] = $_POST['product_names'];
+		$product_info['product_item_prices'] = $_POST['product_item_prices'];
+		$product_info['product_total_price'] = $_POST['product_total_price'];
+		$product_info['product_quantity'] = $_POST['product_quantity'];
+		$product_info['product_shipping'] = $_POST['product_shipping'];		
+		$product_information = serialize($product_info);
+				
         $registrationId = $_POST['registrationId'];
         date_default_timezone_set("GMT");
         $date = date("F j, Y, g:i a");
@@ -211,7 +222,8 @@ function add_customer_info(){
                     add_user_meta($createUser, 'selectCountry', $selectCountry, true);
                     add_user_meta($createUser, 'checkout_postcode', $checkout_postcode, true);
                     add_user_meta($createUser, 'checkout_town_city', $checkout_town_city, true);
-                    add_user_meta($createUser, 'checkout_notes', $checkout_notes, true);
+                    add_user_meta($createUser, 'checkout_notes', $checkout_notes, true);				
+					
 
                     $the_order_post = get_page_by_title($post_title);
                     if (!$the_order_post) {
@@ -219,7 +231,7 @@ function add_customer_info(){
                         $post = array(
                             'post_title' => $post_title,
                             'post_content' => '',
-                            'post_status' => 'atm-on-hold',
+                            'post_status' => 'publish',
                             'post_type' => 'automobile_order',
                             'post_author' => $createUser,
                             'ping_status' => 'closed',
@@ -233,17 +245,37 @@ function add_customer_info(){
                             'post_excerpt' => '',
                             'import_id' => 0
                         );
-                        // Insert the automobile order post into the database
-                        wp_insert_post($post);
+                        // Insert the automobile order post into the database					
+						
+                        $orderId = wp_insert_post($post);
+						add_post_meta( $orderId, 'product_information', $product_information, true );
+						add_post_meta( $orderId, 'subTotalPrice', $subTotalPrice, true );
+						add_post_meta( $orderId, 'productTotalPrice', $productTotalPrice, true );
+						add_post_meta( $orderId, 'productTotalItem', $productTotalItem, true );
+						add_post_meta( $orderId, 'customerId', $createUser, true );
                     }
 
                 }
 
 
             $result = array(
-                'success' => true,
-                'mess'    => 'ok'
-            );
+				'success' => true,
+				'mess'    => 'ok',
+				'post_id' => $orderId
+			);
+			
+			$data=array(
+			'merchant_email'=>'sanjeev00733@gmail.com',
+			'product_name'=>'Demo Product',
+			'amount'=>20.50,
+			'currency_code'=>'USD',
+			'thanks_page'=>"http://".$_SERVER['HTTP_HOST'].'paypal/thank.php',
+			'notify_url'=>"http://".$_SERVER['HTTP_HOST'].'paypal/ipn.php',
+			'cancel_url'=>"http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+			'paypal_mode'=>true,
+			);
+			echo infotutsPaypal($data);
+			
         }
             } else {
                 $user_ID = get_current_user_id();
@@ -284,7 +316,7 @@ function add_customer_info(){
                     $post = array(
                         'post_title' => $post_title,
                         'post_content' => '',
-                        'post_status' => 'atm-on-hold',
+                        'post_status' => 'publish',
                         'post_type' => 'automobile_order',
                         'post_author' => $user_ID,
                         'ping_status' => 'closed',
@@ -300,6 +332,11 @@ function add_customer_info(){
                     );
                     // Insert the automobile order post into the database
                     $orderId = wp_insert_post($post);
+					add_post_meta( $orderId, 'product_information', $product_information, true );
+					add_post_meta( $orderId, 'subTotalPrice', $subTotalPrice, true );
+					add_post_meta( $orderId, 'productTotalPrice', $productTotalPrice, true );
+					add_post_meta( $orderId, 'productTotalItem', $productTotalItem, true );
+					add_post_meta( $orderId, 'customerId', $user_ID, true );
                 }
 
                 $result = array(
@@ -312,7 +349,8 @@ function add_customer_info(){
         else :
             $result = array(
                 'success' => false,
-                'mess'    => 'Error found'
+                'mess'    => 'Error found',
+				'post_id' => ''
         );
         endif;
         echo json_encode($result);
@@ -320,6 +358,9 @@ function add_customer_info(){
   }
 add_action( 'wp_ajax_nopriv_add_customer_info','add_customer_info' );
 add_action( 'wp_ajax_add_customer_info','add_customer_info' );
+
+
+
 
 function automobile_columns( $columns ) {
     $columns['automobile_make'] = 'Make';

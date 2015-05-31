@@ -172,6 +172,7 @@ if ( is_user_logged_in() ) {
                 <?php
                 $totalPrice =0;
                 $incr = 0;
+				$totalItem = 0;
                 foreach($get_mobile_info_uns as $key=>$get_mobile_info_unss):
                 $itemId = $get_mobile_info_unss['item_id'];
                 $item_quantity = $get_mobile_info_unss['item_quantity'];
@@ -179,13 +180,14 @@ if ( is_user_logged_in() ) {
                 $post_image = wp_get_attachment_url( get_post_thumbnail_id($itemId) );
                 if($post_image): $postImage = $post_image; else : $postImage = 'http://placehold.it/72x72'; endif;
                 $totalPrice += $item_price;
+				$totalItem += $item_quantity;
                 ?>
                     <tr>
-<input type="hidden" name="product_names[]" value="<?php echo get_the_title( $itemId ); ?>"/>
-<input type="hidden" name="product_item_price[]" value="<?php echo $item_price/$item_quantity; ?>"/>
-<input type="hidden" name="product_total_price[]" value="<?php echo $item_price; ?>"/>
-<input type="hidden" name="product_quantity[]" value="<?php echo $item_quantity; ?>"/>
-<input type="hidden" name="product_shipping" value="0.00"/>
+<input type="hidden" class="product_names" name="product_names[]" value="<?php echo get_the_title( $itemId ); ?>"/>
+<input type="hidden" class="product_item_prices" name="product_item_price[]" value="<?php echo $item_price/$item_quantity; ?>"/>
+<input type="hidden" class="product_total_price" name="product_total_price[]" value="<?php echo $item_price; ?>"/>
+<input type="hidden" class="product_quantity" name="product_quantity[]" value="<?php echo $item_quantity; ?>"/>
+<input type="hidden" class="product_shipping" name="product_shipping[]" value="0.00"/>
                         <td class="col-sm-8 col-md-6">
                         <div class="media">
                           
@@ -203,7 +205,9 @@ if ( is_user_logged_in() ) {
                        
                     </tr>
                     <?php $incr++; endforeach; ?>
-                    
+<input type="hidden" id="subTotalPrice" name="subTotalPrice" value="<?php echo $totalPrice; ?>"/>
+<input type="hidden" id="productTotalPrice" name="productTotalPrice" value="<?php echo $totalPrice; ?>"/>
+<input type="hidden" id="productTotalItem" name="productTotalItem" value="<?php echo $totalItem; ?>"/>         
                     <tr>
                         <td>   </td>
                         <td>   </td>
@@ -229,6 +233,56 @@ if ( is_user_logged_in() ) {
                 </tbody>
         </form>
             </table>
+			
+			<?php
+			$options = get_option('automobile_options');
+			if($options):
+				$order_send_email = esc_attr($options['automobile_order_send_email']);
+				if($order_send_email):
+					$orderEmail = $order_send_email;
+				else :
+					$orderEmail = 'jakir44.du@gmail.com';
+				endif;
+			else :
+				$orderEmail = 'jakir44.du@gmail.com';
+			endif;
+			$data=array(
+				'merchant_email'=>$orderEmail,	
+				'currency_code'=>'USD',
+				'thanks_page'=>"http://".$_SERVER['HTTP_HOST'].'paypal/thank.php',
+				'notify_url'=>"http://".$_SERVER['HTTP_HOST'].'paypal/ipn.php',
+				'cancel_url'=>"http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
+				'paypal_mode'=>true,
+			);
+			define( 'SSL_URL', 'https://www.paypal.com/cgi-bin/webscr' );
+			define( 'SSL_SAND_URL', 'https://www.sandbox.paypal.com/cgi-bin/webscr' );
+			$action = '';
+			 //Is this a test transaction?
+			$action = ($data['paypal_mode']) ? SSL_SAND_URL : SSL_URL;
+			?>
+
+			<form name="frm_payment_method" action="<?php echo $action; ?>" method="post">
+			<input type="hidden" name="cmd" value="_cart">
+			<input type="hidden" name="upload" value="1">
+			<input type="hidden" name="business" value="<?php echo $data['merchant_email']; ?>">
+			<input type="hidden" name="currency_code" value="<?php echo $data['currency_code']; ?>">
+			<input type="hidden" name="notify_url" value="<?php echo $data['notify_url']; ?>" />
+			<input type="hidden" name="cancel_return" value="<?php echo $data['cancel_url']; ?>" />
+			<input type="hidden" name="return" value="<?php echo $data['thanks_page']; ?>" />
+			<input type="hidden" name="charset" value="utf-8" />
+			<?php $inn = 1; foreach($get_mobile_info_uns as $key=>$get_mobile_info_unss): 
+				$item_id = $get_mobile_info_unss['item_id'];
+                $itemQuantity = $get_mobile_info_unss['item_quantity'];
+                $itemPrice = $get_mobile_info_unss['item_price'];             
+                
+			?>
+			<input type="hidden" name="item_name_<?php echo $inn; ?>" value="<?php echo get_the_title( $item_id ); ?>">
+			<input type="hidden" name="amount_<?php echo $inn; ?>" value="<?php echo $itemPrice/$itemQuantity; ?>">
+			<input type="hidden" name="quantity_<?php echo $inn; ?>" value="<?php echo $itemQuantity; ?>">			
+			<?php $inn++; endforeach; ?>
+			</form>
+			
+			
         <?php } else { ?>
         <article id="post-5" class="post-5 page type-page status-publish hentry">
                 <header class="entry-header">
@@ -283,6 +337,5 @@ if ( is_user_logged_in() ) {
     });
 </script>
 <?php endif; ?>
-
 <?php get_footer(); ?>
               
