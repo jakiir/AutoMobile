@@ -183,6 +183,7 @@ if ( is_user_logged_in() ) {
 				$totalItem += $item_quantity;
                 ?>
                     <tr>
+<input type="hidden" class="product_ids" name="product_ids[]" value="<?php echo $itemId; ?>"/>
 <input type="hidden" class="product_names" name="product_names[]" value="<?php echo get_the_title( $itemId ); ?>"/>
 <input type="hidden" class="product_item_prices" name="product_item_price[]" value="<?php echo $item_price/$item_quantity; ?>"/>
 <input type="hidden" class="product_total_price" name="product_total_price[]" value="<?php echo $item_price; ?>"/>

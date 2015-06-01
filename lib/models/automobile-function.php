@@ -173,6 +173,7 @@ function add_customer_info(){
 		$productTotalPrice = $_POST['productTotalPrice'];
 		$productTotalItem = $_POST['productTotalItem'];
 		
+		$product_info['product_ids'] = $_POST['product_ids'];
 		$product_info['product_names'] = $_POST['product_names'];
 		$product_info['product_item_prices'] = $_POST['product_item_prices'];
 		$product_info['product_total_price'] = $_POST['product_total_price'];
