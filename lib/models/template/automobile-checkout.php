@@ -22,9 +22,17 @@ if ( is_user_logged_in() ) {
 
 }
 ?>
-<div style="height: 200px;"></div>
 <div class="container">
-    <div class="row">
+<?php
+	@session_start();
+	$sessionId = session_id();
+	$auto_mobile_info = '_auto_mobile_info_'.$sessionId;
+	$get_mobile_info = get_option( $auto_mobile_info );
+	if($get_mobile_info){
+	$get_mobile_info_uns = @unserialize($get_mobile_info);
+	if($get_mobile_info_uns){
+?>
+<div class="row">
         <div class="col-sm-6 col-md-6">
           
        <form class="form-horizontal">
@@ -147,16 +155,7 @@ if ( is_user_logged_in() ) {
 </fieldset>
 </form>
     </div>
-    <div class="col-sm-6 col-md-6">
-        <?php
-        @session_start();
-        $sessionId = session_id();
-        $auto_mobile_info = '_auto_mobile_info_'.$sessionId;
-        $get_mobile_info = get_option( $auto_mobile_info );
-        if($get_mobile_info){
-        $get_mobile_info_uns = @unserialize($get_mobile_info);
-        if($get_mobile_info_uns){
-        ?>
+    <div class="col-sm-6 col-md-6">        
     <table class="table table-hover">
         <form action="" method="">
                 <thead>
@@ -284,7 +283,17 @@ if ( is_user_logged_in() ) {
 			</form>
 			
 			
-        <?php } else { ?>
+        
+<div class="control-group pull-right">
+  <label class="control-label" for="Place order">Place order</label>
+  <div class="controls">
+    <a id="automobile_place_order" href="javascript:void(0)" data-logged="<?php if ( is_user_logged_in() ) : echo 'yes'; else : echo 'no'; endif; ?>" name="automobile_place_order" class="btn btn-primary">Place order</a>
+  </div>
+</div>
+            </div>
+            <!-- Button -->
+</div>
+<?php } else { ?>
         <article id="post-5" class="post-5 page type-page status-publish hentry">
                 <header class="entry-header">
 
@@ -313,22 +322,8 @@ if ( is_user_logged_in() ) {
                 </div>
             </article>
         <?php } ?>
-<div class="control-group pull-right">
-  <label class="control-label" for="Place order">Place order</label>
-  <div class="controls">
-    <a id="automobile_place_order" href="javascript:void(0)" data-logged="<?php if ( is_user_logged_in() ) : echo 'yes'; else : echo 'no'; endif; ?>" name="automobile_place_order" class="btn btn-primary">Place order</a>
-  </div>
-</div>
-            </div>
-            <!-- Button -->
+       
 
-        </div>
-
-    
-
-  <div class="row">
-  
-</div>
 </div>
 
 <?php if($selectCountry): ?>
