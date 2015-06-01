@@ -307,6 +307,43 @@ function edit_automobile_model(){
 add_action( 'wp_ajax_nopriv_edit_automobile_model','edit_automobile_model' );
 add_action( 'wp_ajax_edit_automobile_model','edit_automobile_model' );
 
+function add_order_status(){
+    $order_id = $_POST['order_id'];
+    $order_status = $_POST['order_status'];
+	$results = array();
+    if($order_id):
+		$orderStatus = array();
+		if($order_status == 'processing'):
+			$orderStatus = array(
+				'name' => 'on-hold',
+				'title' => 'On Hold'
+			);
+		endif;
+		if($order_status == 'complete'):
+			$orderStatus = array(
+				'name' => 'on-complete',
+				'title' => 'On Complete'
+			);
+		endif;
+		
+		$orderStatuSer = serialize($orderStatus);
+        update_post_meta($order_id, 'order_status', $orderStatuSer);
+		
+		$results = array(
+			'success' => true
+		);
+	else :
+		$results = array(
+			'success' => false
+		);
+    endif;
+		
+	echo json_encode($results);
+    die();
+}
+add_action( 'wp_ajax_nopriv_add_order_status','add_order_status' );
+add_action( 'wp_ajax_add_order_status','add_order_status' );
+
 add_role(
     'atm_customer',
     __( 'Customer' ),

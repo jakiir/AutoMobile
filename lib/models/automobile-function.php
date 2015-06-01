@@ -258,7 +258,8 @@ function add_customer_info(){
 							'name' => 'on-hold',
 							'title' => 'On Hold'
 						);
-						add_post_meta( $orderId, 'order_status', $orderStatus, true );
+						$orderStatuSer = serialize($orderStatus);
+						add_post_meta( $orderId, 'order_status', $orderStatuSer, true );
                     }
 
                 }
@@ -335,7 +336,8 @@ function add_customer_info(){
 							'name' => 'on-hold',
 							'title' => 'On Hold'
 						);
-					add_post_meta( $orderId, 'order_status', $orderStatus, true );
+					$orderStatuSer = serialize($orderStatus);
+					add_post_meta( $orderId, 'order_status', $orderStatuSer, true );
 					
                 }
 

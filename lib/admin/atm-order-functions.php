@@ -62,7 +62,17 @@ function automobile_order_columns( $existing_columns ) {
 		$customerId = get_post_meta( get_the_ID(), 'customerId', true );
 		switch ( $column ) {
 			case 'order_status' :
-				echo '<mark class="on-hold tips atm-tooltip" data-tooltip="On Hold"><i class="fa fa-minus"></i></mark>';
+				$order_status = get_post_meta( get_the_ID(), 'order_status', true );
+				if($order_status) :						
+					$order_statuss = unserialize($order_status);
+					if($order_statuss['name'] == 'on-complete') : $iconClass = 'fa-check'; else : $iconClass = 'fa-minus'; endif;
+					echo '<mark class="'.$order_statuss['name'].' tips atm-tooltip" data-tooltip="'.$order_statuss['title'].'"><i class="fa '.$iconClass.'"></i></mark>';
+				
+				else :
+				
+					echo '<mark class="on-hold tips atm-tooltip" data-tooltip="On Hold"><i class="fa fa-minus"></i></mark>';
+					
+				endif;
 			break;
 			case 'order_date' :
 
@@ -103,10 +113,10 @@ function automobile_order_columns( $existing_columns ) {
 			case 'order_actions' :
 
 				?><p>
-					<a class="button tips atm_processing atm-tooltip" data-tooltip="Processing" href="#">
+					<a class="button tips atm_processing atm-tooltip orderStatus" data-order_id="<?php echo get_the_ID(); ?>"  data-order_status="processing" data-tooltip="Processing" href="#">
 						<i class="fa fa-ellipsis-h"></i>
 					</a>
-					<a class="button tips atm_complete atm-tooltip" data-tooltip="Complete" href="#">
+					<a class="button tips atm_complete atm-tooltip orderStatus" data-order_id="<?php echo get_the_ID(); ?>"  data-order_status="complete" data-tooltip="Complete" href="#">
 						<i class="fa fa-check"></i>
 					</a>
 					<?php echo '<a class="button tips atm_view atm-tooltip" data-tooltip="View" href="post.php?post='.get_the_ID().'&amp;action=edit"><i class="fa fa-book"></i></a>';	?>			
