@@ -60,11 +60,12 @@ function automobile_order_columns( $existing_columns ) {
 	function render_automobile_order_columns( $column ) {
 		global $post, $autoMobile;
 		$customerId = get_post_meta( get_the_ID(), 'customerId', true );
+		$order_status = get_post_meta( get_the_ID(), 'order_status', true );
 		switch ( $column ) {
-			case 'order_status' :
-				$order_status = get_post_meta( get_the_ID(), 'order_status', true );
+			case 'order_status' :				
 				if($order_status) :						
 					$order_statuss = unserialize($order_status);
+					$iconClass = '';
 					if($order_statuss['name'] == 'on-complete') : $iconClass = 'fa-check'; else : $iconClass = 'fa-minus'; endif;
 					echo '<mark class="'.$order_statuss['name'].' tips atm-tooltip" data-tooltip="'.$order_statuss['title'].'"><i class="fa '.$iconClass.'"></i></mark>';
 				
@@ -103,22 +104,36 @@ function automobile_order_columns( $existing_columns ) {
 			break;
 			case 'order_total' :
 				$productTotalPrice = get_post_meta( get_the_ID(), 'productTotalPrice', true );
-				if($productTotalPrice): echo '$'.$productTotalPrice.'<small class="meta">Via PayPal</small>'; else : echo '$0.00'; endif;
+				if($productTotalPrice): echo '$'.$productTotalPrice.' <small class="meta">Via PayPal</small>'; else : echo '$0.00'; endif;
 			break;
 			case 'order_title' :				
 				$user_info = get_userdata($customerId);				
 				$userEmail = '<a href="user-edit.php?user_id='.$customerId.'">'.$user_info->display_name.'</a>';
 				echo '<div class="tips"><a href="post.php?post='.get_the_ID().'&amp;action=edit"><strong>#'.get_the_ID().'</strong></a> by '.$userEmail.' <small class="meta email"><a href="mailto:'.$user_info->user_email.'">'.$user_info->user_email.'</a></small></div>';
 			break;
-			case 'order_actions' :
-
+			case 'order_actions' :				
+				if($order_status) :						
+					$order_statuss = unserialize($order_status);					
 				?><p>
+				
+					<a class="<?php if($order_statuss['name'] == 'on-hold') : echo 'active'; endif; ?> button tips atm_processing atm-tooltip orderStatus" data-order_id="<?php echo get_the_ID(); ?>"  data-order_status="processing" data-tooltip="Processing" href="#">
+						<i class="fa fa-ellipsis-h"></i>
+					</a>
+					<a class="<?php if($order_statuss['name'] == 'on-complete') : echo 'active'; endif; ?> button tips atm_complete atm-tooltip orderStatus" data-order_id="<?php echo get_the_ID(); ?>"  data-order_status="complete" data-tooltip="Complete" href="#">
+						<i class="fa fa-check"></i>
+					</a>
+					
+					<?php else :?>
+					
 					<a class="button tips atm_processing atm-tooltip orderStatus" data-order_id="<?php echo get_the_ID(); ?>"  data-order_status="processing" data-tooltip="Processing" href="#">
 						<i class="fa fa-ellipsis-h"></i>
 					</a>
 					<a class="button tips atm_complete atm-tooltip orderStatus" data-order_id="<?php echo get_the_ID(); ?>"  data-order_status="complete" data-tooltip="Complete" href="#">
 						<i class="fa fa-check"></i>
 					</a>
+					
+					<?php endif; ?>
+					
 					<?php echo '<a class="button tips atm_view atm-tooltip" data-tooltip="View" href="post.php?post='.get_the_ID().'&amp;action=edit"><i class="fa fa-book"></i></a>';	?>			
 				</p>
 					<?php

@@ -712,3 +712,6 @@ table.wp-list-table .column-order_items {
   font-size: inherit;
   margin: 3px 0;
 }
+.order_actions a.orderStatus.active{
+	background:#ccc !important;
+}
