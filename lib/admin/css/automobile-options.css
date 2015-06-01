@@ -628,9 +628,7 @@ mark.tips{
   background: 0 0;
   font-size: 10px;
   margin: 0 auto;
-  margin: 0 auto;
-  width: 1em;
-  height: 1em;
+  margin: 0 auto;  
   cursor: help;
   text-decoration: none;
 }
@@ -638,7 +636,7 @@ mark.tips .fa{
   border: 1px solid #000;
   border-radius: 50%;
   line-height: 5px;
-  padding: 6px;
+  padding: 4px;
 }
 .atm-tooltip{
     display: inline;
@@ -667,4 +665,50 @@ mark.tips .fa{
     position: absolute;
     z-index: 99;
 }
+.widefat td.column-order_status {
+  padding-top: 9px;
+}
+.widefat .column-order_status {
+  width: 45px;
+  text-align: center;
+}
 
+table.wp-list-table .notes_head, table.wp-list-table .order-notes_head, table.wp-list-table .status_head {
+  display: block;  
+  position: relative;
+  height: 1em;
+  width: 1em;
+  margin: 0 auto;
+}
+.widefat .column-order_title {
+  width: 15%;
+}
+table.wp-list-table .column-order_items {
+  width: 12%;
+}
+table.wp-list-table .column-customer_message, table.wp-list-table .column-order_notes {
+  width: 48px;
+  text-align: center;
+}
+table.wp-list-table .column-customer_message, table.wp-list-table .column-order_notes {
+  width: 48px;
+  text-align: center;
+}
+.widefat .column-order_date, .widefat .column-order_total {
+  width: 9%;
+}
+.widefat .column-order_actions, .widefat .column-user_actions, .widefat .column-wc_actions {
+  width: 110px;
+}
+table.wp-list-table .column-order_items {
+  width: 12%;
+}
+.widefat .column-order_actions, .widefat .column-user_actions, .widefat .column-wc_actions {
+  width: 110px;
+}
+.widefat small.meta {
+  display: block;
+  color: #999;
+  font-size: inherit;
+  margin: 3px 0;
+}

@@ -41,12 +41,12 @@ function atm_register_order_type( $type, $args = array() ) {
 function automobile_order_columns( $existing_columns ) {
 		$columns                     = array();
 		$columns['cb']               = $existing_columns['cb'];
-		$columns['order_status']     = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', 'automobile' ) . '">' . esc_attr__( 'Status', 'automobile' ) . '</span>';
+		$columns['order_status']     = '<span class="status_head tips atm-tooltip" data-tooltip="' . esc_attr__( 'Status', 'automobile' ) . '"><i class="fa fa-minus-circle"></i></span>';
 		$columns['order_title']      = __( 'Order', 'automobile' );
 		$columns['order_items']      = __( 'Purchased', 'automobile' );
 		$columns['shipping_address'] = __( 'Ship to', 'automobile' );
-		$columns['customer_message'] = '<span class="notes_head tips" data-tip="' . esc_attr__( 'Customer Message', 'automobile' ) . '">' . esc_attr__( 'Customer Message', 'automobile' ) . '</span>';
-		$columns['order_notes']      = '<span class="order-notes_head tips" data-tip="' . esc_attr__( 'Order Notes', 'automobile' ) . '">' . esc_attr__( 'Order Notes', 'automobile' ) . '</span>';
+		$columns['customer_message'] = '<span class="notes_head tips atm-tooltip" data-tooltip="' . esc_attr__( 'Customer Message', 'automobile' ) . '"><i class="fa fa-envelope"></i></span>';
+		$columns['order_notes']      = '<span class="order-notes_head tips atm-tooltip" data-tooltip="' . esc_attr__( 'Order Notes', 'automobile' ) . '"><i class="fa fa-desktop"></i></span>';
 		$columns['order_date']       = __( 'Date', 'automobile' );
 		$columns['order_total']      = __( 'Total', 'automobile' );
 		$columns['order_actions']    = __( 'Actions', 'automobile' );
@@ -59,26 +59,32 @@ function automobile_order_columns( $existing_columns ) {
 	 */
 	function render_automobile_order_columns( $column ) {
 		global $post, $autoMobile;
-
+		$customerId = get_post_meta( get_the_ID(), 'customerId', true );
 		switch ( $column ) {
 			case 'order_status' :
 				echo '<mark class="on-hold tips atm-tooltip" data-tooltip="On Hold"><i class="fa fa-minus"></i></mark>';
 			break;
 			case 'order_date' :
 
-				echo 'Order date';
+				echo $pfx_date = get_the_date( $format, get_the_ID() );
 
 			break;
 			case 'customer_message' :
-				echo 'cutomer message';
+				echo '-';
 			break;
 			case 'order_items' :
-				echo 'order item';				
+				echo $productTotalItem = get_post_meta( get_the_ID(), 'productTotalItem', true );			
 			break;
 			case 'shipping_address' :
-
-				echo 'shipping_address';
-
+				$user_info = get_userdata($customerId);
+				$checkout_company_name = get_user_meta( $customerId, 'checkout_company_name', true );
+				$user_address = get_user_meta( $customerId, 'checkout_address', true );
+				$selectCountry = get_user_meta( $customerId, 'selectCountry', true );
+				$checkout_postcode = get_user_meta( $customerId, 'checkout_postcode', true );
+				$checkout_town_city = get_user_meta( $customerId, 'checkout_town_city', true );				
+				$checkout_phone = get_user_meta( $customerId, 'checkout_phone', true );
+				$address = $user_info->display_name.', '.$checkout_company_name.', '.$user_address.', '.$selectCountry.', '.$checkout_postcode.', '.$checkout_town_city;
+				echo '<a target="_blank" href="http://maps.google.com/maps?&amp;q='.$address.'&amp;z=16">'.$address.'</a>';
 			break;
 			case 'order_notes' :
 
@@ -86,10 +92,13 @@ function automobile_order_columns( $existing_columns ) {
 
 			break;
 			case 'order_total' :
-				echo '0';
+				$productTotalPrice = get_post_meta( get_the_ID(), 'productTotalPrice', true );
+				if($productTotalPrice): echo '$'.$productTotalPrice.'<small class="meta">Via PayPal</small>'; else : echo '$0.00'; endif;
 			break;
-			case 'order_title' :
-				echo 'Order Title';
+			case 'order_title' :				
+				$user_info = get_userdata($customerId);				
+				$userEmail = '<a href="user-edit.php?user_id='.$customerId.'">'.$user_info->display_name.'</a>';
+				echo '<div class="tips"><a href="post.php?post='.get_the_ID().'&amp;action=edit"><strong>#'.get_the_ID().'</strong></a> by '.$userEmail.' <small class="meta email"><a href="mailto:'.$user_info->user_email.'">'.$user_info->user_email.'</a></small></div>';
 			break;
 			case 'order_actions' :
 
@@ -100,7 +109,7 @@ function automobile_order_columns( $existing_columns ) {
 					<a class="button tips atm_complete atm-tooltip" data-tooltip="Complete" href="#">
 						<i class="fa fa-check"></i>
 					</a>
-					<a class="button tips atm_view atm-tooltip" data-tooltip="View" href="#"><i class="fa fa-book"></i></a>				
+					<?php echo '<a class="button tips atm_view atm-tooltip" data-tooltip="View" href="post.php?post='.get_the_ID().'&amp;action=edit"><i class="fa fa-book"></i></a>';	?>			
 				</p>
 					<?php
 

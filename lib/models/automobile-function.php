@@ -254,6 +254,11 @@ function add_customer_info(){
 						add_post_meta( $orderId, 'productTotalPrice', $productTotalPrice, true );
 						add_post_meta( $orderId, 'productTotalItem', $productTotalItem, true );
 						add_post_meta( $orderId, 'customerId', $createUser, true );
+						$orderStatus = array(
+							'name' => 'on-hold',
+							'title' => 'On Hold'
+						);
+						add_post_meta( $orderId, 'order_status', $orderStatus, true );
                     }
 
                 }
@@ -264,18 +269,6 @@ function add_customer_info(){
 				'mess'    => 'ok',
 				'post_id' => $orderId
 			);
-			
-			$data=array(
-			'merchant_email'=>'sanjeev00733@gmail.com',
-			'product_name'=>'Demo Product',
-			'amount'=>20.50,
-			'currency_code'=>'USD',
-			'thanks_page'=>"http://".$_SERVER['HTTP_HOST'].'paypal/thank.php',
-			'notify_url'=>"http://".$_SERVER['HTTP_HOST'].'paypal/ipn.php',
-			'cancel_url'=>"http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'],
-			'paypal_mode'=>true,
-			);
-			echo infotutsPaypal($data);
 			
         }
             } else {
@@ -338,6 +331,12 @@ function add_customer_info(){
 					add_post_meta( $orderId, 'productTotalPrice', $productTotalPrice, true );
 					add_post_meta( $orderId, 'productTotalItem', $productTotalItem, true );
 					add_post_meta( $orderId, 'customerId', $user_ID, true );
+					$orderStatus = array(
+							'name' => 'on-hold',
+							'title' => 'On Hold'
+						);
+					add_post_meta( $orderId, 'order_status', $orderStatus, true );
+					
                 }
 
                 $result = array(
