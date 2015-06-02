@@ -156,6 +156,22 @@ function get_country_state(){
 add_action( 'wp_ajax_nopriv_get_country_state','get_country_state' );
 add_action( 'wp_ajax_get_country_state','get_country_state' );
 
+
+function get_country_state_by_country($country = '', $checkout_town_city = ''){        
+        if($country):
+        global $autoMobile;
+		//$output = array();
+        $statesPath = $autoMobile->statesPath;
+        if (!file_exists($statesPath . $country . '.php')) {
+            return $output = null;
+        } else {
+            require_once( $statesPath . $country . '.php' );
+            return $output =  $states[$country][$checkout_town_city];            
+        }
+        endif;		
+}
+
+
 function add_customer_info(){
         $checkout_email = $_POST['checkout_email'];
         $checkout_password = $_POST['checkout_password'];

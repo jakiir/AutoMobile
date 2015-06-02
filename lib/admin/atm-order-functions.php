@@ -87,6 +87,9 @@ function automobile_order_columns( $existing_columns ) {
 				echo $productTotalItem = get_post_meta( get_the_ID(), 'productTotalItem', true );			
 			break;
 			case 'shipping_address' :
+				$countryList = $autoMobile->create_countryList();
+				$stateList = $autoMobile->state_list();
+				
 				$user_info = get_userdata($customerId);
 				$checkout_company_name = get_user_meta( $customerId, 'checkout_company_name', true );
 				$user_address = get_user_meta( $customerId, 'checkout_address', true );
@@ -94,8 +97,17 @@ function automobile_order_columns( $existing_columns ) {
 				$checkout_postcode = get_user_meta( $customerId, 'checkout_postcode', true );
 				$checkout_town_city = get_user_meta( $customerId, 'checkout_town_city', true );				
 				$checkout_phone = get_user_meta( $customerId, 'checkout_phone', true );
-				$address = $user_info->display_name.', '.$checkout_company_name.', '.$user_address.', '.$selectCountry.', '.$checkout_postcode.', '.$checkout_town_city;
-				echo '<a target="_blank" href="http://maps.google.com/maps?&amp;q='.$address.'&amp;z=16">'.$address.'</a>';
+				
+				if($user_info->display_name): $displayName = $user_info->display_name.', '; else : $displayName = ''; endif;
+				if($checkout_company_name): $company_name = $checkout_company_name.', '; else : $company_name = ''; endif;
+				if($user_address): $userAddress = $user_address.', '; else : $userAddress = ''; endif;				
+				if($checkout_town_city): $checkoutTownCity = $stateList[$selectCountry][$checkout_town_city].', '; else : $checkoutTownCity = '';  endif;
+				if($checkout_postcode): $checkoutPostcode = $checkout_postcode.', '; else : $checkoutPostcode = '';  endif;
+				if($selectCountry): $select_country = $countryList[$selectCountry]; else : $select_country = ''; endif;	
+				
+				$address = $displayName.$company_name.$userAddress.$checkoutTownCity.$checkoutPostcode.$select_country;
+				$addressMap = $userAddress.$checkoutTownCity.$select_country;
+				echo '<a target="_blank" href="http://maps.google.com/maps?&amp;q='.$addressMap.'&amp;z=16">'.$address.'</a>';
 			break;
 			case 'order_notes' :
 
