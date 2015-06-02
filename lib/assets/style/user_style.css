@@ -73,3 +73,8 @@ ul#previous{
   display: inline-block;
   height: 20px;
 }
+.container-fluid .adv_head{
+	font-weight: bold;
+	display: inline-block;
+	width: 80px;
+}

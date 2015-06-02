@@ -333,7 +333,7 @@ $get_advanced_automobile = @unserialize($get_advanced_automobile_array);
         $earliest_year = 1980; ?>
        <select name="txt_automobile_year"  id="txt_automobile_year">
            <option value="">None</option>
-        <?php foreach (range(date('Y'), $earliest_year) as $x) { ?>
+        <?php foreach (range(date('Y', strtotime('+1 year')), $earliest_year) as $x) { ?>
             <option value="<?php echo $x; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php echo $x; ?></option>
        <?php } ?>
        </select>
@@ -357,15 +357,16 @@ $get_advanced_automobile = @unserialize($get_advanced_automobile_array);
 </div>
   <div id="options">
     <p>
+        <label for="txt_automobile_comments"><?php _e( 'Comments', 'wpshed' ); ?>:</label><br />
+        <textarea name="txt_automobile_comments" id="txt_automobile_comments" cols="60" rows="4"><?php echo $get_advanced_automobile['txt_automobile_comments']; ?></textarea>
+    </p>
+
+
+    <p>
         <label class="left-lable"  for="inquiry"><?php _e('Product Inquiry', 'automobile_plugin'); ?>: </label>
-        <input type="checkbox" class="ckb-inquiry" name="inquiry" id="inquiry" value="yes" <?php if ( isset ( $prfx_stored_meta['inquiry'] ) ) checked( $prfx_stored_meta['inquiry'][0], 'yes' ); ?> />
+        <input type="checkbox" class="ckb-inquiry" name="automobile_inquiry" id="inquiry" value="yes" <?php if ( isset ( $get_advanced_automobile['automobile_inquiry'] ) ) checked( $get_advanced_automobile['automobile_inquiry'], 'yes' ); ?> />
         <?php _e( ' Yes / No', 'automobile_plugin' )?>
     </p>
-     <p>
-       <label class="left-lable"  for="txt_automobile_weight2"><?php _e('if need meta box (EX:Jakir vi)', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_weight2" id="txt_automobile_weight2" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_weight2', true); ?>" />
-       <em></em>
-   </p>
   </div>
    </div>
   </div>
@@ -439,15 +440,22 @@ function automobile_save_meta_box($post_id)
 	if( isset( $_POST[ 'txt_automobile_weight' ] ) )
 	{ $txt_automobile_weight = $_POST[ 'txt_automobile_weight' ]; } else { $txt_automobile_weight = ''; }
 
+	if( isset( $_POST[ 'txt_automobile_comments' ] ) )
+	{ $txt_automobile_comments = $_POST[ 'txt_automobile_comments' ]; } else { $txt_automobile_comments = ''; }
+
+	if( isset( $_POST[ 'automobile_inquiry' ] ) )
+	{ $automobile_inquiry = $_POST[ 'automobile_inquiry' ]; } else { $automobile_inquiry = ''; }
+
         $advanced_automobile_array = array(
             'txt_automobile_make'   => $txt_automobile_make,
             'txt_automobile_model'  => $txt_automobile_model,
             'txt_automobile_year'   => $txt_automobile_year,
             'txt_automobile_color'  => $txt_automobile_color,
             'txt_automobile_position' => $txt_automobile_position,
-            'txt_automobile_weight' => $txt_automobile_weight
+            'txt_automobile_weight' => $txt_automobile_weight,
+			'txt_automobile_comments' => $txt_automobile_comments,
+			'automobile_inquiry' => $automobile_inquiry
             );
-
         $advanced_automobile = serialize($advanced_automobile_array);
         update_post_meta($post_id, 'advanced_automobile', $advanced_automobile);
 		

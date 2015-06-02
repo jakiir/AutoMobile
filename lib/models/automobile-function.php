@@ -383,7 +383,6 @@ function automobile_populate_columns( $column ) {
     if ( 'automobile_make' == $column ) {
         if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )
         $txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
-
         $auto_mobile_make = '_auto_mobile_make';
         $get_auto_mobile_make = get_option( $auto_mobile_make );
         $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);

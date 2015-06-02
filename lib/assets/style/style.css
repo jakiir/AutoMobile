@@ -285,7 +285,11 @@ h2.entry-title a:hover{
 }
 
 .product-info{
-        margin-top: 50px;
+    margin-top: 50px;
+}
+.tab-pane section{
+	margin-top: 50px;
+	margin-bottom: 50px;
 }
 
 /*********************************************

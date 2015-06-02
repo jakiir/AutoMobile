@@ -19,10 +19,10 @@ get_header(); ?>
         <div class="item-container">
             <div class="container">
 
-            <h2><?php echo esc_attr($automobile_options['automobile_order_send_email']); ?></h2>
+            <h2><?php //echo esc_attr($automobile_options['automobile_order_send_email']); ?></h2>
                 <div class="col-md-5 service-image-left">
                         <div style="margin:0 auto;">
-                            <?php $autoMobile->auto_mobile_thumbnail('400x250'); ?>
+                            <?php echo $autoMobile->auto_mobile_thumbnail('400x250'); ?>
                             <!--<img id="item-display" src="<?php //echo $post_image; ?>" alt=""></img>-->
                         </div>
                 </div>
@@ -66,15 +66,135 @@ get_header(); ?>
         </div>
         <div class="container-fluid">
             <div class="col-md-12 product-info">
+			<?php
+				$get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);
+				$get_advanced_automobile = unserialize($get_advanced_automobile_array);
+			?>
                     <ul id="myTab" class="nav nav-tabs nav_tabs">
-
-                        <li class="active"><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
+ 
+						<li class="active"><a href="#product_details" data-toggle="tab">Product Details</a></li>
+						<li><a href="#applications" data-toggle="tab">Applications</a></li>
+						<li><a href="#product_inquiry" data-toggle="tab">Product Inquiry</a></li>						 
+                        <li><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
                         <li><a href="#service-two" data-toggle="tab">MPN</a></li>
                         <li><a href="#service-three" data-toggle="tab">Advanced</a></li>
 
                     </ul>
-                <div id="myTabContent" class="tab-content">
-                        <div class="tab-pane fade in active" id="service-one">
+                <div id="myTabContent" class="tab-content">				
+						<div class="tab-pane fade in active" id="product_details">
+
+                            <section class="container product-details">
+                              <p>
+								<span class="adv_head">Color </span>
+								<span class="adv_result">:
+									<?php echo $get_advanced_automobile['txt_automobile_color']; ?>
+								</span>
+							</p>
+							<p>
+								<span class="adv_head">Position </span>
+								<span class="adv_result">:
+								<?php echo $get_advanced_automobile['txt_automobile_position']; ?>
+								</span>
+							</p>
+							<p>
+								<span class="adv_head">MPN </span>
+								<span class="adv_result">:
+									<ul>
+										<?php
+											$get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
+											$get_automobile_mpn_uns = unserialize($get_automobile_mpn);
+											if($get_automobile_mpn_uns):
+											foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>
+												<li><?php echo $get_automobile_mpn_un; ?></li>
+										<?php endforeach; endif; ?>
+									</ul>
+								</span>
+							</p>
+                            </section>
+
+                        </div>
+						<div class="tab-pane fade" id="applications">
+
+                            <section class="container applications">
+								<p>
+									<span class="adv_head">Year </span>
+									<span class="adv_result">:
+										<select name="txt_automobile_year" class="selectpicker" id="txt_automobile_year">
+										   <option value="">None</option>
+										<?php foreach (range(date('Y', strtotime('+1 year')), $earliest_year) as $x) { ?>
+											<option value="<?php echo $x; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php echo $x; ?></option>
+									   <?php } ?>
+									   </select>										
+									</span>
+								</p>
+								<p>
+									<span class="adv_head">Make </span>
+									<span class="adv_result">:
+										<?php 
+											if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )
+											$txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
+											$auto_mobile_make = '_auto_mobile_make';
+											$get_auto_mobile_make = get_option( $auto_mobile_make );
+											$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+											echo $get_auto_mobile_make_uns[$txt_automobile_make]; 
+										?>
+									</span>
+									</p>
+									<p>
+										<span class="adv_head">Model </span>
+										<span class="adv_result">:
+										<?php 
+											if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
+											$txt_automobile_model = $get_advanced_automobile['txt_automobile_model'];
+											$auto_mobile_model = '_auto_mobile_model';
+											$get_auto_mobile_model = get_option( $auto_mobile_model );
+											$get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+											echo $get_auto_mobile_model_uns[$txt_automobile_model];
+										?>
+										</span>
+									</p>
+									<p>
+										<span class="adv_head">Position </span>
+										<span class="adv_result">:
+										<?php echo $get_advanced_automobile['txt_automobile_position']; ?>
+										</span>
+									</p>
+									<p>
+										<span class="adv_head">Application Notes </span>
+										<span class="adv_result">:
+											<?php the_content(); ?>
+										</span>
+									</p>
+                            </section>
+
+                        </div>
+						<div class="tab-pane fade" id="product_inquiry">
+
+                            <section class="container product-inquiry">
+								<form action="" method="post">
+								  <div class="form-group">
+									<label for="your_name">Your Name</label>
+									<input type="text" class="form-control" id="your_name" placeholder="Your Name">
+								  </div>
+								  <div class="form-group">
+									<label for="email_address">Email address</label>
+									<input type="email" name="email_address" class="form-control" id="email_address" placeholder="Enter email">
+								  </div>
+								  <div class="form-group">
+									<label for="parts">Part # (automatically fill)</label>
+									<input type="text" name="parts" class="form-control" id="parts" placeholder="Part # (automatically fill)">
+								  </div>
+								  <div class="form-group">
+									<label for="product_inquiry">Product Inquiry</label>
+									<textarea name="product_inquiry" id="product_inquiry" class="form-control" rows="3"></textarea>									
+								  </div>
+								  								  
+								  <button type="submit" class="btn btn-default">Submit</button>
+								</form>
+                            </section>
+
+                        </div>
+                        <div class="tab-pane fade" id="service-one">
 
                             <section class="container product-info">
                               <?php the_content(); ?>
@@ -83,34 +203,78 @@ get_header(); ?>
                         </div>
                     <div class="tab-pane fade" id="service-two">
 
-                    <section class="container product-info" >
-
-                    <ul>
-                        <?php
-                        $get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
-                        $get_automobile_mpn_uns = unserialize($get_automobile_mpn);
-                        if($get_automobile_mpn_uns):
-                        foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>
-                            <li><?php echo $get_automobile_mpn_un; ?></li>
-                        <?php endforeach; endif; ?>
-                    </ul>
+                    <section class="container product-info">
+						<ul>
+							<?php
+							$get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
+							$get_automobile_mpn_uns = unserialize($get_automobile_mpn);
+							if($get_automobile_mpn_uns):
+							foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>
+								<li><?php echo $get_automobile_mpn_un; ?></li>
+							<?php endforeach; endif; ?>
+						</ul>
                     </section>
 
                     </div>
                     <div class="tab-pane fade" id="service-three">
-                      <section class="container product-info" >
+                      <section class="container product-info" >                      
 
-                      <?php
-                        $get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);
-                        $get_advanced_automobile = unserialize($get_advanced_automobile_array);
-                      ?>
-
-                    <p>make: <?php echo $get_advanced_automobile['txt_automobile_make']; ?></p>
-                    <p>model:<?php echo $get_advanced_automobile['txt_automobile_model']; ?></p>
-                    <p>year :<?php echo $get_advanced_automobile['txt_automobile_year']; ?></p>
-                    <p>color:<?php echo $get_advanced_automobile['txt_automobile_color']; ?></p>
-                    <p>position:<?php echo $get_advanced_automobile['txt_automobile_position']; ?></p>
-                    <p>Weight (oz):<?php echo $get_advanced_automobile['txt_automobile_weight']; ?></p>
+                    <p>
+					<span class="adv_head">Make </span>
+					<span class="adv_result">:
+						<?php 
+							if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )
+							$txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
+							$auto_mobile_make = '_auto_mobile_make';
+							$get_auto_mobile_make = get_option( $auto_mobile_make );
+							$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+							echo $get_auto_mobile_make_uns[$txt_automobile_make]; 
+						?>
+					</span>
+					</p>
+                    <p>
+					<span class="adv_head">Model </span>
+						<span class="adv_result">:
+						<?php 
+							if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
+							$txt_automobile_model = $get_advanced_automobile['txt_automobile_model'];
+							$auto_mobile_model = '_auto_mobile_model';
+							$get_auto_mobile_model = get_option( $auto_mobile_model );
+							$get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+							echo $get_auto_mobile_model_uns[$txt_automobile_model];
+						?>
+						</span>
+					</p>
+                    <p>
+						<span class="adv_head">Year </span>
+						<span class="adv_result">:
+							<select name="txt_automobile_year" class="selectpicker" id="txt_automobile_year">
+							   <option value="">None</option>
+							<?php foreach (range(date('Y', strtotime('+1 year')), $earliest_year) as $x) { ?>
+								<option value="<?php echo $x; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php echo $x; ?></option>
+						   <?php } ?>
+						   </select>
+							<?php //echo $get_advanced_automobile['txt_automobile_year']; ?>
+						</span>
+					</p>
+                    <p>
+						<span class="adv_head">Color </span>
+						<span class="adv_result">:
+							<?php echo $get_advanced_automobile['txt_automobile_color']; ?>
+						</span>
+					</p>
+                    <p>
+						<span class="adv_head">Position </span>
+						<span class="adv_result">:
+						<?php echo $get_advanced_automobile['txt_automobile_position']; ?>
+						</span>
+					</p>
+                    <p>
+						<span class="adv_head">Weight (oz) </span>
+						<span class="adv_result">:
+							<?php echo $get_advanced_automobile['txt_automobile_weight']; ?>
+						</span>
+					</p>
 </section>
                     </div>
                 </div>
