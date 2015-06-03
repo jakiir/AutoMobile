@@ -78,3 +78,6 @@ ul#previous{
 	display: inline-block;
 	width: 80px;
 }
+.item-container img{
+	width:100%;
+}

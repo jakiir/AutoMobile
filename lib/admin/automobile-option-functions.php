@@ -307,6 +307,85 @@ function edit_automobile_model(){
 add_action( 'wp_ajax_nopriv_edit_automobile_model','edit_automobile_model' );
 add_action( 'wp_ajax_edit_automobile_model','edit_automobile_model' );
 
+function add_automobile_year(){
+    $year_val = $_POST['year_val'];
+    //$success = false;
+    if($year_val !=''){
+        $year_info = array(
+            'year_1'    =>   $year_val
+        );
+        $year_info2 = serialize($year_info);
+        $auto_mobile_year = '_auto_mobile_year';
+        if ( get_option( $auto_mobile_year ) !== false ) {
+
+           $get_auto_mobile_year = get_option( $auto_mobile_year );
+            $get_auto_mobile_year_uns = unserialize($get_auto_mobile_year);
+
+            $lastKey = substr(end(array_keys($get_auto_mobile_year_uns)), -1);
+            $incrLast = intval($lastKey) + 1;
+            $item_info2 = array(
+                'year_'.$incrLast => $year_val
+            );
+            $itemInfo_result = array_merge($get_auto_mobile_year_uns, $item_info2 );
+            $item_inform2 = serialize($itemInfo_result);
+           update_option( $auto_mobile_year, $item_inform2 );
+
+        } else {
+            $incrLast = 1;
+            add_option( $auto_mobile_year, $year_info2, '', 'yes' );
+        }
+
+
+        $success = true;
+        $value = $year_val;
+        $keys = 'year_'.$incrLast;
+    } else {
+        $success = false;
+        $value = 'Required field!';
+        $keys = '';
+    }
+    $results = array(
+        'success'   => $success,
+        'value'     => $value,
+        'key'     => $keys
+    );
+    echo json_encode($results);
+    die();
+}
+add_action( 'wp_ajax_nopriv_add_automobile_year','add_automobile_year' );
+add_action( 'wp_ajax_add_automobile_year','add_automobile_year' );
+
+function del_automobile_year(){
+    $data_keys = $_POST['data_keys'];
+    if($data_keys):
+        $auto_mobile_year = '_auto_mobile_year';
+        $get_mobile_year = get_option( $auto_mobile_year );
+        $get_mobile_year_uns = unserialize($get_mobile_year);
+        unset($get_mobile_year_uns[$data_keys]);
+        $item_inform2 = serialize($get_mobile_year_uns);
+        update_option( $auto_mobile_year, $item_inform2 );
+    endif;
+    die();
+}
+add_action( 'wp_ajax_nopriv_del_automobile_year','del_automobile_year' );
+add_action( 'wp_ajax_del_automobile_year','del_automobile_year' );
+
+function edit_automobile_year(){
+    $data_keys = $_POST['data_keys'];
+    $year_value = $_POST['year_value'];
+    if($data_keys):
+        $auto_mobile_year = '_auto_mobile_year';
+        $get_mobile_year = get_option( $auto_mobile_year );
+        $get_mobile_year_uns = unserialize($get_mobile_year);
+        $get_mobile_year_uns[$data_keys] = $year_value;
+        $item_inform2 = serialize($get_mobile_year_uns);
+        update_option( $auto_mobile_year, $item_inform2 );
+    endif;
+    die();
+}
+add_action( 'wp_ajax_nopriv_edit_automobile_year','edit_automobile_year' );
+add_action( 'wp_ajax_edit_automobile_year','edit_automobile_year' );
+
 function add_order_status(){
     $order_id = $_POST['order_id'];
     $order_status = $_POST['order_status'];

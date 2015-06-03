@@ -12,6 +12,7 @@
 //add_action( 'admin_init', 'automobile_register_admin_scripts' );
 add_action( 'admin_enqueue_scripts', 'automobile_register_admin_scripts' );
 function automobile_register_admin_scripts() {
+	global $autoMobile;
     wp_enqueue_style( 'automobile-font-awesome', plugins_url('css/font-awesome/css/font-awesome.min.css', __FILE__ ) );
     wp_enqueue_style( 'automobile_css', plugins_url( 'css/automobile-options.css', __FILE__ ) );
     wp_enqueue_style('thickbox');
@@ -19,17 +20,21 @@ function automobile_register_admin_scripts() {
     wp_enqueue_script('jquery-ui-slider');
     wp_enqueue_script( 'automobile_colorpicker', plugins_url('js/colorpicker.js',__FILE__  ) );
     wp_enqueue_script( 'automobile_select_js', plugins_url('js/jquery.customSelect.min.js',__FILE__  ) );
+	//wp_enqueue_script('meta_boxes_product_variation', plugins_url('js/meta-boxes-product-variation.js',__FILE__ ) );
+	wp_enqueue_media();
     wp_enqueue_script('automobile_theme_options', plugins_url('js/automobile-options.js',__FILE__ ) );
     wp_localize_script(
         'automobile_theme_options',
         'adminUrl',
-        array( 'ajaxurl' => admin_url('admin-ajax.php') )
+        array( 'ajaxurl' => admin_url('admin-ajax.php'), 'default_image' => esc_url( $autoMobile->auto_mobile_default_image() ) )
     );
     wp_enqueue_script('automobile_meta_latest', plugins_url('js/jquery-latest.js',__FILE__ ) );
 
     // Enqueue Datepicker + jQuery UI CSS
     wp_enqueue_script( 'jquery-ui-datepicker' );
     wp_enqueue_style( 'jquery-ui-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/smoothness/jquery-ui.css', true);
+	
+	
 
 }
 

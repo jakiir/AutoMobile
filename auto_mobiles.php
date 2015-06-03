@@ -37,7 +37,7 @@ if (!class_exists( 'AutoMobile' )){
             $this->helperPath        = $this->pluginPath . '/lib/helpers/';
 
             $this->pluginUrl        = plugins_url( '' , __FILE__ );
-            $this->assetsUrl        = $this->pluginUrl  . '/assets/';
+            $this->assetsUrl        = $this->pluginUrl  . '/lib/assets/';
             $this->helperUrl        = $this->pluginUrl  .'/lib/helpers/';
             define('ATM_PATH',dirname( __FILE__ ));
             //define('ATM_PLUGIN_URL',plugins_url( '' , __FILE__ )).'/';
@@ -98,6 +98,10 @@ if (!class_exists( 'AutoMobile' )){
                 $output = '<img src="http://placehold.it/'.$placeholderImage.'" />';
             }
             return $output;
+        }
+		
+		function auto_mobile_default_image() {            
+            return $this->assetsUrl.'images/no-preview.png';
         }
 
         /**

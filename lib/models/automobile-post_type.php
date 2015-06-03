@@ -69,25 +69,7 @@ function automobile_product() {
 }
 
 add_filter( 'manage_automobile_order_posts_columns', 'automobile_order_columns'  );
-add_action( 'manage_automobile_order_posts_custom_column', 'render_automobile_order_columns', 2 );
-
-add_action( 'init', 'automobile_taxonomies', 0 );
-function automobile_taxonomies() {
-    register_taxonomy(
-        'automobile_product_category',
-        'tlp_automobile',
-        array(
-            'labels' => array(
-                'name' => 'AutoMobile Category ',
-                'add_new_item' => 'Add New Category',
-                'new_item_name' => "New AutoMobile Type Category"
-            ),
-            'show_ui' => true,
-            'show_tagcloud' => false,
-            'hierarchical' => true
-        )
-    );
-}
+add_action( 'manage_automobile_order_posts_custom_column', 'render_automobile_order_columns', 2 );	
 
 add_action( 'admin_menu', 'automobile_submenu', 2 );
 function automobile_submenu() {
@@ -117,6 +99,7 @@ function automobile_attributes(){
                 <ul>
                     <li class="general first"><a href="#automobile_make"><i class="icon-cogs"></i><?php echo _e('Make', 'automobileoptions'); ?></a></li>
                     <li class="shortcode"><a href="#automobile_model"><i class="icon-trello"></i><?php echo _e('Model', 'automobileoptions'); ?></a></li>
+					<li class="shortcode"><a href="#automobile_year"><i class="icon-trello"></i><?php echo _e('Year', 'automobileoptions'); ?></a></li>
 
                 </ul>
             </div><!-- /subheader -->
@@ -165,7 +148,7 @@ function automobile_attributes(){
                                 <span id="automobile_model_add">
                                 <label for="automobile_model_id">Add automobile model</label>
                                 <input type="text" name="automobile_model" class="" id="automobile_model_id"/>
-                                <input type="submit" name="automobile_model_submit" id="automobile_model_submit" class="button-primary" value="Add New">
+                                <input type="submit" name="automobile_model_submit" id="automobile_model_submit" class="button-primary" value="Add New"/>
                                 </span>
                                 <span id="automobile_model_edit" style="display:none">
                                 <label for="edit_automobile_model">Edit automobile model</label>
@@ -190,6 +173,39 @@ function automobile_attributes(){
                             </div> <!-- /fields-wrap -->
 
                         </div><!-- /tab_block -->
+						
+						<div id="automobile_year" class="automobile_block">
+                            <h2><?php _e('Automobile year', 'automobileoptions'); ?></h2>                            
+                            <div class="fields_wrap">
+                                <span id="automobile_year_add">
+                                <label for="automobile_year_id">Add automobile year</label>
+                                <input type="text" maxlength="4" onkeyup="check_number(this)" onkeypress="check_number(this)" name="automobile_year" class="" id="automobile_year_id"/>
+                                <input type="submit" name="automobile_year_submit" id="automobile_year_submit" class="button-primary" value="Add New">
+                                </span>
+                                <span id="automobile_year_edit" style="display:none">
+                                <label for="edit_automobile_year">Edit automobile year</label>
+                                <input type="text" maxlength="4" onkeyup="check_number(this)" onkeypress="check_number(this)" name="edit_automobile_year" class="" id="edit_automobile_year"/>
+                                <input type="submit" name="automobile_year_edit_submit" id="automobile_year_edit_submit" class="button-primary" value="Edit">
+                                </span>
+                                <span class="reloadIcon" style="display:none"></span>
+                                <span class="message"></span>
+                                <ul id="year_display_area">
+                                    <?php
+                                    $auto_mobile_year = '_auto_mobile_year';
+                                    $get_auto_mobile_year = get_option( $auto_mobile_year );
+                                    $get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
+                                    if($get_auto_mobile_year_uns) {
+                                        foreach ($get_auto_mobile_year_uns as $key=>$get_auto_mobile_year_unss):
+                                            echo "<li class='".$key."'>$get_auto_mobile_year_unss <a href='javascript:void(0)' class='year_del delIcon' onclick='year_del(this)' data-keys='".$key."'><i class='fa fa-times'></i></a><a href='javascript:void(0)' class='year_edit editIcon' onclick='year_edit(this)' data-keys='".$key."' data-year_value='".$get_auto_mobile_year_unss."'><i class='fa fa-pencil-square-o'></i></a></li>";
+                                        endforeach;
+                                    }
+                                    ?>
+
+                                </ul>
+                            </div> <!-- /fields-wrap -->
+
+                        </div><!-- /tab_block -->
+						
                     </div> <!-- /option -->
 
                 </div>
@@ -326,19 +342,35 @@ $get_advanced_automobile = @unserialize($get_advanced_automobile_array);
             ?>
         </select>
     </p>
-    <p>
-    <label class="left-lable"  for="txt_automobile_year"><?php _e('Year', 'automobile_plugin'); ?>: </label>
+	<p>
+	<label for="txt_automobile_year" class="left-lable"><?php _e( 'Year', 'automobile_plugin' )?></label>
+        <select name="txt_automobile_year" id="txt_automobile_year">
+            <option value="">None</option>
+            <?php
+            $auto_mobile_year = '_auto_mobile_year';
+            $get_auto_mobile_year = get_option( $auto_mobile_year );
+            $get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
+            if($get_auto_mobile_year_uns) {
+                foreach ($get_auto_mobile_year_uns as $key=>$get_auto_mobile_year_unss): ?>
+                    <option value="<?php echo $key; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $key ); ?>><?php _e( $get_auto_mobile_year_unss, 'automobile_plugin' )?></option>';
+                <?php  endforeach;
+            }
+            ?>
+        </select>
+    </p>
+    <!--<p>
+    <label class="left-lable"  for="txt_automobile_year"><?php //_e('Year', 'automobile_plugin'); ?>: </label>
     <?php
         //$already_selected_value = 1984;
-        $earliest_year = 1980; ?>
+        //$earliest_year = 1980; ?>
        <select name="txt_automobile_year"  id="txt_automobile_year">
            <option value="">None</option>
-        <?php foreach (range(date('Y', strtotime('+1 year')), $earliest_year) as $x) { ?>
-            <option value="<?php echo $x; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php echo $x; ?></option>
-       <?php } ?>
+        <?php //foreach (range(date('Y', strtotime('+1 year')), $earliest_year) as $x) { ?>
+            <option value="<?php //echo $x; ?>" <?php //if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( //$get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php //echo $x; ?></option>
+       <?php //} ?>
        </select>
        <em></em>
-   </p>   
+   </p> -->  
    <p>
        <label class="left-lable"  for="txt_automobile_color"><?php _e('Color', 'automobile_plugin'); ?>: </label>
        <input type="text" name="txt_automobile_color" id="txt_automobile_color" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_color']; ?>" />
@@ -461,6 +493,7 @@ function automobile_save_meta_box($post_id)
 		
 		update_post_meta($post_id, 'advanced_automobile_make', $txt_automobile_make);
 		update_post_meta($post_id, 'advanced_automobile_model', $txt_automobile_model);
+		update_post_meta($post_id, 'advanced_automobile_year', $txt_automobile_year);
 		
 
 

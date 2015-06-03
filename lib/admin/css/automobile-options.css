@@ -582,7 +582,7 @@ span.customSelect.changed {
     display: inline-block;
     height: 20px;
 }
-#make_display_area,#model_display_area{
+#make_display_area, #model_display_area, #year_display_area{
     clear: both;
     width:200px;
     height: auto;
