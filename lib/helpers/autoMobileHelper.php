@@ -42,19 +42,17 @@ if (!class_exists('autoMobileHelper'))
     }
 	
 function automobile_search_list() {
+	echo '<form action="'. home_url('/auto-mobile/') .'" method="GET">';
     $screen = get_current_screen();
-		global $wp_query;    
-        wp_dropdown_categories( array(
-            'show_option_all' => 'Show All Category',
-            'taxonomy' => 'automobile_product_category',
-            'name' => 'automobile_product_category',
-            'orderby' => 'name',
-            'selected' => ( isset( $wp_query->query['automobile_product_category'] ) ? $wp_query->query['automobile_product_category'] : '' ),
-            'hierarchical' => false,
-            'depth' => 3,
-            'show_count' => false,
-            'hide_empty' => true,
-        ) );
+	
+		$auto_mobile_year = '_auto_mobile_year';
+        $get_auto_mobile_year = get_option( $auto_mobile_year );
+        $get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
+        echo '<select name="txt_automobile_year" id="txt_automobile_year"><option value="">Show All Year</option>';         if($get_auto_mobile_year_uns) {
+            foreach ($get_auto_mobile_year_uns as $key=>$get_auto_mobile_year_unss): ?>
+                <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_year'] ) ) selected( $_GET['txt_automobile_year'], $key ); ?>><?php _e( $get_auto_mobile_year_unss, 'automobile_plugin' )?></option>';         <?php  endforeach;
+        }
+        echo '</select>';
 		
 		$auto_mobile_make = '_auto_mobile_make';
         $get_auto_mobile_make = get_option( $auto_mobile_make );
@@ -75,6 +73,8 @@ function automobile_search_list() {
                 <?php  endforeach;
             }
         echo '</select>';
+		
+		echo '<input type="submit" class="search_submit" value="Go"/></form>';
     
 }
 

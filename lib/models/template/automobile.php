@@ -34,12 +34,44 @@ global $autoMobile;
          </header>
         <?php
         $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-        $args = array(
-            'post_type' => 'tlp_automobile',
-            'post_status' => 'publish',
-            'posts_per_page' => 3,
-            'paged' => $paged
-        );        
+		if($_GET['txt_automobile_year'] !='' || $_GET['txt_automobile_make'] != '' || $_GET['txt_automobile_model'] != '') :
+		
+		$atm_make = $_GET['txt_automobile_make'];
+		$atm_model = $_GET['txt_automobile_model'];
+		$atm_year = $_GET['txt_automobile_year'];
+		
+			$args = array(
+				'post_type' => 'tlp_automobile',
+				'post_status' => 'publish',
+				'posts_per_page' => 3,
+				'paged' => $paged,				
+				'meta_query' => array(
+							'relation' => 'AND',
+					array(
+							'key' => 'advanced_automobile_make',
+							'value' => $atm_make,
+							'compare' => 'LIKE',
+					),
+					array(
+							'key' => 'advanced_automobile_model',
+							'value' => $atm_model,
+							'compare' => 'LIKE',
+					),
+					array(
+							'key' => 'advanced_automobile_year',
+							'value' => $atm_year,
+							'compare' => 'LIKE',
+					)					
+				 )
+			); 
+		else :
+			$args = array(
+				'post_type' => 'tlp_automobile',
+				'post_status' => 'publish',
+				'posts_per_page' => 3,
+				'paged' => $paged
+			);        
+		endif;
         $autoMobile->get_all_automobiles($args);
         echo $autoMobile->automobile_pagination($args);
  endif; ?>
