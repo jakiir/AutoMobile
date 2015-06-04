@@ -20,6 +20,12 @@ global $autoMobile;
         </div>
 		<span class="mini_cart"><?php echo $autoMobile->mini_cart(); ?></span>
     </div>
+	<div class="search_list"><?php echo $autoMobile->automobile_search_list(); ?></div>
+	<div class="category_list"><?php echo $autoMobile->automobile_taxonomies_terms(); 
+
+	?>
+	
+	</div>
     <div id="products" class="row list-group">
 
         <?php if ( have_posts() ) : ?>

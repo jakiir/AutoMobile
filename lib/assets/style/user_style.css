@@ -81,3 +81,7 @@ ul#previous{
 .item-container img{
 	width:100%;
 }
+.category_list li{
+	width:33%;
+	  display: inline-block;
+}

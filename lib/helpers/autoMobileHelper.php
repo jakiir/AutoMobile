@@ -40,7 +40,66 @@ if (!class_exists('autoMobileHelper'))
             return $output_empty;
         }
     }
+	
+function automobile_search_list() {
+    $screen = get_current_screen();
+		global $wp_query;    
+        wp_dropdown_categories( array(
+            'show_option_all' => 'Show All Category',
+            'taxonomy' => 'automobile_product_category',
+            'name' => 'automobile_product_category',
+            'orderby' => 'name',
+            'selected' => ( isset( $wp_query->query['automobile_product_category'] ) ? $wp_query->query['automobile_product_category'] : '' ),
+            'hierarchical' => false,
+            'depth' => 3,
+            'show_count' => false,
+            'hide_empty' => true,
+        ) );
+		
+		$auto_mobile_make = '_auto_mobile_make';
+        $get_auto_mobile_make = get_option( $auto_mobile_make );
+        $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+        echo '<select name="txt_automobile_make" id="txt_automobile_make"><option value="">Show All Make</option>';         if($get_auto_mobile_make_uns) {
+            foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss): ?>
+                <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_make'] ) ) selected( $_GET['txt_automobile_make'], $key ); ?>><?php _e( $get_auto_mobile_make_unss, 'automobile_plugin' )?></option>';         <?php  endforeach;
+        }
+        echo '</select>';
+		
+		$auto_mobile_model = '_auto_mobile_model';
+        $get_auto_mobile_model = get_option( $auto_mobile_model );
+        $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+        echo '<select name="txt_automobile_model" id="txt_automobile_model"><option value="">Show All Model</option>';
+            if($get_auto_mobile_model_uns) {
+                foreach ($get_auto_mobile_model_uns as $key=>$get_auto_mobile_model_unss): ?>
+                    <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_model'] ) ) selected( $_GET['txt_automobile_model'], $key ); ?>><?php _e( $get_auto_mobile_model_unss, 'automobile_plugin' )?></option>';
+                <?php  endforeach;
+            }
+        echo '</select>';
+    
+}
 
+
+function automobile_taxonomies_terms(){
+$terms = get_terms( 'automobile_product_category' );
+$output = '';
+ if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
+	 global $autoMobile;
+	 $automobile_category_extra_fields = get_option('automobile_category_images');
+     $output = '<ul>';
+     foreach ( $terms as $term ) {		 
+		$thumbnail_id = absint($automobile_category_extra_fields[$term->term_id]['automobile_category_images']);
+		if ( $thumbnail_id ) {
+			$image = wp_get_attachment_thumb_url( $thumbnail_id );
+		} else {
+			$image = $autoMobile->auto_mobile_default_image();
+		}
+       $output .= '<li><div>' . $term->name . '</div><div><img src="' . esc_url( $image ) . '" alt="'. __( 'Thumbnail', 'automobile' ) . '" class="wp-post-image" height="48" width="48" /></div></li>';
+        
+     }
+     $output .= '</ul>';
+	return $output;
+	}	
+}
 
 
     function get_all_automobiles($args = array()){
