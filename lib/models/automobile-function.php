@@ -1,4 +1,101 @@
 <?php
+function inquiry_send(){
+        $email_address = $_POST['email_address'];
+        if($email_address):
+			$your_name = $_POST['your_name'];
+			$inquiry_parts = $_POST['inquiry_parts'];
+			$product_inquiry = $_POST['product_inquiry'];
+			
+			$email_to = 'jakir44.du@gmail.com';					 
+			$email_subject = "Contact from automobile inquiry";  
+			
+			function died($error) { 
+				// your error code can go here 
+				echo "We are very sorry, but there were error(s) found with the form you submitted. "; 
+				echo "These errors appear below.<br /><br />";
+				 echo $error."<br /><br />"; 
+				echo "Please go back and fix these errors.<br /><br />"; 
+				die();		
+			}   
+			// validation expected data exists
+		 
+			if(!isset($your_name) || !isset($product_inquiry) || !isset($email_address))  
+			{ 
+				died('We are sorry, but there appears to be a problem with the form you submitted.');    
+			}
+		 
+			$first_name = $your_name; // required    
+			$email_from = $email_address; // required 
+			$inquiry_parts = $inquiry_parts; // not required 
+			$comments = $product_inquiry; // required     
+		 
+			$error_message = "";
+		 
+			$email_exp = '/^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/';
+		 
+		  if(!preg_match($email_exp,$email_from)) {
+		 
+			$error_message .= 'The Email Address you entered does not appear to be valid.<br />';
+		 
+		  }		 
+		  
+		  $string_exp = "/^[A-Za-z .'-]+$/";		 
+		  if(!preg_match($string_exp,$your_name)) { 
+			$error_message .= 'The First Name you entered does not appear to be valid.<br />'; 
+		  } 		  
+		 
+		  if(strlen($comments) < 2) {		 
+			$error_message .= 'The Comments you entered do not appear to be valid.<br />';		 
+		  }
+		 
+		  if(strlen($error_message) > 0) {
+		 
+			died($error_message);
+		 
+		  }
+		 
+			$email_message = "Form details below.\n\n";     
+		 
+			function clean_string($string) {
+		 
+			  $bad = array("content-type","bcc:","to:","cc:","href");
+		 
+			  return str_replace($bad,"",$string);
+		 
+			}     
+		 
+			$email_message .= "<p>Name: ".clean_string($your_name)."</p>"; 
+			$email_message .= "<p>Email: ".clean_string($email_from)."</p>"; 
+			$email_message .= "<p>Inquiry parts: ".clean_string($inquiry_parts)."</p>"; 
+			$email_message .= "<p>Comments: ".clean_string($comments)."</p>";
+		 
+		// create email headers
+
+		$headers		= 'MIME-Version: 1.0' . "\r\n";
+		$headers	   .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+		$headers	   .= 'From: "'.$your_name.'"' . "\r\n";
+		$headers	   .= 'Reply-To: '.$email_from. "\r\n";	
+
+
+		$mail_send = wp_mail($email_to, $email_subject, $email_message, $headers);  
+		 if($mail_send){
+			 $results = array(
+				'success' => true,
+				'mess' => 'Email successfully sent.'
+			 );
+		 } else {
+			 $results = array(
+				'success' => false,
+				'mess' => 'Email not send, there are some error to send email.'
+			 );
+		 }			
+		echo json_encode($results);
+        endif;
+  die();
+  }
+add_action( 'wp_ajax_nopriv_inquiry_send','inquiry_send' );
+add_action( 'wp_ajax_inquiry_send','inquiry_send' );
+
 function autoMobileAddToCart(){
         $itemId = $_POST['itemId'];
         if($itemId):

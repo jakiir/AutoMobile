@@ -280,7 +280,7 @@ function automobile_discount_meta_box($post){
 
   <div id='mpn'>
     <div class="automobile_mpn">
-        <?php if(empty($prfx_stored_meta)): ?>
+        <!--<?php /* if(empty($prfx_stored_meta)): ?>
         <p><label for="txt_automobile_mpn"></label>
         <p><label for="txt_automobile_mpn2"></label>
             <input type="text" name="txt_automobile_mpn" id="txt_automobile_mpn2" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>" />
@@ -299,7 +299,12 @@ function automobile_discount_meta_box($post){
                 </p>
             <?php $incr++; endforeach; endif; ?>
             <p> <span class="add_more button button-primary button-large"><?php _e('Add More', 'automobile_plugin'); ?></span> </p>
-        <?php endif;?>
+        <?php endif; */?>-->
+		<p>
+       <label class="left-lable"  for="txt_automobile_mpn"><?php _e('MPN', 'automobile_plugin'); ?>: </label>
+       <input type="text" name="txt_automobile_mpn" id="txt_automobile_mpn" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>" />
+       <em></em>
+   </p>
     </div>
 
   </div>
@@ -500,9 +505,9 @@ function automobile_save_meta_box($post_id)
             if( isset( $_POST[ 'txt_automobile_mpn' ] ) )
                     {
                         $combined = $_POST['txt_automobile_mpn'];
-                        $automobile_mpn = serialize($combined);
+                        //$automobile_mpn = serialize($combined);
                         //$pics=implode('|',$combined);
-                        update_post_meta($post_id, 'txt_automobile_mpn', $automobile_mpn);
+                        update_post_meta($post_id, 'txt_automobile_mpn', $combined);
                     }
                     else
                     {

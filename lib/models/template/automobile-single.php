@@ -76,8 +76,7 @@ get_header(); ?>
 						<li><a href="#applications" data-toggle="tab">Applications</a></li>
 						<li><a href="#product_inquiry" data-toggle="tab">Product Inquiry</a></li>						 
                         <li><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
-                        <li><a href="#service-two" data-toggle="tab">MPN</a></li>
-                        <li><a href="#service-three" data-toggle="tab">Advanced</a></li>
+                        <li><a href="#service-two" data-toggle="tab">MPN</a></li>                        
 
                     </ul>
                 <div id="myTabContent" class="tab-content">				
@@ -99,15 +98,16 @@ get_header(); ?>
 							<p>
 								<span class="adv_head">MPN </span>
 								<span class="adv_result">:
-									<ul>
+									
 										<?php
-											$get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
+										echo get_post_meta($post->ID, 'txt_automobile_mpn', true);
+											/* $get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
 											$get_automobile_mpn_uns = unserialize($get_automobile_mpn);
 											if($get_automobile_mpn_uns):
 											foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>
 												<li><?php echo $get_automobile_mpn_un; ?></li>
-										<?php endforeach; endif; ?>
-									</ul>
+										<?php endforeach; endif; */ ?>
+									
 								</span>
 							</p>
                             </section>
@@ -119,12 +119,13 @@ get_header(); ?>
 								<p>
 									<span class="adv_head">Year </span>
 									<span class="adv_result">:
-										<select name="txt_automobile_year" class="selectpicker" id="txt_automobile_year">
-										   <option value="">None</option>
-										<?php foreach (range(date('Y', strtotime('+1 year')), $earliest_year) as $x) { ?>
-											<option value="<?php echo $x; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php echo $x; ?></option>
-									   <?php } ?>
-									   </select>										
+										<?php 
+										$txt_automobile_year = get_post_meta($post->ID, 'advanced_automobile_year', true); 
+										$auto_mobile_year = '_auto_mobile_year';
+										$get_auto_mobile_year = get_option( $auto_mobile_year );
+										$get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
+										echo $get_auto_mobile_year_uns[$txt_automobile_year]; 
+										?>										
 									</span>
 								</p>
 								<p>
@@ -171,25 +172,27 @@ get_header(); ?>
 						<div class="tab-pane fade" id="product_inquiry">
 
                             <section class="container product-inquiry">
+								<div id="enquiry_msg"></div>
 								<form action="" method="post">
 								  <div class="form-group">
-									<label for="your_name">Your Name</label>
+									<label for="your_name">Your Name <span class="requird">*</span></label>
 									<input type="text" class="form-control" id="your_name" placeholder="Your Name">
 								  </div>
 								  <div class="form-group">
-									<label for="email_address">Email address</label>
+									<label for="email_address">Email address <span class="requird">*</span></label>
 									<input type="email" name="email_address" class="form-control" id="email_address" placeholder="Enter email">
 								  </div>
 								  <div class="form-group">
 									<label for="parts">Part # (automatically fill)</label>
-									<input type="text" name="parts" class="form-control" id="parts" placeholder="Part # (automatically fill)">
+									<input type="text" name="inquiry_parts" class="form-control" id="inquiry_parts" placeholder="Part # (automatically fill)">
 								  </div>
 								  <div class="form-group">
-									<label for="product_inquiry">Product Inquiry</label>
+									<label for="product_inquiry">Product Inquiry <span class="requird">*</span></label>
 									<textarea name="product_inquiry" id="product_inquiry" class="form-control" rows="3"></textarea>									
 								  </div>
-								  								  
-								  <button type="submit" class="btn btn-default">Submit</button>
+								  <span>							  
+								  <button type="submit" id="inquiry_submit" class="btn btn-default">Submit</button>
+								  </span>
 								</form>
                             </section>
 
@@ -204,79 +207,11 @@ get_header(); ?>
                     <div class="tab-pane fade" id="service-two">
 
                     <section class="container product-info">
-						<ul>
-							<?php
-							$get_automobile_mpn = get_post_meta($post->ID, 'txt_automobile_mpn', true);
-							$get_automobile_mpn_uns = unserialize($get_automobile_mpn);
-							if($get_automobile_mpn_uns):
-							foreach($get_automobile_mpn_uns as $get_automobile_mpn_un): ?>
-								<li><?php echo $get_automobile_mpn_un; ?></li>
-							<?php endforeach; endif; ?>
-						</ul>
+						<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>
                     </section>
 
                     </div>
-                    <div class="tab-pane fade" id="service-three">
-                      <section class="container product-info" >                      
-
-                    <p>
-					<span class="adv_head">Make </span>
-					<span class="adv_result">:
-						<?php 
-							if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )
-							$txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
-							$auto_mobile_make = '_auto_mobile_make';
-							$get_auto_mobile_make = get_option( $auto_mobile_make );
-							$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
-							echo $get_auto_mobile_make_uns[$txt_automobile_make]; 
-						?>
-					</span>
-					</p>
-                    <p>
-					<span class="adv_head">Model </span>
-						<span class="adv_result">:
-						<?php 
-							if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
-							$txt_automobile_model = $get_advanced_automobile['txt_automobile_model'];
-							$auto_mobile_model = '_auto_mobile_model';
-							$get_auto_mobile_model = get_option( $auto_mobile_model );
-							$get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
-							echo $get_auto_mobile_model_uns[$txt_automobile_model];
-						?>
-						</span>
-					</p>
-                    <p>
-						<span class="adv_head">Year </span>
-						<span class="adv_result">:
-							<select name="txt_automobile_year" class="selectpicker" id="txt_automobile_year">
-							   <option value="">None</option>
-							<?php foreach (range(date('Y', strtotime('+1 year')), $earliest_year) as $x) { ?>
-								<option value="<?php echo $x; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php echo $x; ?></option>
-						   <?php } ?>
-						   </select>
-							<?php //echo $get_advanced_automobile['txt_automobile_year']; ?>
-						</span>
-					</p>
-                    <p>
-						<span class="adv_head">Color </span>
-						<span class="adv_result">:
-							<?php echo $get_advanced_automobile['txt_automobile_color']; ?>
-						</span>
-					</p>
-                    <p>
-						<span class="adv_head">Position </span>
-						<span class="adv_result">:
-						<?php echo $get_advanced_automobile['txt_automobile_position']; ?>
-						</span>
-					</p>
-                    <p>
-						<span class="adv_head">Weight (oz) </span>
-						<span class="adv_result">:
-							<?php echo $get_advanced_automobile['txt_automobile_weight']; ?>
-						</span>
-					</p>
-</section>
-                    </div>
+                    
                 </div>
                 <hr>
             </div>
