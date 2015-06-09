@@ -232,6 +232,60 @@ function autoMobileRemoveCart(){
 add_action( 'wp_ajax_nopriv_autoMobileRemoveCart','autoMobileRemoveCart' );
 add_action( 'wp_ajax_autoMobileRemoveCart','autoMobileRemoveCart' );
 
+
+function autoMobileMakeNModel(){
+        $automobile_year = $_POST['automobile_year'];
+		global $wpdb;
+        if($automobile_year):			
+			$results = $wpdb->get_results( "select post_id, meta_key from $wpdb->postmeta where meta_value = '$automobile_year'", ARRAY_A );
+			$automobile_make = array();
+			$automobile_make_val = array();
+			$automobile_model = array();
+			$automobile_model_val = array();
+			foreach($results as $result):
+				$postId = $result['post_id'];
+				$automobile_make[] = get_post_meta( $postId, 'advanced_automobile_make', true );
+				
+				$txt_automobile_make = get_post_meta( $postId, 'advanced_automobile_make', true );
+				$auto_mobile_make = '_auto_mobile_make';
+				$get_auto_mobile_make = get_option( $auto_mobile_make );
+				$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+				$automobile_make_val[] = $get_auto_mobile_make_uns[$txt_automobile_make];
+				
+				
+				$automobile_model[] = get_post_meta( $postId, 'advanced_automobile_model', true );
+				
+				$txt_automobile_model = get_post_meta( $postId, 'advanced_automobile_model', true );
+				$auto_mobile_model = '_auto_mobile_model';
+				$get_auto_mobile_model = get_option( $auto_mobile_model );
+				$get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+				$automobile_model_val[] =  $get_auto_mobile_model_uns[$txt_automobile_model];
+			endforeach;
+			$result = array(
+                'success' => true,
+				'make' => $automobile_make,
+				'make_val' => $automobile_make_val,
+				'model' => $automobile_model,
+				'model_val' => $automobile_model_val
+            );
+		else :
+            $result = array(
+                'success' => false,
+				'make' => '',
+				'make_val' => '',
+				'model' => '',
+				'model_val' => ''
+            );
+        endif;
+		
+		echo json_encode($result);	
+		
+  die();
+  }
+add_action( 'wp_ajax_nopriv_autoMobileMakeNModel','autoMobileMakeNModel' );
+add_action( 'wp_ajax_autoMobileMakeNModel','autoMobileMakeNModel' );
+
+
 function get_country_state(){
         $country = $_POST['country'];
         if($country):
@@ -675,10 +729,7 @@ if (!function_exists('owl_team_public_css')) {
     wp_enqueue_style( 'automobile-bootstrap', plugins_url('assets/style/bootstrap.min.css', dirname(__FILE__)) );
     wp_enqueue_style( 'user-style', plugins_url('assets/style/user_style.css', dirname(__FILE__)) );
     wp_enqueue_style( 'automobile-style', plugins_url('assets/style/style.css', dirname(__FILE__)) );
-
-    wp_enqueue_style( 'font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css', null, '4.0.1' );
-    wp_enqueue_style( 'droid-serif', 'http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic,700,700italic');
-
+ 
     }
 }
 add_action( 'wp_enqueue_scripts', 'owl_team_public_css' );

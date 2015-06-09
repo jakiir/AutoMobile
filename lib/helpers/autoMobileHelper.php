@@ -42,39 +42,39 @@ if (!class_exists('autoMobileHelper'))
     }
 	
 function automobile_search_list() {
-	echo '<form action="'. home_url('/auto-mobile/') .'" method="GET">';
+	echo '<form action="'. home_url('/auto-mobile/') .'" method="GET"><ul class="list-inline">';
     $screen = get_current_screen();
 	
 		$auto_mobile_year = '_auto_mobile_year';
         $get_auto_mobile_year = get_option( $auto_mobile_year );
         $get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
-        echo '<select name="txt_automobile_year" id="txt_automobile_year"><option value="">Show All Year</option>';         if($get_auto_mobile_year_uns) {
+        echo '<li><select class="form-control"  name="txt_automobile_year" id="txt_automobile_year_dropdown"><option value="">Show All Year</option>';         if($get_auto_mobile_year_uns) {
             foreach ($get_auto_mobile_year_uns as $key=>$get_auto_mobile_year_unss): ?>
                 <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_year'] ) ) selected( $_GET['txt_automobile_year'], $key ); ?>><?php _e( $get_auto_mobile_year_unss, 'automobile_plugin' )?></option>';         <?php  endforeach;
         }
-        echo '</select>';
+        echo '</select></li>';
 		
 		$auto_mobile_make = '_auto_mobile_make';
         $get_auto_mobile_make = get_option( $auto_mobile_make );
         $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
-        echo '<select name="txt_automobile_make" id="txt_automobile_make"><option value="">Show All Make</option>';         if($get_auto_mobile_make_uns) {
+        echo '<li><select class="form-control"  name="txt_automobile_make" id="txt_automobile_make_dropdown"><option value="">Show All Make</option>';         if($get_auto_mobile_make_uns) {
             foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss): ?>
                 <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_make'] ) ) selected( $_GET['txt_automobile_make'], $key ); ?>><?php _e( $get_auto_mobile_make_unss, 'automobile_plugin' )?></option>';         <?php  endforeach;
         }
-        echo '</select>';
+        echo '</select></li>';
 		
 		$auto_mobile_model = '_auto_mobile_model';
         $get_auto_mobile_model = get_option( $auto_mobile_model );
         $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
-        echo '<select name="txt_automobile_model" id="txt_automobile_model"><option value="">Show All Model</option>';
+        echo '<li><select class="form-control"  name="txt_automobile_model" id="txt_automobile_model_dropdown"><option value="">Show All Model</option>';
             if($get_auto_mobile_model_uns) {
                 foreach ($get_auto_mobile_model_uns as $key=>$get_auto_mobile_model_unss): ?>
                     <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_model'] ) ) selected( $_GET['txt_automobile_model'], $key ); ?>><?php _e( $get_auto_mobile_model_unss, 'automobile_plugin' )?></option>';
                 <?php  endforeach;
             }
-        echo '</select>';
+        echo '</select></li>';
 		
-		echo '<input type="submit" class="search_submit" value="Go"/></form>';
+		echo '<li><input type="submit" class="btn btn-danger search_submit" value="Go"/></li></ul></form>';
     
 }
 
@@ -85,7 +85,8 @@ $output = '';
  if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
 	 global $autoMobile;
 	 $automobile_category_extra_fields = get_option('automobile_category_images');
-     $output = '<ul>';
+       
+     $output = '<div class="row">';
      foreach ( $terms as $term ) {		 
 		$thumbnail_id = absint($automobile_category_extra_fields[$term->term_id]['automobile_category_images']);
 		if ( $thumbnail_id ) {
@@ -93,12 +94,12 @@ $output = '';
 		} else {
 			$image = $autoMobile->auto_mobile_default_image();
 		}
-       $output .= '<li><div>' . $term->name . '</div><div><img src="' . esc_url( $image ) . '" alt="'. __( 'Thumbnail', 'automobile' ) . '" class="wp-post-image" height="48" width="48" /></div></li>';
+       $output .= '<div class="col-md-3"><div class="product-box"><img src="' . esc_url( $image ) . '" alt="'. __( 'Thumbnail', 'automobile' ) . '" class="wp-post-image img-responsive" height="" width="" /><h3>' . $term->name . '</h3></div></div>';
         
      }
-     $output .= '</ul>';
+     $output .= '</div>';
 	return $output;
-	}	
+	}
 }
 
 
@@ -111,28 +112,18 @@ $output = '';
             $txt_limit=20;
             $content = get_the_content(get_the_ID($post->ID));
             $automobile_content = wp_trim_words( $content,$txt_limit); ?>
-            <div class="item  col-xs-4 col-lg-4">
-            <div class="thumbnail">
+            <div class="item  col-md-4">
+            <div class="product-box">
                 <a href="<?php the_permalink(); ?>">
                     <?php echo $autoMobile->auto_mobile_thumbnail('400x250'); ?>
                 </a>
                 <div class="caption">
-                    <h4 class="group inner list-group-item-heading">
+                    <h3>
                             <a href="<?php the_permalink(); ?>">
                                 <?php the_title(); ?>
                             </a>
-                    </h4>
-                    <p class="group inner list-group-item-text">
-                        <?php echo $automobile_content; ?></p>
-                    <div class="row">
-                        <div class="col-xs-12 col-md-6">
-                            <span class="automobile-price">
-                               Price: <?php $itemPriec = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); if($itemPriec): echo '$'.$itemPriec; else : echo '$0.00'; endif; ?></span>
-                        </div>
-                        <div class="col-xs-12 col-md-6">
-                            <a data-item_id="<?php echo get_the_ID(); ?>" data-item_sku="<?php echo esc_html(get_post_meta(get_the_ID(), 'txt_automobile_sku', true)); ?>" data-quantity="1" data-item_price="<?php $itemPric = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); if($itemPric): echo $itemPric; else : echo '0'; endif; ?>" class="btn btn-success auto_mobile_add_to_cart" href="<?php echo esc_url(home_url('/auto-mobile/?addToCart='.get_the_ID())); ?>">Add to cart</a>
-                        </div>
-                    </div>
+                    </h3>                    
+                   
                 </div>
             </div>
         </div>

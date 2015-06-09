@@ -5,7 +5,6 @@
 global $autoMobile;
 ?>
 
-
 <section id="primary">
 <div id="content" role="main">
 
@@ -18,12 +17,10 @@ global $autoMobile;
             </span>List</a> <a href="#" id="grid" class="btn btn-default btn-sm"><span
                 class="glyphicon glyphicon-th"></span>Grid</a>
         </div>
-		<span class="mini_cart"><?php echo $autoMobile->mini_cart(); ?></span>
+		<!--<span class="mini_cart"><?php //echo $autoMobile->mini_cart(); ?></span>-->
     </div>
 	<div class="search_list"><?php echo $autoMobile->automobile_search_list(); ?></div>
-	<div class="category_list"><?php echo $autoMobile->automobile_taxonomies_terms(); 
-
-	?>
+	<div class="category_list"><?php echo $autoMobile->automobile_taxonomies_terms(); 	?>
 	
 	</div>
     <div id="products" class="row list-group">

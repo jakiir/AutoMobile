@@ -56,7 +56,7 @@ if (!function_exists('automobile_js')) {
  */
 if (!function_exists('automobile_public_css')) {
     function automobile_public_css() {
-    wp_enqueue_style( 'font-awesome', plugins_url('css/font-awesome/css/font-awesome.min.css', dirname(__FILE__)) );
+    wp_enqueue_style( 'font-awesome', plugins_url('admin/css/font-awesome/css/font-awesome.min.css', dirname(__FILE__)) );
     }
 }
 add_action( 'wp_enqueue_scripts', 'automobile_public_css' );
