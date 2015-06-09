@@ -65,7 +65,7 @@ function automobile_search_list() {
 		$auto_mobile_make = '_auto_mobile_make';
         $get_auto_mobile_make = get_option( $auto_mobile_make );
         $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
-        echo '<li><select class="form-control"  name="txt_automobile_make" id="txt_automobile_make_dropdown"><option value="">Show All Make</option>';         if($get_auto_mobile_make_uns) {
+        echo '<li><select disabled class="form-control"  name="txt_automobile_make" id="txt_automobile_make_dropdown"><option value="">Show All Make</option>';         if($get_auto_mobile_make_uns) {
             foreach ($get_auto_mobile_make_uns as $key=>$get_auto_mobile_make_unss): ?>
                 <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_make'] ) ) selected( $_GET['txt_automobile_make'], $key ); ?>><?php _e( $get_auto_mobile_make_unss, 'automobile_plugin' )?></option>';         <?php  endforeach;
         }
@@ -74,7 +74,7 @@ function automobile_search_list() {
 		$auto_mobile_model = '_auto_mobile_model';
         $get_auto_mobile_model = get_option( $auto_mobile_model );
         $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
-        echo '<li><select class="form-control"  name="txt_automobile_model" id="txt_automobile_model_dropdown"><option value="">Show All Model</option>';
+        echo '<li><select disabled class="form-control"  name="txt_automobile_model" id="txt_automobile_model_dropdown"><option value="">Show All Model</option>';
             if($get_auto_mobile_model_uns) {
                 foreach ($get_auto_mobile_model_uns as $key=>$get_auto_mobile_model_unss): ?>
                     <option value="<?php echo $key; ?>" <?php if ( isset ( $_GET['txt_automobile_model'] ) ) selected( $_GET['txt_automobile_model'], $key ); ?>><?php _e( $get_auto_mobile_model_unss, 'automobile_plugin' )?></option>';
@@ -83,6 +83,20 @@ function automobile_search_list() {
         echo '</select></li>';
 		
 		echo '<li><input type="submit" class="btn btn-danger search_submit" value="Go"/></li></ul></form>';
+    
+}
+
+function automobile_search_by_model() {
+	echo '<ul>';
+		$auto_mobile_model = '_auto_mobile_model';
+        $get_auto_mobile_model = get_option( $auto_mobile_model );
+        $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);       
+		if($get_auto_mobile_model_uns) {
+			foreach ($get_auto_mobile_model_uns as $key=>$get_auto_mobile_model_unss): ?>
+				<li><a href="<?php echo home_url('/auto-mobile/?txt_automobile_model='.$key); ?>"><i class="fa fa-arrow-circle-right"></i><?php _e( $get_auto_mobile_model_unss, 'automobile_plugin' ); ?></a></li>
+			<?php  endforeach;
+		}
+	echo '</ul>';
     
 }
 
