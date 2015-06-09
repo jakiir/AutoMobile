@@ -13,7 +13,15 @@ if (!class_exists('autoMobileHelper'))
         $output = '';
         $quantity = 0;
         $totalPrice = 0;
-        $shopping_cart = home_url('/shopping-cart/');
+		$permalink_structure = get_option('permalink_structure');
+		if($permalink_structure == ''):
+		$shopping_cart_id = get_option('shopping-cart_page_id');
+		$shopping_cart = home_url('/?page_id='.$shopping_cart_id);
+		else :
+		$shopping_cart_name = get_option('shopping-cart_page_name');
+        $shopping_cart = home_url('/'.$shopping_cart_name.'/');
+		endif;
+		
         @session_start();
         $sessionId = session_id();
         $auto_mobile_info = '_auto_mobile_info_'.$sessionId;

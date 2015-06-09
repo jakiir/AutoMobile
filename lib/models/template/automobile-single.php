@@ -2,7 +2,8 @@
  /*Template Name: Automobile single */
 
  $automobile_options = get_option('automobile_options');
-get_header(); ?>
+get_header(); 
+?>
 <div id="">
     <div id="" role="main">
     <?php  while ( have_posts() ) : the_post();

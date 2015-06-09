@@ -4,7 +4,22 @@
 
  $automobile_options = get_option('automobile_options');
 
-get_header(); ?>
+get_header(); 
+	$permalink_structure = get_option('permalink_structure');
+	if($permalink_structure == ''):
+		$auto_mobile_page_id = get_option('auto-mobile_page_id');
+		$auto_mobile_permalink = home_url('/?page_id='.$auto_mobile_page_id);
+		
+		$automobile_checkout_page_id = get_option('automobile-checkout_page_id');
+		$automobile_checkout_permalink = home_url('/?page_id='.$automobile_checkout_page_id);
+	else :
+		$auto_mobile_page_name = get_option('auto-mobile_page_name');
+		$auto_mobile_permalink = home_url('/'.$auto_mobile_page_name.'/');
+		
+		$automobile_checkout_page_name = get_option('automobile-checkout_page_name');
+		$automobile_checkout_permalink = home_url('/'.$automobile_checkout_page_name.'/');
+	endif;
+?>
 
 <div class="container">
     <div class="row">
@@ -97,12 +112,12 @@ get_header(); ?>
                         <td>   </td>
                         <td>   </td>
                         <td>
-                        <a href="<?php echo home_url('/auto-mobile/'); ?>" class="btn btn-default">
+                        <a href="<?php echo $auto_mobile_permalink; ?>" class="btn btn-default">
                             <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
                         </a>
                         </td>
                         <td>
-                        <a href="<?php echo home_url('/automobile-checkout/'); ?>" class="btn btn-success">
+                        <a href="<?php echo $automobile_checkout_permalink; ?>" class="btn btn-success">
                             Checkout <span class="glyphicon glyphicon-play"></span>
                         </a></td>
                     </tr>
@@ -118,7 +133,7 @@ get_header(); ?>
                 <div class="entry-content">
                 <div class="">
                 <p class="cart-empty">Your cart is currently empty.</p>
-                <p class="return-to-auto-mobile"><a class="button wc-backward" href="<?php echo home_url('/auto-mobile/'); ?>">Return To Auto Mobile</a></p>
+                <p class="return-to-auto-mobile"><a class="button wc-backward" href="<?php echo $auto_mobile_permalink; ?>">Return To Auto Mobile</a></p>
                 </div>
                 </div>
             </article>
@@ -132,7 +147,7 @@ get_header(); ?>
                 <div class="entry-content">
                 <div class="">
                 <p class="cart-empty">Your cart is currently empty.</p>
-                <p class="return-to-auto-mobile"><a class="button wc-backward" href="<?php echo home_url('/auto-mobile/'); ?>">Return To Auto Mobile</a></p>
+                <p class="return-to-auto-mobile"><a class="button wc-backward" href="<?php echo $auto_mobile_permalink; ?>">Return To Auto Mobile</a></p>
                 </div>
                 </div>
             </article>
