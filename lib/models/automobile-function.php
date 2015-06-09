@@ -261,6 +261,10 @@ function autoMobileMakeNModel(){
 				$get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
 				$automobile_model_val[] =  $get_auto_mobile_model_uns[$txt_automobile_model];
 			endforeach;
+			$automobile_make = array_unique($automobile_make);
+			$automobile_make_val = array_unique($automobile_make_val);
+			$automobile_model = array_unique($automobile_model);
+			$automobile_model_val = array_unique($automobile_model_val);
 			$result = array(
                 'success' => true,
 				'make' => $automobile_make,
