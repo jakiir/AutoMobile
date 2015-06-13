@@ -4,8 +4,7 @@
  $automobile_options = get_option('automobile_options');
 get_header(); 
 ?>
-<div id="">
-    <div id="" role="main">
+
     <?php  while ( have_posts() ) : the_post();
         global $post;
     $pid=$post->ID;
@@ -13,26 +12,20 @@ get_header();
     $author = get_the_author(get_the_ID($post->ID));
     global $autoMobile;
     ?>
-
-<div class="container-fluid">
-<!--<span class="mini_cart"><?php //echo $autoMobile->mini_cart(); ?></span>-->
-
-
-
-    <div class="content-wrapper">
+   <div class="content-wrapper">
         <div class="item-container">
             <div class="container">
-
+        <div class="col-md-9">
             <h2><?php //echo esc_attr($automobile_options['automobile_order_send_email']); ?></h2>
                 <div class="col-md-5 service-image-left">
                         <div style="margin:0 auto;">
                             <?php echo $autoMobile->auto_mobile_thumbnail('400x250'); ?>
-                            <!--<img id="item-display" src="<?php //echo $post_image; ?>" alt=""></img>-->
+                            
                         </div>
                 </div>
                 <div class="col-md-7">
                     <div class="product-title"><?php the_title(); ?></div>
-                    <!--<div class="product-desc">The Corsair Gaming Series GS600 is the ideal price/performance choice for mid-spec gaming PC</div>-->
+                    
                     <hr>
                     <p class="price">
                     <?php $txt_automobile_regular_price = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_regular_price', true ) );
@@ -66,10 +59,9 @@ get_header();
 
 
                 </div>
-            </div>
-        </div>
-        <div class="container-fluid">
-            <div class="col-md-12 product-info">
+                
+                
+                <div class="col-md-12 product-info">
 			<?php
 				$get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);
 				$get_advanced_automobile = unserialize($get_advanced_automobile_array);
@@ -86,7 +78,7 @@ get_header();
                 <div id="myTabContent" class="tab-content">				
 						<div class="tab-pane fade in active" id="product_details">
 
-                            <section class="container product-details">
+                            <section class="product-details">
                               <p>
 								<span class="adv_head">Color </span>
 								<span class="adv_result">:
@@ -119,7 +111,7 @@ get_header();
                         </div>
 						<div class="tab-pane fade" id="applications">
 
-                            <section class="container applications">
+                            <section class="applications">
 								<p>
 									<span class="adv_head">Year </span>
 									<span class="adv_result">:
@@ -175,7 +167,7 @@ get_header();
                         </div>
 						<div class="tab-pane fade" id="product_inquiry">
 
-                            <section class="container product-inquiry">
+                            <section class="product-inquiry">
 								<div id="enquiry_msg"></div>
 								<form action="" method="post">
 								  <div class="form-group">
@@ -203,28 +195,37 @@ get_header();
                         </div>
                         <div class="tab-pane fade" id="service-one">
 
-                            <section class="container product-info">
+                            <section class=" product-info">
                               <?php the_content(); ?>
                             </section>
 
                         </div>
                     <div class="tab-pane fade" id="service-two">
 
-                    <section class="container product-info">
+                    <section class=" product-info">
 						<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>
                     </section>
 
                     </div>
                     
                 </div>
-                <hr>
+              
+            </div>
+                
+                
+                </div>
+                 <div class="col-md-3">
+               <?php get_sidebar(); ?>
+            </div>
             </div>
         </div>
-    </div>
-</div>
+        
+            
+        </div>
+    
+
 
    <?php endwhile;  ?>
-   </div>
-</div>
+  
 
 <?php get_footer(); ?>
