@@ -75,6 +75,21 @@ global $autoMobile;
 				'meta_key'         => 'advanced_automobile_model',
 				'meta_value'       => $atm_model				
 			);
+		elseif($_GET['product_category'] != '') :
+			$args = array(
+				'post_type' => 'tlp_automobile',
+				'post_status' => 'publish',
+				'posts_per_page' => $postLimit,
+				'paged' => $paged,
+				'tax_query' => array(
+						array(
+						  'taxonomy' => 'automobile_product_category',
+						  'field' => 'id',
+						  'terms' => $_GET['product_category'], 
+						  'include_children' => false
+						)
+					  )				
+			);
 		else :
 			$args = array(
 				'post_type' => 'tlp_automobile',

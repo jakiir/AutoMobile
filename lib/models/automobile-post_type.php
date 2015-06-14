@@ -1,4 +1,133 @@
 <?php
+add_action('save_post', 'automobile_save_meta_box', 10, 2);
+function automobile_save_meta_box($post_id)
+{
+   if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+       return;
+
+   if('page' == $_POST['post_type'])
+   {
+       if(!current_user_can('edit_page', $post_id))
+           return;
+   }
+   else
+       if(!current_user_can('edit_post', $post_id))
+           return;
+
+   if(isset($_POST['automobile_plugin_noncename']) && wp_verify_nonce($_POST['automobile_plugin_noncename'], plugins_url(__FILE__)) && check_admin_referer(plugins_url(__FILE__), 'automobile_plugin_noncename'))
+   {
+
+	
+	
+global $autoMobile;	
+$get_automobile_post_id = $autoMobile->get_automobile_post_id($_POST[ 'txt_automobile_sku' ]);
+if (in_array("yes", $get_automobile_post_id)) {
+	@session_start();
+	$_SESSION['skuMess'] = 'SKU is unique, please write another';	
+    return;
+} else {
+	
+    if( isset( $_POST[ 'txt_automobile_sku' ] ) ) {
+		update_post_meta($post_id, 'txt_automobile_sku', $_POST['txt_automobile_sku']);
+	} else {
+		delete_post_meta( $post_id, 'txt_automobile_sku' );
+	}
+	@session_start();
+	$_SESSION['skuMess'] = '';
+}
+
+       
+
+            if( isset( $_POST[ 'txt_automobile_regular_price' ] ) ) {
+                      update_post_meta($post_id, 'txt_automobile_regular_price', $_POST['txt_automobile_regular_price']);
+                    } else {
+                        delete_post_meta( $post_id, 'txt_automobile_regular_price' );
+                    }
+
+            if( isset( $_POST[ 'txt_automobile_price' ] ) ) {
+                      update_post_meta($post_id, 'txt_automobile_price', $_POST['txt_automobile_price']);
+                    } else { delete_post_meta( $post_id, 'txt_automobile_price' ); }
+
+
+            if( isset( $_POST[ 'txt_automobile_qty' ] ) ) {
+                      update_post_meta($post_id, 'txt_automobile_qty', $_POST['txt_automobile_qty']);
+                    } else { delete_post_meta( $post_id, 'txt_automobile_qty' );}
+
+              if( isset( $_POST[ 'automobile-product-status' ] ) ) {
+                      update_post_meta($post_id, 'automobile-product-status', $_POST['automobile-product-status']);
+                    } else {delete_post_meta( $post_id, 'automobile-product-status' ); }
+
+
+	if( isset( $_POST[ 'txt_automobile_make' ] ) )
+	{ 
+		$txt_automobile_make = $_POST[ 'txt_automobile_make' ]; } else { $txt_automobile_make = ''; 
+		
+	}
+	if( isset( $_POST[ 'txt_automobile_model' ] ) )
+	{ 
+		$txt_automobile_model = $_POST['txt_automobile_model'];} else { $txt_automobile_model = '';
+	}
+
+	if( isset( $_POST[ 'txt_automobile_year' ] ) )
+	{ $txt_automobile_year = $_POST[ 'txt_automobile_year' ]; } else { $txt_automobile_year = ''; }
+
+	if( isset( $_POST[ 'txt_automobile_color' ] ) )
+	{ $txt_automobile_color = $_POST[ 'txt_automobile_color' ]; } else { $txt_automobile_color = ''; }
+
+	if( isset( $_POST[ 'txt_automobile_position' ] ) )
+	{ $txt_automobile_position = $_POST[ 'txt_automobile_position' ]; } else { $txt_automobile_position = ''; }
+
+	if( isset( $_POST[ 'txt_automobile_weight' ] ) )
+	{ $txt_automobile_weight = $_POST[ 'txt_automobile_weight' ]; } else { $txt_automobile_weight = ''; }
+
+	if( isset( $_POST[ 'txt_automobile_comments' ] ) )
+	{ $txt_automobile_comments = $_POST[ 'txt_automobile_comments' ]; } else { $txt_automobile_comments = ''; }
+
+	if( isset( $_POST[ 'automobile_inquiry' ] ) )
+	{ $automobile_inquiry = $_POST[ 'automobile_inquiry' ]; } else { $automobile_inquiry = ''; }
+
+        $advanced_automobile_array = array(
+            'txt_automobile_make'   => $txt_automobile_make,
+            'txt_automobile_model'  => $txt_automobile_model,
+            'txt_automobile_year'   => $txt_automobile_year,
+            'txt_automobile_color'  => $txt_automobile_color,
+            'txt_automobile_position' => $txt_automobile_position,
+            'txt_automobile_weight' => $txt_automobile_weight,
+			'txt_automobile_comments' => $txt_automobile_comments,
+			'automobile_inquiry' => $automobile_inquiry
+            );
+        $advanced_automobile = serialize($advanced_automobile_array);
+        update_post_meta($post_id, 'advanced_automobile', $advanced_automobile);
+		
+		update_post_meta($post_id, 'advanced_automobile_make', $txt_automobile_make);
+		update_post_meta($post_id, 'advanced_automobile_model', $txt_automobile_model);
+		update_post_meta($post_id, 'advanced_automobile_year', $txt_automobile_year);
+		
+
+
+            if( isset( $_POST[ 'txt_automobile_mpn' ] ) )
+                    {
+                        $combined = $_POST['txt_automobile_mpn'];
+                        //$automobile_mpn = serialize($combined);
+                        //$pics=implode('|',$combined);
+                        update_post_meta($post_id, 'txt_automobile_mpn', $combined);
+                    }
+                    else
+                    {
+                        delete_post_meta( $post_id, 'txt_automobile_mpn' );
+                    }
+
+
+                  if( isset( $_POST[ 'monday-checkbox' ] ) ) {
+            update_post_meta( $post_id, 'monday-checkbox', 'yes' );
+        } else {
+            update_post_meta( $post_id, 'monday-checkbox', 'no' );
+        }
+   }
+   return;
+}
+
+
 add_action( 'init', 'automobile_product' );
 function automobile_product() {
     register_post_type( 'tlp_automobile',
@@ -65,7 +194,6 @@ function automobile_product() {
 				)
 			)
 		);
-	
 }
 
 add_filter( 'manage_automobile_order_posts_columns', 'automobile_order_columns'  );
@@ -247,6 +375,7 @@ function automobile_discount_meta_box($post){
   <div class="automobile-meta-boxs">
   <div id='general'>
     <p>
+		<?php @session_start(); if($_SESSION['skuMess'] != ''): echo '<span style="color:red">'.$_SESSION['skuMess'].'</span>'; $_SESSION['skuMess'] = ''; endif; ?>
        <label class="left-lable"  for="txt_automobile_sku"><?php _e('SKU', 'automobile_plugin'); ?>: </label>
        <input type="text" name="txt_automobile_sku" id="txt_automobile_sku" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_sku', true); ?>" />
        <!--<span class="tip"><a rel="tooltip" title="A paragraph typically consists of a unifying main point, thought, or idea accompanied by <b>supporting details</b>">paragraph</a></span>-->
@@ -408,119 +537,5 @@ $get_advanced_automobile = @unserialize($get_advanced_automobile_array);
    </div>
   </div>
 <?php
-
-
-}
-add_action('save_post', 'automobile_save_meta_box', 10, 2);
-function automobile_save_meta_box($post_id)
-{
-   if(defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-       return;
-
-   if('page' == $_POST['post_type'])
-   {
-       if(!current_user_can('edit_page', $post_id))
-           return;
-   }
-   else
-       if(!current_user_can('edit_post', $post_id))
-           return;
-
-   if(isset($_POST['automobile_plugin_noncename']) && wp_verify_nonce($_POST['automobile_plugin_noncename'], plugins_url(__FILE__)) && check_admin_referer(plugins_url(__FILE__), 'automobile_plugin_noncename'))
-   {
-
-       if( isset( $_POST[ 'txt_automobile_sku' ] ) ) {
-          update_post_meta($post_id, 'txt_automobile_sku', $_POST['txt_automobile_sku']);
-        } else {
-            delete_post_meta( $post_id, 'txt_automobile_sku' );
-        }
-
-            if( isset( $_POST[ 'txt_automobile_regular_price' ] ) ) {
-                      update_post_meta($post_id, 'txt_automobile_regular_price', $_POST['txt_automobile_regular_price']);
-                    } else {
-                        delete_post_meta( $post_id, 'txt_automobile_regular_price' );
-                    }
-
-            if( isset( $_POST[ 'txt_automobile_price' ] ) ) {
-                      update_post_meta($post_id, 'txt_automobile_price', $_POST['txt_automobile_price']);
-                    } else { delete_post_meta( $post_id, 'txt_automobile_price' ); }
-
-
-            if( isset( $_POST[ 'txt_automobile_qty' ] ) ) {
-                      update_post_meta($post_id, 'txt_automobile_qty', $_POST['txt_automobile_qty']);
-                    } else { delete_post_meta( $post_id, 'txt_automobile_qty' );}
-
-              if( isset( $_POST[ 'automobile-product-status' ] ) ) {
-                      update_post_meta($post_id, 'automobile-product-status', $_POST['automobile-product-status']);
-                    } else {delete_post_meta( $post_id, 'automobile-product-status' ); }
-
-
-	if( isset( $_POST[ 'txt_automobile_make' ] ) )
-	{ 
-		$txt_automobile_make = $_POST[ 'txt_automobile_make' ]; } else { $txt_automobile_make = ''; 
-		
-	}
-	if( isset( $_POST[ 'txt_automobile_model' ] ) )
-	{ 
-		$txt_automobile_model = $_POST['txt_automobile_model'];} else { $txt_automobile_model = '';
-	}
-
-	if( isset( $_POST[ 'txt_automobile_year' ] ) )
-	{ $txt_automobile_year = $_POST[ 'txt_automobile_year' ]; } else { $txt_automobile_year = ''; }
-
-	if( isset( $_POST[ 'txt_automobile_color' ] ) )
-	{ $txt_automobile_color = $_POST[ 'txt_automobile_color' ]; } else { $txt_automobile_color = ''; }
-
-	if( isset( $_POST[ 'txt_automobile_position' ] ) )
-	{ $txt_automobile_position = $_POST[ 'txt_automobile_position' ]; } else { $txt_automobile_position = ''; }
-
-	if( isset( $_POST[ 'txt_automobile_weight' ] ) )
-	{ $txt_automobile_weight = $_POST[ 'txt_automobile_weight' ]; } else { $txt_automobile_weight = ''; }
-
-	if( isset( $_POST[ 'txt_automobile_comments' ] ) )
-	{ $txt_automobile_comments = $_POST[ 'txt_automobile_comments' ]; } else { $txt_automobile_comments = ''; }
-
-	if( isset( $_POST[ 'automobile_inquiry' ] ) )
-	{ $automobile_inquiry = $_POST[ 'automobile_inquiry' ]; } else { $automobile_inquiry = ''; }
-
-        $advanced_automobile_array = array(
-            'txt_automobile_make'   => $txt_automobile_make,
-            'txt_automobile_model'  => $txt_automobile_model,
-            'txt_automobile_year'   => $txt_automobile_year,
-            'txt_automobile_color'  => $txt_automobile_color,
-            'txt_automobile_position' => $txt_automobile_position,
-            'txt_automobile_weight' => $txt_automobile_weight,
-			'txt_automobile_comments' => $txt_automobile_comments,
-			'automobile_inquiry' => $automobile_inquiry
-            );
-        $advanced_automobile = serialize($advanced_automobile_array);
-        update_post_meta($post_id, 'advanced_automobile', $advanced_automobile);
-		
-		update_post_meta($post_id, 'advanced_automobile_make', $txt_automobile_make);
-		update_post_meta($post_id, 'advanced_automobile_model', $txt_automobile_model);
-		update_post_meta($post_id, 'advanced_automobile_year', $txt_automobile_year);
-		
-
-
-            if( isset( $_POST[ 'txt_automobile_mpn' ] ) )
-                    {
-                        $combined = $_POST['txt_automobile_mpn'];
-                        //$automobile_mpn = serialize($combined);
-                        //$pics=implode('|',$combined);
-                        update_post_meta($post_id, 'txt_automobile_mpn', $combined);
-                    }
-                    else
-                    {
-                        delete_post_meta( $post_id, 'txt_automobile_mpn' );
-                    }
-
-
-                  if( isset( $_POST[ 'monday-checkbox' ] ) ) {
-            update_post_meta( $post_id, 'monday-checkbox', 'yes' );
-        } else {
-            update_post_meta( $post_id, 'monday-checkbox', 'no' );
-        }
-   }
-   return;
 }
 ?>

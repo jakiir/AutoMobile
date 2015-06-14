@@ -111,18 +111,45 @@ $output = '';
 	 $automobile_category_extra_fields = get_option('automobile_category_images');
        
      $output = '<div class="row">';
-     foreach ( $terms as $term ) {		 
+     foreach ( $terms as $term ) {
+		 
+		$permalink_cat = home_url('/auto-mobile/?product_category='.$term->term_id);
+		
 		$thumbnail_id = absint($automobile_category_extra_fields[$term->term_id]['automobile_category_images']);
 		if ( $thumbnail_id ) {
 			$image = wp_get_attachment_thumb_url( $thumbnail_id );
 		} else {
 			$image = $autoMobile->auto_mobile_default_image();
 		}
-       $output .= '<div class="col-md-3"><div class="product-box"><img src="' . esc_url( $image ) . '" alt="'. __( 'Thumbnail', 'automobile' ) . '" class="wp-post-image img-responsive" height="" width="" /><h3>' . $term->name . '</h3></div></div>';
+       $output .= '<div class="col-md-3"><div class="product-box"><a href="' . esc_url( $permalink_cat ) . '"><img src="' . esc_url( $image ) . '" alt="'. __( 'Thumbnail', 'automobile' ) . '" class="wp-post-image img-responsive" height="" width="" /></a><h3><a href="' . esc_url( $permalink_cat ) . '">' . $term->name . '</a></h3></div></div>';
         
      }
      $output .= '</div>';
 	return $output;
+	}
+}
+
+function get_automobile_post_id($automobile_sku){
+	$args = array(
+		'post_type' => 'tlp_automobile',
+		'post_status' => 'publish',	
+	);
+
+	global $wp_query , $post;
+	$wp_query = new WP_Query($args);
+	if( $wp_query->have_posts() ) {
+	  while ($wp_query->have_posts()) : $wp_query->the_post();
+		$postId = $post->ID;
+		
+		$txt_automobile_sku = get_post_meta( $postId, 'txt_automobile_sku', true );
+		if($txt_automobile_sku == $automobile_sku){
+			$checkVal[] = 'yes';
+		} else {
+			$checkVal[] = 'no';
+		}
+		
+	  endwhile;
+	  return $checkVal;
 	}
 }
 
