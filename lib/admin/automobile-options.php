@@ -136,13 +136,24 @@ function automobile_theme_options_page() {
                             <div id="general" class="automobile_block">
 
 
-                                <h2><?php _e('Tean Settings', 'automobileoptions'); ?></h2>
+                                <!--<h2><?php //_e('Tean Settings', 'automobileoptions'); ?></h2>-->
 
 
                                         <div class="field">
-                                            <label for="automobile_options[automobile_order_send_email]"><?php _e('Order Send Email', 'automobileoptions'); ?></label>
+                                            <label for="automobile_options[automobile_order_send_email]"><?php _e('Paypal Email', 'automobileoptions'); ?></label>
                                             <input id="automobile_options[automobile_order_send_email]" name="automobile_options[automobile_order_send_email]" type="text" value="<?php echo esc_attr($options['automobile_order_send_email']); ?>" />
 
+                                        </div>
+										
+										<div class="field">
+                                            <label for="automobile_options[automobile_shipping_charge]"><?php _e('Shipping Charge', 'automobileoptions'); ?></label>
+                                            <input id="automobile_options[automobile_shipping_charge]" name="automobile_options[automobile_shipping_charge]" type="text" value="<?php echo esc_attr($options['automobile_shipping_charge']); ?>" onkeyup="check_number(this)" onkeypress="check_number(this)" />
+
+                                        </div>
+										
+										<div class="field">
+                                            <label for="automobile_options[automobile_tax_in]"><?php _e('Tax In %', 'automobileoptions'); ?></label>
+                                            <input id="automobile_options[automobile_tax_in]" name="automobile_options[automobile_tax_in]" type="text" value="<?php echo esc_attr($options['automobile_tax_in']); ?>" onkeyup="check_number(this)" onkeypress="check_number(this)" />
                                         </div>
                                     </div><!-- /fields_wrap -->
 
@@ -212,7 +223,8 @@ function automobile_theme_options_page() {
 function automobile_default_options() {
     $options = array(
         'automobile_order_send_email' => '',
-
+		'automobile_shipping_charge' => '', 
+		'automobile_tax_in' => ''
     );
     return $options;
 }
@@ -226,6 +238,9 @@ function automobile_validate_options( $input='' ) {
 
 
         $input['automobile_order_send_email'] = wp_filter_nohtml_kses($input['automobile_order_send_email']);
+		$input['automobile_shipping_charge'] = wp_filter_nohtml_kses($input['automobile_shipping_charge']);
+		$input['automobile_tax_in'] = wp_filter_nohtml_kses($input['automobile_tax_in']);		
+		 
 
      return $input;
 

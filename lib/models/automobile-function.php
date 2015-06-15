@@ -138,8 +138,8 @@ function autoMobileAddToCart(){
 
                 foreach ($get_mobile_info_uns as $key => $get_mobile_info_unss){
                     if($get_mobile_info_unss['item_id'] === $itemId){
-                        $itemQuantity = $get_mobile_info_unss['item_quantity']+1;
-                        $item_price = $get_mobile_info_unss['item_price']+ $itemPrice;
+                        $itemQuantity = $quantity;
+                        $item_price = $itemPrice;
                         $itemInfo = array(
                             $key => array(
                                         'item_id'           => $get_mobile_info_unss['item_id'],
@@ -192,10 +192,37 @@ function autoMobileAddToCart(){
             }
 
         }
+		
+		
+        $get_mobile_info = get_option( $auto_mobile_info );
+        $get_mobile_info_uns = @unserialize($get_mobile_info);
+        if($get_mobile_info_uns){
+            foreach($get_mobile_info_uns as $key=>$get_mobile_info_unss):
+                $item_quantity_db = $get_mobile_info_unss['item_quantity'];
+                $item_price = $get_mobile_info_unss['item_price'];
+                
+					$quantity_db += $item_quantity_db;
+					$totalPrice += $item_price;
+				
+            endforeach;
+		}
+		$result = array(
+			'success' => true,
+			'quantity' => $quantity_db,
+			'totalPrice' => $totalPrice				
+		);  
+		
+		else :	
+		
+		$result = array(
+                'success' => false,
+				'quantity' => '',
+				'totalPrice' => ''				
+            );
 
         endif;
 
-
+		echo json_encode($result);
 
   die();
   }
@@ -375,7 +402,7 @@ function add_customer_info(){
                 'success' => false,
                 'mess'    => 'Email address already exist!'
             );
-        } else{
+        } else {
                 $customerData = array(
                     'user_login' => $checkout_email,
                     'display_name' => $display_name,
@@ -434,8 +461,16 @@ function add_customer_info(){
                     }
 
                 }
-
-
+				
+			$qty_po = 0;
+			foreach($_POST['product_ids'] as $product_id):
+				echo $product_id;
+				echo $_POST['product_quantity'][$qty_po];
+				$qty_product = get_post_meta($product_id, 'txt_automobile_qty', true) - $_POST['product_quantity'][$qty_po];
+				update_post_meta($product_id, 'txt_automobile_qty', $qty_product);
+				$qty_po++;
+			endforeach;			
+			
             $result = array(
 				'success' => true,
 				'mess'    => 'ok',
@@ -511,6 +546,15 @@ function add_customer_info(){
 					add_post_meta( $orderId, 'order_status', $orderStatuSer, true );
 					
                 }
+				
+			$qty_po = 0;
+			foreach($_POST['product_ids'] as $product_id):
+				echo $product_id;
+				echo $_POST['product_quantity'][$qty_po];
+				$qty_product = get_post_meta($product_id, 'txt_automobile_qty', true) - $_POST['product_quantity'][$qty_po];
+				update_post_meta($product_id, 'txt_automobile_qty', $qty_product);
+				$qty_po++;
+			endforeach;
 
                 $result = array(
                     'success' => true,

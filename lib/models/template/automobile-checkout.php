@@ -344,9 +344,8 @@ if ( is_user_logged_in() ) {
 
 <?php if($selectCountry): ?>
 <script type="text/javascript">
-    jQuery( function( $ ) {
-        get_state_city('<?php echo $selectCountry; ?>','<?php echo $checkout_town_city; ?>');
-    });
+	var selectCountry = '<?php echo $selectCountry; ?>';
+	var checkout_town_city = '<?php echo $checkout_town_city; ?>';    
 </script>
 <?php endif; ?>
 <?php get_footer(); ?>

@@ -21,10 +21,11 @@ function automobile_save_meta_box($post_id)
 	
 global $autoMobile;	
 $get_automobile_post_id = $autoMobile->get_automobile_post_id($_POST[ 'txt_automobile_sku' ]);
-if (in_array("yes", $get_automobile_post_id)) {
+$txt_automobile_sku_now = get_post_meta( $post_id, 'txt_automobile_sku', true );
+if ( in_array("yes", $get_automobile_post_id ) && $_POST[ 'txt_automobile_sku' ] != $txt_automobile_sku_now ) {
 	@session_start();
-	$_SESSION['skuMess'] = 'SKU is unique, please write another';	
-    return;
+	$_SESSION['skuMess'] = 'Part# is unique, please write another';	
+    //return;
 } else {
 	
     if( isset( $_POST[ 'txt_automobile_sku' ] ) ) {
@@ -55,7 +56,27 @@ if (in_array("yes", $get_automobile_post_id)) {
 
               if( isset( $_POST[ 'automobile-product-status' ] ) ) {
                       update_post_meta($post_id, 'automobile-product-status', $_POST['automobile-product-status']);
-                    } else {delete_post_meta( $post_id, 'automobile-product-status' ); }
+                    } else {
+						delete_post_meta( $post_id, 'automobile-product-status' ); 
+						}
+					
+			if( isset( $_POST[ 'txt_automobile_color' ] ) ){
+				$txt_automobile_color = $_POST[ 'txt_automobile_color' ];
+					update_post_meta($post_id, 'txt_automobile_color', $txt_automobile_color);
+				} else { 
+					delete_post_meta( $post_id, 'txt_automobile_color' );  
+				}
+			if( isset( $_POST[ 'txt_automobile_mpn' ] ) )
+			{
+				$combined = $_POST['txt_automobile_mpn'];
+				//$automobile_mpn = serialize($combined);
+				//$pics=implode('|',$combined);
+				update_post_meta($post_id, 'txt_automobile_mpn', $combined);
+			}
+			else
+			{
+				delete_post_meta( $post_id, 'txt_automobile_mpn' );
+			}
 
 
 	if( isset( $_POST[ 'txt_automobile_make' ] ) )
@@ -71,8 +92,7 @@ if (in_array("yes", $get_automobile_post_id)) {
 	if( isset( $_POST[ 'txt_automobile_year' ] ) )
 	{ $txt_automobile_year = $_POST[ 'txt_automobile_year' ]; } else { $txt_automobile_year = ''; }
 
-	if( isset( $_POST[ 'txt_automobile_color' ] ) )
-	{ $txt_automobile_color = $_POST[ 'txt_automobile_color' ]; } else { $txt_automobile_color = ''; }
+	
 
 	if( isset( $_POST[ 'txt_automobile_position' ] ) )
 	{ $txt_automobile_position = $_POST[ 'txt_automobile_position' ]; } else { $txt_automobile_position = ''; }
@@ -89,8 +109,7 @@ if (in_array("yes", $get_automobile_post_id)) {
         $advanced_automobile_array = array(
             'txt_automobile_make'   => $txt_automobile_make,
             'txt_automobile_model'  => $txt_automobile_model,
-            'txt_automobile_year'   => $txt_automobile_year,
-            'txt_automobile_color'  => $txt_automobile_color,
+            'txt_automobile_year'   => $txt_automobile_year,            
             'txt_automobile_position' => $txt_automobile_position,
             'txt_automobile_weight' => $txt_automobile_weight,
 			'txt_automobile_comments' => $txt_automobile_comments,
@@ -105,17 +124,7 @@ if (in_array("yes", $get_automobile_post_id)) {
 		
 
 
-            if( isset( $_POST[ 'txt_automobile_mpn' ] ) )
-                    {
-                        $combined = $_POST['txt_automobile_mpn'];
-                        //$automobile_mpn = serialize($combined);
-                        //$pics=implode('|',$combined);
-                        update_post_meta($post_id, 'txt_automobile_mpn', $combined);
-                    }
-                    else
-                    {
-                        delete_post_meta( $post_id, 'txt_automobile_mpn' );
-                    }
+            
 
 
                   if( isset( $_POST[ 'monday-checkbox' ] ) ) {
@@ -368,33 +377,33 @@ function automobile_discount_meta_box($post){
 <div class="automobile-meta">
  <ul class='tabs tabs-menu'>
     <li><a href='#general'>General</a></li>
-    <li><a href='#mpn'>MPN</a></li>
-    <li><a href='#advanced'>advanced</a></li>
-    <li><a href='#options'>Options</a></li>
+    <!--<li><a href='#mpn'>MPN</a></li>-->
+    <li><a href='#applicationsTab'>Applications TAB</a></li>
+    <!--<li><a href='#options'>Options</a></li>-->
   </ul>
   <div class="automobile-meta-boxs">
   <div id='general'>
     <p>
 		<?php @session_start(); if($_SESSION['skuMess'] != ''): echo '<span style="color:red">'.$_SESSION['skuMess'].'</span>'; $_SESSION['skuMess'] = ''; endif; ?>
-       <label class="left-lable"  for="txt_automobile_sku"><?php _e('SKU', 'automobile_plugin'); ?>: </label>
+       <label class="left-lable"  for="txt_automobile_sku"><?php _e('Part#', 'automobile_plugin'); ?>: </label>
        <input type="text" name="txt_automobile_sku" id="txt_automobile_sku" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_sku', true); ?>" />
        <!--<span class="tip"><a rel="tooltip" title="A paragraph typically consists of a unifying main point, thought, or idea accompanied by <b>supporting details</b>">paragraph</a></span>-->
    </p>
    <div class="border-sep"></div>
    <p>
-       <label class="left-lable"  for="txt_automobile_regular_price"><?php _e('Regular Price ($)', 'automobile_plugin'); ?>: </label>
+       <label class="left-lable"  for="txt_automobile_regular_price"><?php _e('Price ($)', 'automobile_plugin'); ?>: </label>
        <input type="number" name="txt_automobile_regular_price" id="txt_automobile_regular_price" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_regular_price', true); ?>" />
        <em></em>
    </p>
   <p>
-       <label class="left-lable"  for="txt_automobile_price"><?php _e('Price ($)', 'automobile_plugin'); ?>: </label>
+       <label class="left-lable"  for="txt_automobile_price"><?php _e('Special Price ($)', 'automobile_plugin'); ?>: </label>
        <input type="number" name="txt_automobile_price" id="txt_automobile_price" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_price', true); ?>" />
        <em></em>
    </p>
    <div class="border-sep"></div>
    <p>
 
-    <label for="meta-select" class="left-lable"><?php _e( 'Stock status', 'automobile_plugin' )?>:</label>
+    <label for="meta-select" class="left-lable"><?php _e( 'Stock Status', 'automobile_plugin' )?>:</label>
     <select name="automobile-product-status" id="meta-select">
         <option value="instock" <?php if ( isset ( $prfx_stored_meta['automobile-product-status'] ) ) selected( $prfx_stored_meta['automobile-product-status'][0], 'instock' ); ?>><?php _e( 'In stock', 'automobile_plugin' )?></option>';
         <option value="Outofstock" <?php if ( isset ( $prfx_stored_meta['automobile-product-status'] ) ) selected( $prfx_stored_meta['automobile-product-status'][0], 'Outofstock' ); ?>><?php _e( 'Out of stock', 'automobile_plugin' )?></option>';
@@ -405,9 +414,19 @@ function automobile_discount_meta_box($post){
        <input type="number" name="txt_automobile_qty" id="txt_automobile_qty" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_qty', true); ?>" />
        <em></em>
    </p>
+   <p>
+       <label class="left-lable"  for="txt_automobile_color"><?php _e('Color', 'automobile_plugin'); ?>: </label>
+       <input type="text" name="txt_automobile_color" id="txt_automobile_color" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_color', true); ?>" />
+       <em></em>
+   </p>
+   <p>
+       <label class="left-lable"  for="txt_automobile_mpn"><?php _e('MPN', 'automobile_plugin'); ?>: </label>
+       <input type="text" name="txt_automobile_mpn" id="txt_automobile_mpn" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>" />
+       <em></em>
+   </p>
   </div>
 
-  <div id='mpn'>
+  <!--<div id='mpn'>
     <div class="automobile_mpn">
         <!--<?php /* if(empty($prfx_stored_meta)): ?>
         <p><label for="txt_automobile_mpn"></label>
@@ -429,21 +448,50 @@ function automobile_discount_meta_box($post){
             <?php $incr++; endforeach; endif; ?>
             <p> <span class="add_more button button-primary button-large"><?php _e('Add More', 'automobile_plugin'); ?></span> </p>
         <?php endif; */?>-->
-		<p>
-       <label class="left-lable"  for="txt_automobile_mpn"><?php _e('MPN', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_mpn" id="txt_automobile_mpn" size="50" value="<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>" />
+		<!--<p>
+       <label class="left-lable"  for="txt_automobile_mpn"><?php //_e('MPN', 'automobile_plugin'); ?>: </label>
+       <input type="text" name="txt_automobile_mpn" id="txt_automobile_mpn" size="50" value="<?php //echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>" />
        <em></em>
    </p>
     </div>
 
-  </div>
-<div id='advanced'>
+  </div>-->
+<div id='applicationsTab'>
 <?php
 global $post;
 $get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);
 if(!$get_advanced_automobile_array): add_post_meta( $post->ID, 'advanced_automobile', '' ); endif;
 $get_advanced_automobile = @unserialize($get_advanced_automobile_array);
 ?>
+	<p>
+	<label for="txt_automobile_year" class="left-lable"><?php _e( 'Year', 'automobile_plugin' )?></label>
+        <select name="txt_automobile_year" id="txt_automobile_year">
+            <option value="">None</option>
+            <?php
+            $auto_mobile_year = '_auto_mobile_year';
+            $get_auto_mobile_year = get_option( $auto_mobile_year );
+            $get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
+            if($get_auto_mobile_year_uns) {
+                foreach ($get_auto_mobile_year_uns as $key=>$get_auto_mobile_year_unss): ?>
+                    <option value="<?php echo $key; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $key ); ?>><?php _e( $get_auto_mobile_year_unss, 'automobile_plugin' )?></option>';
+                <?php  endforeach;
+            }
+            ?>
+        </select>
+    </p>
+    <!--<p>
+    <label class="left-lable"  for="txt_automobile_year"><?php //_e('Year', 'automobile_plugin'); ?>: </label>
+    <?php
+        //$already_selected_value = 1984;
+        //$earliest_year = 1980; ?>
+       <select name="txt_automobile_year"  id="txt_automobile_year">
+           <option value="">None</option>
+        <?php //foreach (range(date('Y', strtotime('+1 year')), $earliest_year) as $x) { ?>
+            <option value="<?php //echo $x; ?>" <?php //if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( //$get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php //echo $x; ?></option>
+       <?php //} ?>
+       </select>
+       <em></em>
+   </p> -->  
     <p>
         <label for="txt_automobile_make" class="left-lable"><?php _e( 'Make', 'automobile_plugin' )?></label>
         <select name="txt_automobile_make" id="txt_automobile_make">
@@ -476,40 +524,8 @@ $get_advanced_automobile = @unserialize($get_advanced_automobile_array);
             ?>
         </select>
     </p>
-	<p>
-	<label for="txt_automobile_year" class="left-lable"><?php _e( 'Year', 'automobile_plugin' )?></label>
-        <select name="txt_automobile_year" id="txt_automobile_year">
-            <option value="">None</option>
-            <?php
-            $auto_mobile_year = '_auto_mobile_year';
-            $get_auto_mobile_year = get_option( $auto_mobile_year );
-            $get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
-            if($get_auto_mobile_year_uns) {
-                foreach ($get_auto_mobile_year_uns as $key=>$get_auto_mobile_year_unss): ?>
-                    <option value="<?php echo $key; ?>" <?php if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( $get_advanced_automobile['txt_automobile_year'], $key ); ?>><?php _e( $get_auto_mobile_year_unss, 'automobile_plugin' )?></option>';
-                <?php  endforeach;
-            }
-            ?>
-        </select>
-    </p>
-    <!--<p>
-    <label class="left-lable"  for="txt_automobile_year"><?php //_e('Year', 'automobile_plugin'); ?>: </label>
-    <?php
-        //$already_selected_value = 1984;
-        //$earliest_year = 1980; ?>
-       <select name="txt_automobile_year"  id="txt_automobile_year">
-           <option value="">None</option>
-        <?php //foreach (range(date('Y', strtotime('+1 year')), $earliest_year) as $x) { ?>
-            <option value="<?php //echo $x; ?>" <?php //if ( isset ( $get_advanced_automobile['txt_automobile_year'] ) ) selected( //$get_advanced_automobile['txt_automobile_year'], $x ); ?> ><?php //echo $x; ?></option>
-       <?php //} ?>
-       </select>
-       <em></em>
-   </p> -->  
-   <p>
-       <label class="left-lable"  for="txt_automobile_color"><?php _e('Color', 'automobile_plugin'); ?>: </label>
-       <input type="text" name="txt_automobile_color" id="txt_automobile_color" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_color']; ?>" />
-       <em></em>
-   </p>
+	
+   
    <p>
        <label class="left-lable"  for="txt_automobile_position"><?php _e('Position', 'automobile_plugin'); ?>: </label>
        <input type="text" name="txt_automobile_position" id="txt_automobile_position" size="50" value="<?php echo $get_advanced_automobile['txt_automobile_position']; ?>" />
@@ -520,20 +536,18 @@ $get_advanced_automobile = @unserialize($get_advanced_automobile_array);
        <input type="text" name="txt_automobile_weight" size="50" id="txt_automobile_weight" value="<?php echo $get_advanced_automobile['txt_automobile_weight']; ?>" />
        <em></em>
    </p>
-</div>
-  <div id="options">
-    <p>
+   <p>
         <label for="txt_automobile_comments"><?php _e( 'Comments', 'wpshed' ); ?>:</label><br />
         <textarea name="txt_automobile_comments" id="txt_automobile_comments" cols="60" rows="4"><?php echo $get_advanced_automobile['txt_automobile_comments']; ?></textarea>
     </p>
-
-
+</div>
+  <!--<div id="options">
     <p>
-        <label class="left-lable"  for="inquiry"><?php _e('Product Inquiry', 'automobile_plugin'); ?>: </label>
-        <input type="checkbox" class="ckb-inquiry" name="automobile_inquiry" id="inquiry" value="yes" <?php if ( isset ( $get_advanced_automobile['automobile_inquiry'] ) ) checked( $get_advanced_automobile['automobile_inquiry'], 'yes' ); ?> />
-        <?php _e( ' Yes / No', 'automobile_plugin' )?>
+        <label class="left-lable"  for="inquiry"><?php //_e('Product Inquiry', 'automobile_plugin'); ?>: </label>
+        <input type="checkbox" class="ckb-inquiry" name="automobile_inquiry" id="inquiry" value="yes" <?php //if ( isset ( $get_advanced_automobile['automobile_inquiry'] ) ) checked( $get_advanced_automobile['automobile_inquiry'], 'yes' ); ?> />
+        <?php //_e( ' Yes / No', 'automobile_plugin' )?>
     </p>
-  </div>
+  </div>-->
    </div>
   </div>
 <?php

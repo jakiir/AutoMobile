@@ -27,6 +27,9 @@ get_header();
                     <div class="product-title"><?php the_title(); ?></div>
                     
                     <hr>
+					<p class="automobile_sku">
+						Part# : <?php echo get_post_meta($post->ID, 'txt_automobile_sku', true); ?>
+					</p>
                     <p class="price">
                     <?php $txt_automobile_regular_price = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_regular_price', true ) );
                     if($txt_automobile_regular_price): ?>
@@ -50,9 +53,37 @@ get_header();
                     ?>
 
                     </div>
+					<div class="product-qty">
+						<?php $qty_product = get_post_meta($post->ID, 'txt_automobile_qty', true); 
+						
+						@session_start();
+						$sessionId = session_id();
+						$auto_mobile_info = '_auto_mobile_info_'.$sessionId;
+						$get_mobile_info = get_option( $auto_mobile_info );
+						if($get_mobile_info){
+						$get_mobile_info_uns = @unserialize($get_mobile_info);
+						if($get_mobile_info_uns){
+							foreach($get_mobile_info_uns as $key=>$get_mobile_info_unss):
+								$itemId = $get_mobile_info_unss['item_id'];
+								if(get_the_ID() == $itemId)
+									$item_quantity = $get_mobile_info_unss['item_quantity'];
+							endforeach;
+						} 
+						}						
+						?>
+						<label for="product_qty_single" class="left-lable"><?php _e( 'QTY', 'automobile_plugin' )?></label>
+						<select data-item_price="<?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); ?>" name="product_qty_single" id="product_qty_single">							
+							<?php
+								if($qty_product){
+								for($product_qty=1;$product_qty<=$qty_product;$product_qty++){ ?>
+									<option value="<?php echo $product_qty; ?>" <?php if ( isset ( $item_quantity ) ) selected( $item_quantity, $product_qty ); ?>><?php echo $product_qty; ?></option>';
+								<?php } } else { ?>
+								<option value="0">0</option>';
+								<?php } ?>
+						</select>
+					</div>
+					
                     <hr>
-
-
                     <div class="btn-group cart">
                         <a data-item_id="<?php echo get_the_ID(); ?>" data-item_sku="<?php echo esc_html(get_post_meta(get_the_ID(), 'txt_automobile_sku', true)); ?>" data-quantity="1" data-item_price="<?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); ?>" class="btn btn-success auto_mobile_add_to_cart" href="<?php echo esc_url(home_url('/auto-mobile/?addToCart='.get_the_ID())); ?>">Add to cart</a>
                     </div>
@@ -67,16 +98,26 @@ get_header();
 				$get_advanced_automobile = unserialize($get_advanced_automobile_array);
 			?>
                     <ul id="myTab" class="nav nav-tabs nav_tabs">
- 
-						<li class="active"><a href="#product_details" data-toggle="tab">Product Details</a></li>
+						<li class="active"><a href="#description" data-toggle="tab">Description</a></li>
+						<li><a href="#product_details" data-toggle="tab">Product Details</a></li>
 						<li><a href="#applications" data-toggle="tab">Applications</a></li>
-						<li><a href="#product_inquiry" data-toggle="tab">Product Inquiry</a></li>						 
-                        <li><a href="#service-one" data-toggle="tab">DESCRIPTION</a></li>
-                        <li><a href="#service-two" data-toggle="tab">MPN</a></li>                        
-
+						<li><a href="#product_inquiry" data-toggle="tab">Product Inquiry</a></li>	
                     </ul>
-                <div id="myTabContent" class="tab-content">				
-						<div class="tab-pane fade in active" id="product_details">
+                <div id="myTabContent" class="tab-content">			
+
+						<div class="tab-pane fade in active" id="description">
+
+                            <section class="product-description">
+								 <p>
+									<span class="adv_head"></span>
+									<span class="adv_result">
+										<?php the_content(); ?>
+									</span>
+								</p>
+							</section>
+						</div>
+				
+						<div class="tab-pane fade" id="product_details">
 
                             <section class="product-details">
                               <p>
@@ -159,7 +200,7 @@ get_header();
 									<p>
 										<span class="adv_head">Application Notes </span>
 										<span class="adv_result">:
-											<?php the_content(); ?>
+											<?php echo $get_advanced_automobile['txt_automobile_comments']; ?>
 										</span>
 									</p>
                             </section>
@@ -180,7 +221,7 @@ get_header();
 								  </div>
 								  <div class="form-group">
 									<label for="parts">Part # (automatically fill)</label>
-									<input type="text" name="inquiry_parts" class="form-control" id="inquiry_parts" placeholder="Part # (automatically fill)">
+									<input readonly type="text" name="inquiry_parts" class="form-control" id="inquiry_parts" placeholder="Part # (automatically fill)" value="<?php echo get_post_meta($post->ID, 'txt_automobile_sku', true); ?>">
 								  </div>
 								  <div class="form-group">
 									<label for="product_inquiry">Product Inquiry <span class="requird">*</span></label>
@@ -193,21 +234,6 @@ get_header();
                             </section>
 
                         </div>
-                        <div class="tab-pane fade" id="service-one">
-
-                            <section class=" product-info">
-                              <?php the_content(); ?>
-                            </section>
-
-                        </div>
-                    <div class="tab-pane fade" id="service-two">
-
-                    <section class=" product-info">
-						<?php echo get_post_meta($post->ID, 'txt_automobile_mpn', true); ?>
-                    </section>
-
-                    </div>
-                    
                 </div>
               
             </div>
