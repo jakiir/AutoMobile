@@ -11,7 +11,15 @@ global $autoMobile;
             <div class="col-md-9">
                                                     
                 <div class="ctg-title">
-                    <h2><?php echo $taxonomies = get_taxonomies(); ?>
+                    <h2><?php 
+					$product_category = $_GET['product_category'];
+					if($product_category):
+						$autoMobileTermObject = get_term_by( 'id', absint( $_GET['product_category'] ), 'automobile_product_category' );
+						echo $autoMobileTermObject->name;
+					else :
+						echo 'Categories';
+					endif;
+					?>
                     
                     </h2>
                 </div>
@@ -91,7 +99,7 @@ global $autoMobile;
               <!--<div class="row">
                     <div class="col-md-4">
                         <div class="latest-pro-box">
-                            <img class="img-responsive" src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/slider.png" alt="pro4" />
+                            <img class="img-responsive" src="<?php //echo esc_url( get_template_directory_uri() ); ?>/assets/images/slider.png" alt="pro4" />
                             
                         </div>
                     </div>
