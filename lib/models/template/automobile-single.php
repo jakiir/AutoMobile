@@ -97,27 +97,15 @@ get_header();
 				$get_advanced_automobile_array = get_post_meta($post->ID, 'advanced_automobile', true);
 				$get_advanced_automobile = unserialize($get_advanced_automobile_array);
 			?>
-                    <ul id="myTab" class="nav nav-tabs nav_tabs">
-						<li class="active"><a href="#description" data-toggle="tab">Description</a></li>
-						<li><a href="#product_details" data-toggle="tab">Product Details</a></li>
+                    <ul id="myTab" class="nav nav-tabs nav_tabs">						
+						<li class="active"><a href="#product_details" data-toggle="tab">Product Details</a></li>
 						<li><a href="#applications" data-toggle="tab">Applications</a></li>
 						<li><a href="#product_inquiry" data-toggle="tab">Product Inquiry</a></li>	
                     </ul>
                 <div id="myTabContent" class="tab-content">			
 
-						<div class="tab-pane fade in active" id="description">
-
-                            <section class="product-description">
-								 <p>
-									<span class="adv_head"></span>
-									<span class="adv_result">
-										<?php the_content(); ?>
-									</span>
-								</p>
-							</section>
-						</div>
 				
-						<div class="tab-pane fade" id="product_details">
+						<div class="tab-pane fade in active" id="product_details">
 
                             <section class="product-details">
                               <p>
@@ -147,6 +135,14 @@ get_header();
 									
 								</span>
 							</p>
+							<p>
+								<span class="adv_head">Description </span>
+								<span class="adv_result">:
+									<?php the_content(); ?>
+								</span>
+							</p>
+							
+							
                             </section>
 
                         </div>

@@ -96,6 +96,71 @@ function inquiry_send(){
 add_action( 'wp_ajax_nopriv_inquiry_send','inquiry_send' );
 add_action( 'wp_ajax_inquiry_send','inquiry_send' );
 
+function autoMobileUpdateCart(){
+	$itemId = $_POST['itemId'];
+        if($itemId):
+        $itemSku = $_POST['itemSku'];
+        $quantity = $_POST['quantity'];
+        $itemPrice = $_POST['itemPrice'];
+        @session_start();
+        $sessionId = session_id();
+		
+		if($quantity == '' || $quantity == 0){
+			$results = array(
+				'success' => false,
+				'mess' => 'Product quantity is null.'
+			 );
+		} else {       
+	   $auto_mobile_info = '_auto_mobile_info_'.$sessionId;
+        if ( get_option( $auto_mobile_info ) !== false ) {
+
+            $get_mobile_info = get_option( $auto_mobile_info );
+            $get_mobile_info_uns = unserialize($get_mobile_info);
+            $singleArray = array();
+            foreach ($get_mobile_info_uns as $key => $value){
+                $singleArray[$key] = $value['item_id'];
+            }
+
+                if (in_array($itemId, $singleArray)) {
+
+                foreach ($get_mobile_info_uns as $key => $get_mobile_info_unss){
+                    if($get_mobile_info_unss['item_id'] === $itemId){
+                        $itemQuantity = $quantity;
+                        $item_price = $itemPrice;
+                        $itemInfo = array(
+                            $key => array(
+                                        'item_id'           => $get_mobile_info_unss['item_id'],
+                                        'item_sku'          => $itemSku,
+                                        'item_quantity'     => $itemQuantity,
+                                        'item_price'        => $item_price
+                                    )
+                        );
+                        $itemInfoResult = array_merge($get_mobile_info_uns, $itemInfo );
+                        $item_inform = serialize($itemInfoResult);
+                        update_option( $auto_mobile_info, $item_inform );
+
+							if ( is_user_logged_in() ) {
+								$user_ID = get_current_user_id();
+								update_user_meta( $user_ID, 'auto_mobile_shopping_cart', $item_inform );
+							}
+
+						}
+					}
+				}
+			}
+			
+			$results = array(
+				'success' => true,
+				'mess' => 'Update successfully.'
+			 );
+		}
+	endif;
+	echo json_encode($results);
+	die();
+}
+add_action( 'wp_ajax_nopriv_autoMobileUpdateCart','autoMobileUpdateCart' );
+add_action( 'wp_ajax_autoMobileUpdateCart','autoMobileUpdateCart' );
+
 function autoMobileAddToCart(){
         $itemId = $_POST['itemId'];
         if($itemId):

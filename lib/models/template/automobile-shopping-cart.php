@@ -40,7 +40,7 @@ get_header();
                         <th>Quantity</th>
                         <th class="text-center">Price</th>
                         <th class="text-center">Total</th>
-                        <th> </th>
+                        <th colspan="2"> </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,21 +55,47 @@ get_header();
                 $post_image = wp_get_attachment_url( get_post_thumbnail_id($itemId) );
                 if($post_image): $postImage = $post_image; else : $postImage = 'http://placehold.it/72x72'; endif;
                 $totalPrice += $item_price;
+				$get_advanced_automobile_array = get_post_meta($itemId, 'advanced_automobile', true);
+				$get_advanced_automobile = unserialize($get_advanced_automobile_array);
+				$partId = get_post_meta($itemId, 'txt_automobile_sku', true);
                 ?>
                     <tr>
-                        <td class="col-sm-8 col-md-6">
+                        <td class="col-sm-8 col-md-7">
                         <div class="media">
                             <a class="thumbnail pull-left" href="<?php echo get_permalink( $itemId ); ?>">
                             <img class="media-object" src="<?php echo $postImage; ?>" style="width: 72px; height: 72px;">
                             </a>
                             <div class="media-body">
                                 <h4 class="media-heading"><a href="<?php echo get_permalink( $itemId ); ?>"><?php echo get_the_title( $itemId ); ?></a></h4>
-                                <h5 class="media-heading"> by <a href="#">Brand name</a></h5>
-                                <span>Status: </span><span class="text-success"><strong>
-                                <?php
-                                $product_status = get_post_meta( $itemId, 'automobile-product-status', true );
-                                if($product_status == 'instock'): echo 'In Stock'; else : echo 'Out of Stock'; endif;
-                                ?>
+                                <h5 class="media-heading"> Part# <?php echo $partId; ?></h5>
+                                <span>Make: </span><span class="text-success"><strong>
+                                <?php 
+									if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )
+									$txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
+									$auto_mobile_make = '_auto_mobile_make';
+									$get_auto_mobile_make = get_option( $auto_mobile_make );
+									$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+									echo $get_auto_mobile_make_uns[$txt_automobile_make]; 
+								?>
+                                </strong>/</span>
+								<span>Model: </span><span class="text-success"><strong>
+                                <?php 
+									if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
+									$txt_automobile_model = $get_advanced_automobile['txt_automobile_model'];
+									$auto_mobile_model = '_auto_mobile_model';
+									$get_auto_mobile_model = get_option( $auto_mobile_model );
+									$get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+									echo $get_auto_mobile_model_uns[$txt_automobile_model]; 
+								?>
+                                </strong>/</span>
+								<span>Year: </span><span class="text-success"><strong>
+                                <?php 
+									$txt_automobile_year = get_post_meta($itemId, 'advanced_automobile_year', true); 
+									$auto_mobile_year = '_auto_mobile_year';
+									$get_auto_mobile_year = get_option( $auto_mobile_year );
+									$get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
+									echo $get_auto_mobile_year_uns[$txt_automobile_year];  
+								?>
                                 </strong></span>
                             </div>
                         </div></td>
@@ -79,9 +105,13 @@ get_header();
                         </td>
                         <td class="col-sm-1 col-md-1 text-center"><strong>$<?php echo $item_price/$item_quantity; ?></strong></td>
                         <td class="col-sm-1 col-md-1 text-center"><strong>$<?php echo $item_price; ?></strong></td>
+						<td class="col-sm-1 col-md-1">
+                        <a href="javascript:void(0)" data-item_sku="<?php echo $partId; ?>" data-incr_id="<?php echo $incr; ?>" data-item_price="<?php echo $item_price/$item_quantity; ?>" data-item_id="<?php echo $itemId; ?>" data-item_key="<?php echo $key; ?>" class="btn btn-danger itemUpdateBtn">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </a></td>
                         <td class="col-sm-1 col-md-1">
                         <a href="javascript:void(0)" data-item_id="<?php echo $itemId; ?>" data-item_key="<?php echo $key; ?>" class="btn btn-danger itemRemoveBtn">
-                            <span class="glyphicon glyphicon-remove"></span> Remove
+                            <span class="glyphicon glyphicon-remove"></span>
                         </a></td>
                     </tr>
                 <?php $incr++; endforeach; ?>

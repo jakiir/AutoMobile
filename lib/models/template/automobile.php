@@ -9,26 +9,11 @@ global $autoMobile;
     <div class="container">
         <div class="row">
             <div class="col-md-9">
-                 <!-- <div class="well well-sm">
-        <strong>Category Title</strong>
-        <div class="btn-group">
-            <a href="#" id="list" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-th-list">
-            </span>List</a> <a href="#" id="grid" class="btn btn-default btn-sm"><span
-                class="glyphicon glyphicon-th"></span>Grid</a>
-        </div>
-		
-    </div>-->
-	<?php if(!isset($_GET['txt_automobile_model'])) : ?>
-				<div class="slider">
-                   <img class="img-responsive" src="<?php echo esc_url( $autoMobile->assetsUrl ); ?>/images/slider.png" alt="slider" />
-                </div>
+                                                    
                 <div class="ctg-title">
-                    <h2>Categories</h2>
-                </div>
-            <?php echo $autoMobile->automobile_taxonomies_terms(); 	?>
-    <?php endif; ?>                                           
-                <div class="ctg-title">
-                    <h2>Latest Vehicles</h2>
+                    <h2><?php echo $taxonomies = get_taxonomies(); ?>
+                    
+                    </h2>
                 </div>
                 
                <div id="products" class="row list-group">
@@ -102,8 +87,7 @@ global $autoMobile;
         echo $autoMobile->automobile_pagination($args);
  endif; 
  ?>
-    </div>
-                
+    </div>  
               <!--<div class="row">
                     <div class="col-md-4">
                         <div class="latest-pro-box">
