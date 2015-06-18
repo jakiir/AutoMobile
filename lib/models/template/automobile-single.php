@@ -28,7 +28,7 @@ get_header();
                     
                     <hr>
 					<p class="automobile_sku">
-						Part# : <?php echo get_post_meta($post->ID, 'txt_automobile_sku', true); ?>
+						<strong>Part# :</strong>  <?php echo get_post_meta($post->ID, 'txt_automobile_sku', true); ?>
 					</p>
                     <p class="price">
                     <?php $txt_automobile_regular_price = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_regular_price', true ) );
@@ -109,19 +109,19 @@ get_header();
 
                             <section class="product-details">
                               <p>
-								<span class="adv_head">Color </span>
+								<span class="adv_head"><strong> Color </strong> </span>
 								<span class="adv_result">:
 									<?php echo $get_advanced_automobile['txt_automobile_color']; ?>
 								</span>
 							</p>
 							<p>
-								<span class="adv_head">Position </span>
+								<span class="adv_head"><strong> Position </strong> </span>
 								<span class="adv_result">:
 								<?php echo $get_advanced_automobile['txt_automobile_position']; ?>
 								</span>
 							</p>
 							<p>
-								<span class="adv_head">MPN </span>
+								<span class="adv_head"><strong> MPN </strong> </span>
 								<span class="adv_result">:
 									
 										<?php
@@ -136,7 +136,7 @@ get_header();
 								</span>
 							</p>
 							<p>
-								<span class="adv_head">Description </span>
+								<span class="adv_head"><strong> Description </strong> </span>
 								<span class="adv_result">:
 									<?php the_content(); ?>
 								</span>
@@ -149,56 +149,48 @@ get_header();
 						<div class="tab-pane fade" id="applications">
 
                             <section class="applications">
-								<p>
-									<span class="adv_head">Year </span>
-									<span class="adv_result">:
-										<?php 
-										$txt_automobile_year = get_post_meta($post->ID, 'advanced_automobile_year', true); 
-										$auto_mobile_year = '_auto_mobile_year';
-										$get_auto_mobile_year = get_option( $auto_mobile_year );
-										$get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
-										echo $get_auto_mobile_year_uns[$txt_automobile_year]; 
-										?>										
-									</span>
-								</p>
-								<p>
-									<span class="adv_head">Make </span>
-									<span class="adv_result">:
-										<?php 
-											if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )
-											$txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
-											$auto_mobile_make = '_auto_mobile_make';
-											$get_auto_mobile_make = get_option( $auto_mobile_make );
-											$get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
-											echo $get_auto_mobile_make_uns[$txt_automobile_make]; 
-										?>
-									</span>
-									</p>
-									<p>
-										<span class="adv_head">Model </span>
-										<span class="adv_result">:
-										<?php 
-											if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
-											$txt_automobile_model = $get_advanced_automobile['txt_automobile_model'];
-											$auto_mobile_model = '_auto_mobile_model';
-											$get_auto_mobile_model = get_option( $auto_mobile_model );
-											$get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
-											echo $get_auto_mobile_model_uns[$txt_automobile_model];
-										?>
-										</span>
-									</p>
-									<p>
-										<span class="adv_head">Position </span>
-										<span class="adv_result">:
-										<?php echo $get_advanced_automobile['txt_automobile_position']; ?>
-										</span>
-									</p>
-									<p>
-										<span class="adv_head">Application Notes </span>
-										<span class="adv_result">:
-											<?php echo $get_advanced_automobile['txt_automobile_comments']; ?>
-										</span>
-									</p>
+							
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Year</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Position</th>
+            <th>Application Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><?php 
+        $txt_automobile_year = get_post_meta($post->ID, 'advanced_automobile_year', true); 
+        $auto_mobile_year = '_auto_mobile_year';
+        $get_auto_mobile_year = get_option( $auto_mobile_year );
+        $get_auto_mobile_year_uns = @unserialize($get_auto_mobile_year);
+        echo $get_auto_mobile_year_uns[$txt_automobile_year]; 
+        ?></td>
+        <td><?php 
+        if ( isset ( $get_advanced_automobile['txt_automobile_make'] ) )
+        $txt_automobile_make = $get_advanced_automobile['txt_automobile_make'];
+        $auto_mobile_make = '_auto_mobile_make';
+        $get_auto_mobile_make = get_option( $auto_mobile_make );
+        $get_auto_mobile_make_uns = @unserialize($get_auto_mobile_make);
+        echo $get_auto_mobile_make_uns[$txt_automobile_make]; 
+        ?></td>
+        <td><?php 
+        if ( isset ( $get_advanced_automobile['txt_automobile_model'] ) )
+        $txt_automobile_model = $get_advanced_automobile['txt_automobile_model'];
+        $auto_mobile_model = '_auto_mobile_model';
+        $get_auto_mobile_model = get_option( $auto_mobile_model );
+        $get_auto_mobile_model_uns = @unserialize($get_auto_mobile_model);
+        echo $get_auto_mobile_model_uns[$txt_automobile_model];
+        ?></td>
+        <td><?php echo $get_advanced_automobile['txt_automobile_position']; ?></td>
+        <td>	<?php echo $get_advanced_automobile['txt_automobile_comments']; ?></td>
+      </tr>
+      
+    </tbody>
+  </table>
                             </section>
 
                         </div>

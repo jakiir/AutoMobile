@@ -344,9 +344,14 @@ if ( is_user_logged_in() ) {
 
 <?php if($selectCountry): ?>
 <script type="text/javascript">
-	var selectCountry = '<?php echo $selectCountry; ?>';
-	var checkout_town_city = '<?php echo $checkout_town_city; ?>';    
+	var login_user_selectCountry = '<?php echo $selectCountry; ?>';
+	var login_user_checkout_town_city = '<?php echo $checkout_town_city; ?>';    
 </script>
-<?php endif; ?>
+<?php else : ?>
+<script type="text/javascript">
+	var login_user_selectCountry = '';
+	var login_user_checkout_town_city = '';    
+</script>
+ <?php endif; ?>
 <?php get_footer(); ?>
               

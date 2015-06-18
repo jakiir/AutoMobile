@@ -2,7 +2,7 @@
 /* Template Name: Automobile archive */
 ?>
 <?php get_header(); 
-global $autoMobile;
+        global $autoMobile;
 ?>
 
 <section class="main-container">
@@ -13,27 +13,25 @@ global $autoMobile;
                 <div class="ctg-title">
                     <h2><?php 
 					$product_category = $_GET['product_category'];
-					if($product_category):
-						$autoMobileTermObject = get_term_by( 'id', absint( $_GET['product_category'] ), 'automobile_product_category' );
-						echo $autoMobileTermObject->name;
-					else :
-						echo 'Categories';
-					endif;
-					?>
-                    
+    					if($product_category):
+    						$autoMobileTermObject = get_term_by( 'id', absint( $_GET['product_category'] ), 'automobile_product_category' );
+    						echo $autoMobileTermObject->name;
+    					else :
+    						echo 'Categories';
+    					endif;
+					?>                    
                     </h2>
                 </div>
                 
-               <div id="products" class="row list-group">
+               <div id="products" class="list-group">
 
         <?php if ( have_posts() ) : ?>          
         <?php
-        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-		
-		$atm_make = $_GET['txt_automobile_make'];
-		$atm_model = $_GET['txt_automobile_model'];
-		$atm_year = $_GET['txt_automobile_year'];
-		$postLimit = 6;
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;		
+    		$atm_make = $_GET['txt_automobile_make'];
+    		$atm_model = $_GET['txt_automobile_model'];
+    		$atm_year = $_GET['txt_automobile_year'];
+    		$postLimit = 6;
 		if(isset($_GET['txt_automobile_year']) && isset($_GET['txt_automobile_make']) && isset($_GET['txt_automobile_model'])) :	
 			$args = array(
 				'post_type' => 'tlp_automobile',
@@ -91,19 +89,21 @@ global $autoMobile;
 				'paged' => $paged
 			);        
 		endif;
-        $autoMobile->get_all_automobiles($args);
-        echo $autoMobile->automobile_pagination($args);
+        
+        
+       
+		if(isset($_GET['txt_automobile_year']) && isset($_GET['txt_automobile_make']) && isset($_GET['txt_automobile_model'])) {
+			//echo $autoMobile->autoMobileList($args);
+             echo $autoMobile->get_all_automobiles($args);
+             echo $autoMobile->automobile_pagination($args);
+		}else{
+		  echo $autoMobile->get_all_automobiles($args);
+          echo $autoMobile->automobile_pagination($args);
+		}
+         
  endif; 
- ?>
+ ?> 
     </div>  
-              <!--<div class="row">
-                    <div class="col-md-4">
-                        <div class="latest-pro-box">
-                            <img class="img-responsive" src="<?php //echo esc_url( get_template_directory_uri() ); ?>/assets/images/slider.png" alt="pro4" />
-                            
-                        </div>
-                    </div>
-                </div>-->
             </div>
             <div class="col-md-3">
                <?php get_sidebar(); ?>

@@ -37,7 +37,7 @@ if (!class_exists('autoMobileHelper'))
 
             $output = '<span class="cart_item" data-qty="'.$quantity.'">'.$quantity.'</span> ';
             $output .= ' <span class="cart_price" data-price="'.$totalPrice.'">$'.$totalPrice.'</span> ';
-            $output .= ' <span class="view_cart" style="display:none;"><a href="'.$shopping_cart.'" title="view cart" target="_self">View Cart</a></span>';
+            $output .= ' <span class="view_cart"><a href="'.$shopping_cart.'" title="view cart" target="_self">View Cart</a></span>';
         }
         if($output != ''){
             return $output;
@@ -121,7 +121,7 @@ $output = '';
 		} else {
 			$image = $autoMobile->auto_mobile_default_image();
 		}
-       $output .= '<div class="col-md-3"><div class="product-box"><a href="' . esc_url( $permalink_cat ) . '"><img src="' . esc_url( $image ) . '" alt="'. __( 'Thumbnail', 'automobile' ) . '" class="wp-post-image img-responsive" height="" width="" /></a><h3><a href="' . esc_url( $permalink_cat ) . '">' . $term->name . '</a></h3></div></div>';
+       $output .= '<div class="col-md-3 col-sm-6"><div class="product-box product-box-cat"><a href="' . esc_url( $permalink_cat ) . '"><img src="' . esc_url( $image ) . '" alt="'. __( 'Thumbnail', 'automobile' ) . '" class="wp-post-image img-responsive" height="" width="" /></a><h3><a href="' . esc_url( $permalink_cat ) . '">' . $term->name . '</a></h3></div></div>';
         
      }
      $output .= '</div>';
@@ -161,10 +161,11 @@ function get_automobile_post_id($automobile_sku){
         if( $wp_query->have_posts() ) {
           while ($wp_query->have_posts()) : $wp_query->the_post();
             $txt_limit=20;
+            $txt_automobile_price = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) );
             $content = get_the_content(get_the_ID($post->ID));
             $automobile_content = wp_trim_words( $content,$txt_limit); ?>
-            <div class="item  col-md-4">
-            <div class="product-box">
+            <div class="item  col-md-4 col-sm-6">
+            <div class="product-box product-box-border">
                 <a href="<?php the_permalink(); ?>">
                     <?php echo $autoMobile->auto_mobile_thumbnail('400x250'); ?>
                 </a>
@@ -173,14 +174,84 @@ function get_automobile_post_id($automobile_sku){
                             <a href="<?php the_permalink(); ?>">
                                 <?php the_title(); ?>
                             </a>
-                    </h3>                    
-                   
+                            
+                    </h3>   
+                     <ul class="buy-now-pro-btn">
+                     <li>
+                    <span class="auto-price">$<?php if($txt_automobile_price) : echo $txt_automobile_price; else : echo '-'; endif; ?></span>                 
+                  		</li>					
+                          <li>     <a class="btn btn-success auto_mobile_add_to_cart" href="#" data-item_id="<?php echo get_the_ID(); ?>" data-item_sku="<?php echo esc_html(get_post_meta(get_the_ID(), 'txt_automobile_sku', true)); ?>" data-quantity="1" data-item_price="<?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); ?>"><i class="fa fa-shopping-cart"></i> Buy Now</a>
+                           </li>
+                           </ul>
                 </div>
             </div>
         </div>
         <?php  endwhile;
         }
     }
+	
+	function autoMobileList($args = array()){ ?>
+		
+        
+            <div class="arkive-product">
+                <div class="row" style="padding: 0;">
+                    <div class="product-heading">
+                        <div class="col-md-2">
+                            <h5>Parts#</h5>
+                        </div>
+                        <div class="col-md-2">
+                            <h5>Image</h5>
+                        </div> 
+                        <div class="col-md-6">
+                            <h5>Product Name</h5>
+                        </div> 
+                        <div class="col-md-2">
+                           
+                        </div>             
+                    </div>
+                </div>
+                
+                
+               
+    <?php
+		global $wp_query , $post, $autoMobile;
+        $wp_query = new WP_Query($args);
+        if( $wp_query->have_posts() ) {
+          while ($wp_query->have_posts()) : $wp_query->the_post();            
+			$txt_automobile_price = esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) );
+			$partId = get_post_meta(get_the_ID(), 'txt_automobile_sku', true);
+			?>
+                
+                <div class="row" style="padding: 0;">
+                    <div class="product-box2">
+                        <div class="col-md-2 col-sm-6">
+                            <h5> <?php if($partId): echo $partId; else : echo '-'; endif; ?></h5>
+                        </div>
+                        <div class="col-md-2 col-sm-6">
+                            <h5><a href="<?php the_permalink(); ?>"><?php echo $autoMobile->auto_mobile_thumbnail('72x72'); ?></a></h5>
+                        </div> 
+                        <div class="col-md-6 col-sm-8">
+                            <p class="p-name"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
+                        </div> 
+                        <div class="col-md-2 col-sm-4">
+                            <div class="product-price">
+                                <span class="t-price">$<?php if($txt_automobile_price) : echo $txt_automobile_price; else : echo '-'; endif; ?></span>
+                            </div>
+                            <div class="buy-now-pro-btn">							
+                                <a class="btn btn-success auto_mobile_add_to_cart" href="#" data-item_id="<?php echo get_the_ID(); ?>" data-item_sku="<?php echo esc_html(get_post_meta(get_the_ID(), 'txt_automobile_sku', true)); ?>" data-quantity="1" data-item_price="<?php echo esc_html( get_post_meta( get_the_ID(), 'txt_automobile_price', true ) ); ?>"><i class="fa fa-shopping-cart"></i> Buy Now</a>
+                           </div>
+                        </div>             
+                    </div>                             
+                </div>
+		<?php endwhile; } ?>
+                
+             
+                
+                
+            </div>
+              
+    
+	<?php }
 
   }
 }

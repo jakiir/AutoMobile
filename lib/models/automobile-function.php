@@ -165,6 +165,7 @@ function autoMobileAddToCart(){
         $itemId = $_POST['itemId'];
         if($itemId):
         $itemSku = $_POST['itemSku'];
+		$addtocartType = $_POST['addtocartType'];
         $quantity = $_POST['quantity'];
         $itemPrice = $_POST['itemPrice'];
         @session_start();
@@ -203,8 +204,14 @@ function autoMobileAddToCart(){
 
                 foreach ($get_mobile_info_uns as $key => $get_mobile_info_unss){
                     if($get_mobile_info_unss['item_id'] === $itemId){
-                        $itemQuantity = $quantity;
+                      if($addtocartType === 'oneby'):
+						$itemQuantity = $get_mobile_info_unss['item_quantity']+1;
+                        $item_price = $get_mobile_info_unss['item_price']+ $itemPrice;
+					  else :
+						$itemQuantity = $quantity;
                         $item_price = $itemPrice;
+					  endif;
+					  
                         $itemInfo = array(
                             $key => array(
                                         'item_id'           => $get_mobile_info_unss['item_id'],
@@ -325,6 +332,85 @@ add_action( 'wp_ajax_nopriv_autoMobileRemoveCart','autoMobileRemoveCart' );
 add_action( 'wp_ajax_autoMobileRemoveCart','autoMobileRemoveCart' );
 
 
+function user_login_form(){
+
+    
+    check_ajax_referer( 'ajax-login-nonce', 'security' );
+
+    
+    $info = array();
+    $info['user_login'] = $_POST['username'];
+    $info['user_password'] = $_POST['password'];
+    $info['remember'] = true;
+
+    $user_signon = wp_signon( $info, false );
+    if ( is_wp_error($user_signon) ){
+        echo json_encode(array('loggedin'=>false, 'message'=>__('Wrong username or password.')));
+    } else {
+        echo json_encode(array('loggedin'=>true, 'message'=>__('Login successful, redirecting...')));
+    }	
+    die();
+}
+add_action( 'wp_ajax_nopriv_user_login_form','user_login_form' );
+add_action( 'wp_ajax_user_login_form','user_login_form' );
+
+function user_regi_form(){
+
+	$firstname				= $_POST['first_name'];
+	$lastname				= $_POST['last_name'];
+	$fullName				= $firstname.' '.$lastname;
+	$user_name				= $_POST['user_name'];		
+	$user_email				= $_POST['user_email'];
+	$password				= $_POST['password'];
+	$password_confirmation	= $_POST['password_confirmation'];
+	$t_and_c				= $_POST['t_and_c'];
+	$regInfo				= $_POST['regInfo'];
+	$regStatus				= $_POST['regStatus'];
+	
+	$user_exist = username_exists( $user_name );
+	$email_exist = email_exists( $user_email );
+	if($user_exist):
+		$result = array(
+			'success' => false,
+			'message'=>__($user_name.'already exist!')			
+		);
+	elseif($email_exist):
+		$result = array(
+			'success' => false,
+			'message'=>__($user_email.'already exist!')			
+		);
+	else :
+		$memberData = array(
+							'user_login' => $user_name,
+							'first_name' => $firstname,
+							'last_name' => $lastname,
+							'user_pass' => $password,
+							'user_email' => $user_email,
+							'user_url' => '',
+							'role' => 'atm_customer'
+						);
+		$createUser = wp_insert_user( $memberData );
+			
+		$result = array(
+			'success' => true,
+			'message'=>__($user_email.'already exist!')			
+		);
+		
+	$info = array();
+    $info['user_login'] = $user_name;
+    $info['user_password'] = $password;
+    $info['remember'] = true;
+    $user_signon = wp_signon( $info, false );		
+	endif;
+
+    echo json_encode($result);
+    	
+    die();
+}
+add_action( 'wp_ajax_nopriv_user_regi_form','user_regi_form' );
+add_action( 'wp_ajax_user_regi_form','user_regi_form' );
+
+
 function autoMobileMakeNModel(){
         $automobile_year = $_POST['automobile_year'];
 		global $wpdb;
@@ -419,6 +505,9 @@ function get_country_state_by_country($country = '', $checkout_town_city = ''){
 }
 
 
+
+
+
 function add_customer_info(){
         $checkout_email = $_POST['checkout_email'];
         $checkout_password = $_POST['checkout_password'];
@@ -450,7 +539,7 @@ function add_customer_info(){
         $post_title = 'atm_order-' . $date;
         $now_time = time();
         $post_pwd = 'atm_order_'.$now_time;
-    //global $wpdb;
+    //global $wpdb; 	
         if ( 'POST' == $_SERVER['REQUEST_METHOD'] && isset($registrationId) && isset($checkout_email) && isset($checkout_password)) :
 
         $username = username_exists( $checkout_email );
@@ -529,8 +618,8 @@ function add_customer_info(){
 				
 			$qty_po = 0;
 			foreach($_POST['product_ids'] as $product_id):
-				echo $product_id;
-				echo $_POST['product_quantity'][$qty_po];
+				//echo $product_id;
+				//echo $_POST['product_quantity'][$qty_po];
 				$qty_product = get_post_meta($product_id, 'txt_automobile_qty', true) - $_POST['product_quantity'][$qty_po];
 				update_post_meta($product_id, 'txt_automobile_qty', $qty_product);
 				$qty_po++;
@@ -614,8 +703,8 @@ function add_customer_info(){
 				
 			$qty_po = 0;
 			foreach($_POST['product_ids'] as $product_id):
-				echo $product_id;
-				echo $_POST['product_quantity'][$qty_po];
+				//echo $product_id;
+				//echo $_POST['product_quantity'][$qty_po];
 				$qty_product = get_post_meta($product_id, 'txt_automobile_qty', true) - $_POST['product_quantity'][$qty_po];
 				update_post_meta($product_id, 'txt_automobile_qty', $qty_product);
 				$qty_po++;
@@ -891,7 +980,7 @@ $template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-checkout.ph
 }
 
 if(is_page( 'automobile-account' )){
-$template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-register.php';
+$template_path = plugin_dir_path( __FILE__ ) . '/template/automobile-account.php';
 }
 
 return $template_path;
